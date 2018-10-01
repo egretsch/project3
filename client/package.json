@@ -1,5 +1,5 @@
 {
-  "name": "project3test",
+  "name": "project3",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,8 +15,9 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "engine":{
+  "engine": {
     "npm": "6.4.1",
     "node": "8.11.1"
-  } 
+  },
+  "proxy": "http://localhost:3001/"
 }

@@ -35,13 +35,14 @@ class Search extends Component {
             .then(res => {
                 console.log(res.data.results) 
 
-                //I use a forEach to look for the brand name, if it doesn't exist, we skip over it. The brand names are pushed into the empty array.
+                //I use a forEach to look for the brand name.
                 res.data.results.forEach(element => {
                     const brandName = element.openfda.brand_name
                     const activeIngredient = element.active_ingredient
                     const inactiveIngredient = element.inactive_ingredient
 
-
+                    // if a brand name doesn't exist, we skip over it. 
+                    //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
                     if (brandName) {
                         brandNameArray.push({
                             brandName: brandName,
@@ -63,7 +64,7 @@ class Search extends Component {
                 <Row>
                     <Col size='md-6'>
                         <Jumbotron>
-                            <h1 style={{ color: 'red' }}>TEST LOL</h1>
+                            <h1 style={{ color: 'red' }}>Test Search</h1>
                         </Jumbotron>
                         <form>
                             <Input
@@ -84,6 +85,7 @@ class Search extends Component {
                         <Jumbotron>
                             <h2 style={{ color: 'lightblue' }}>Search Results</h2>
                         </Jumbotron>
+                        {/* Ternary Operation to see if there are results for a product */}
                         {this.state.searchResults.length ? (
                             <List>
                                 {this.state.searchResults.map(product => (

@@ -54,6 +54,7 @@ class Profile extends Component {
                     <h3>Ingredients Warnings</h3>
                         {this.state.starredIngredients.length ? (
                             <List>
+                                {/* Ternary Operation to see if User has any marked Ingredients */}
                                 {this.state.starredIngredients.map(ingredient => (
                                     <ListItem key={ingredient}>
                                         <p style={{ color: 'red' }}>{ingredient}</p>
@@ -72,6 +73,7 @@ class Profile extends Component {
                     <h3>Favorite Products</h3>
                         {this.state.favoriteProducts.length ? (
                             <List>
+                                {/* Ternary Operation to see if User has any favorite products */}
                                 {this.state.favoriteProducts.map(product => (
                                     <ListItem key={product}>
                                         <p style={{ color: 'green' }}>{product}</p>
