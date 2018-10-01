@@ -1,16 +1,20 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Search from "./pages/Search";
 import Profile from "./pages/Profile";
+
 
 const App = () => (
 
   <Router>
     <div>
       <Switch>
-        <Route exact path='/' component={Profile} />
+        <Route path='/search' component={Search} />
+        <Route path='/profile' component={Profile}/>
       </Switch>
     </div>
   </Router>
+  
 )
 
 
