@@ -1,0 +1,28 @@
+.jumbotron {
+    width: 100%;
+    background-color: maroon;
+    color: pink;
+    text-align: center;
+}
+
+#warning {
+    text-align: center;
+    color: red;
+}
+
+#info {
+    text-align: center;
+
+    color: blue;
+}
+
+
+#favorite {
+    text-align: center;
+
+    color: green;
+}
+
+.btn {
+    margin:10px;
+}

@@ -4,6 +4,7 @@ import { Col, Row, Container } from "../components/Grid";
 import { Input, TextArea, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
+import './pages.css';
 
 
 class Search extends Component {
@@ -20,7 +21,6 @@ class Search extends Component {
         });
     };
 
-
     //HANDLES A PRODUCT SEARCH
     handleFormSubmit = event => {
 
@@ -33,22 +33,33 @@ class Search extends Component {
         //Our API Call.
         API.getProduct(this.state.searchedProduct)
             .then(res => {
-                console.log(res.data.results)
+                // console.log(res.data.results)
 
                 //I use a forEach to look for the brand name.
                 res.data.results.forEach(element => {
                     const brandName = element.openfda.brand_name
                     const activeIngredient = element.active_ingredient
                     const inactiveIngredient = element.inactive_ingredient
+                    const activeArray = activeIngredient.toString().replace('Active ingredient', '')
+                    console.log(activeArray)
 
-                    // if a brand name doesn't exist, we skip over it. 
-                    //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
-                    if (brandName) {
-                        brandNameArray.push({
-                            brandName: brandName,
-                            activeIngredient: activeIngredient,
-                            inactiveIngredient: inactiveIngredient
-                        });
+                    if (inactiveIngredient) {
+
+                        //splits the inactive ingredients array and puts each ingredient into a string.
+                        const inactiveArray = inactiveIngredient.toString().replace('Inactive ingredients ', '').split(', ');
+                        // console.log(inactiveArray)
+
+
+                        // if a brand name doesn't exist, we skip over it. 
+                        //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
+                        if (brandName) {
+                            brandNameArray.push({
+                                brandName: brandName,
+                                activeIngredient: activeIngredient,
+                                inactiveIngredient: inactiveArray
+                            });
+                        }
+
                     }
 
                 });
@@ -64,7 +75,7 @@ class Search extends Component {
                 <Row>
                     <Col size='md-6'>
                         <Jumbotron>
-                            <h1 style={{ color: 'red' }}>Test Search</h1>
+                            <h1>Test Search</h1>
                         </Jumbotron>
                         <form>
                             <Input
@@ -83,22 +94,28 @@ class Search extends Component {
                     </Col>
                     <Col size="md-6 sm-12">
                         <Jumbotron>
-                            <h2 style={{ color: 'lightblue' }}>Search Results</h2>
+                            <h2>Search Results</h2>
                         </Jumbotron>
                         {/* Ternary Operation to see if there are results for a product */}
                         {this.state.searchResults.length ? (
                             <List>
                                 {this.state.searchResults.map(product => (
                                     <ListItem key={product.brandName}>
-                                        <p style={{ color: 'red' }}>{product.brandName}</p>
-                                        <p>{product.activeIngredient}</p>
-                                        <p>{product.inactiveIngredient}</p>
-
+                                        <h2 id='info'>{product.brandName}</h2>
+                                        <h4>{product.activeIngredient}</h4>
+                                        <h4 id='info'>Inactive Ingredients</h4>
+                                        <List>
+                                            {product.inactiveIngredient.map(ingredient => (
+                                                <ListItem key={product.brandName + ingredient}>
+                                                    {ingredient}
+                                                </ListItem>
+                                            ))}
+                                        </List>
                                     </ListItem>
                                 ))}
                             </List>
                         ) : (
-                                <h2>No results to display</h2>
+                                <h2 id='info'>No results to display</h2>
                             )}
                     </Col>
                 </Row>

@@ -7,6 +7,8 @@ import { Input, TextArea, FormBtn } from "../components/Form";
 
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
+import './pages.css';
+
 
 class Profile extends Component {
 
@@ -37,13 +39,13 @@ class Profile extends Component {
         return (
             <Container>
                 <Row>
-                    <Jumbotron style={{ width: '100%', backgroundColor: 'maroon' }}>
-                        <h3 style={{ color: 'pink', textAlign: 'center' }}>Your Profile</h3>
+                    <Jumbotron>
+                        <h3>Your Profile</h3>
                     </Jumbotron>
                 </Row>
                 <Row>
                     <Col size='md-6'>
-                        <h3>User Information</h3>
+                        <h3 id='info'>User Information</h3>
                         <p>Username: {this.state.username}</p>
                         <p>Email: {this.state.email}</p>
                         <p>Gender: {this.state.gender}</p>
@@ -51,13 +53,13 @@ class Profile extends Component {
                     </Col>
 
                     <Col size='md-4'>
-                    <h3>Ingredients Warnings</h3>
+                    <h3 id='warning'>Ingredient Warnings</h3>
                         {this.state.starredIngredients.length ? (
                             <List>
                                 {/* Ternary Operation to see if User has any marked Ingredients */}
                                 {this.state.starredIngredients.map(ingredient => (
                                     <ListItem key={ingredient}>
-                                        <p style={{ color: 'red' }}>{ingredient}</p>
+                                        <p>{ingredient}</p>
                                     </ListItem>
                                 ))}
                             </List>
@@ -70,13 +72,13 @@ class Profile extends Component {
 
                 <Row>
                     <Col size='md-4'>
-                    <h3>Favorite Products</h3>
+                    <h3 id='favorite'>Favorite Products</h3>
                         {this.state.favoriteProducts.length ? (
                             <List>
                                 {/* Ternary Operation to see if User has any favorite products */}
                                 {this.state.favoriteProducts.map(product => (
                                     <ListItem key={product}>
-                                        <p style={{ color: 'green' }}>{product}</p>
+                                        <p>{product}</p>
                                     </ListItem>
                                 ))}
                             </List>
