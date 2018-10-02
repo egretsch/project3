@@ -3,6 +3,7 @@ const db = require("../models/ingredient");
 // Defining methods for the ingredientsController
 module.exports = {
   findAll: function(req, res) {
+    console.log(req);
     db.Ingredient
       .find(req.query)
       .sort({ date: -1 })

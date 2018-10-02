@@ -6,4 +6,5 @@ const ingredientRoutes = require('./ingredients');
 router.use('/products', productRoutes);
 router.use('/ingredients', ingredientRoutes);
 
+
 module.exports = router;
