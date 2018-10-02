@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ProductAPI from "../utils/ProductAPI";
+import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Input, TextArea, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
@@ -31,9 +31,9 @@ class Search extends Component {
         const brandNameArray = [];
 
         //Our API Call.
-        ProductAPI.getProduct(this.state.searchedProduct)
+        API.getProduct(this.state.searchedProduct)
             .then(res => {
-                console.log(res.data.results) 
+                console.log(res.data.results)
 
                 //I use a forEach to look for the brand name.
                 res.data.results.forEach(element => {
@@ -54,7 +54,7 @@ class Search extends Component {
                 });
 
                 //Sets the state when we are done.
-                this.setState({searchResults: brandNameArray})
+                this.setState({ searchResults: brandNameArray })
             }).catch(err => console.log(err));
     };
 
@@ -90,9 +90,9 @@ class Search extends Component {
                             <List>
                                 {this.state.searchResults.map(product => (
                                     <ListItem key={product.brandName}>
-                                    <p style= {{color: 'red'}}>{product.brandName}</p>
-                                    <p>{product.activeIngredient}</p>
-                                    <p>{product.inactiveIngredient}</p>
+                                        <p style={{ color: 'red' }}>{product.brandName}</p>
+                                        <p>{product.activeIngredient}</p>
+                                        <p>{product.inactiveIngredient}</p>
 
                                     </ListItem>
                                 ))}
