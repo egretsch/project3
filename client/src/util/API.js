@@ -2,8 +2,8 @@ import axios from "axios";
 
 export default {
     // Gets all books
-    postUser: function () {
-        return axios.post("/api/user");
+    postUser: function (userAry) {
+        return axios.post("/api/user", userAry);
     },
     // Gets the book with the given id
     getBook: function (id) {

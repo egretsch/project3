@@ -5,11 +5,7 @@ import API from "../../util/API";
 
 class ScannerNavbar extends Component {
 
-    // createUser = () => {
-    //     API.postUser()
-    //         .then(req => this.setState({ books: res.data }))
-    //         .catch(err => console.log(err));
-    // };
+
 
 
     constructor(props, context) {
@@ -28,11 +24,11 @@ class ScannerNavbar extends Component {
         this.state = {
             showLoginModal: false,
             showNewUserModal: false,
-            createName: "Enter name",
-            createUsername: "Enter Username",
-            createEmail: "Enter Email",
-            createPassword: "Enter Password",
-            createGender: "Enter Gender"
+            createName: "",
+            createUsername: "",
+            createEmail: "",
+            createPassword: "",
+            createGender: ""
 
         };
     }
@@ -47,8 +43,57 @@ class ScannerNavbar extends Component {
         });
     }
 
+
+    createUserState() {
+        this.setState({
+            createName: "",
+            createUsername: "",
+            createEmail: "",
+            createPassword: "",
+            createGender: ""
+        });
+    }
+
+    createUser = () => {
+        var userAry = [];
+        var userObj = {
+            name: `${this.state.createName}`,
+            userName: `${this.state.createUsername}`,
+            email: `${this.state.createEmail}`,
+            password: `${this.state.createPassword}`,
+            gender: `${this.state.createGender}`
+        };
+        userAry.push(userObj);
+        API.postUser(userObj)
+            .then(userAry => console.log(userAry, 1) )
+            .catch(err => console.log(err));
+    };
+
+
+
     handleSubmit(event) {
-        alert('An essay was submitted: ' + this.state.value);
+        //console.log(name)
+        //let name = this.state.createName.trim();
+        //var userAry = [];
+       // //var userObj = {
+            // "createName": `${this.state.createName}`,
+            // "username": `${this.state.createUsername}`,
+            // "email": `${this.state.createEmail}`,
+            // "password": `${this.state.createPassword}`,
+            // "gender": `${this.state.createGender}`
+        //};
+        //console.log(name)
+        //userAry.push(userObj);
+        alert(`An name was submitted:  ${this.state.createName}
+        An username was submitted:  ${this.state.createUsername}
+        An email was submitted:  ${this.state.createEmail}
+        An password was submitted:  ${this.state.createPassword}
+        An gender was submitted:  ${this.state.createGender}
+        `);
+
+        this.createUser();
+        // this.createUserState();
+
         event.preventDefault();
     }
 
@@ -139,8 +184,9 @@ class ScannerNavbar extends Component {
                             Create New Account
                         </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
-                        <Form horizontal onSubmit={this.handleSubmit}>
+                    <Form horizontal onSubmit={this.handleSubmit}>
+                        <Modal.Body>
+
                             <FormGroup controlId="formHorizontalName">
                                 <Col componentClass={ControlLabel} sm={2}>
                                     Name
@@ -149,6 +195,7 @@ class ScannerNavbar extends Component {
                                     <FormControl
                                         name="createName"
                                         type="name"
+                                        placeholder="Enter Name"
                                         value={this.state.createName}
                                         onChange={this.handleInputChange} />
                                 </Col>
@@ -161,6 +208,7 @@ class ScannerNavbar extends Component {
                                     <FormControl
                                         name="createUsername"
                                         type="Username"
+                                        placeholder="Enter Username"
                                         value={this.state.createUsername}
                                         onChange={this.handleInputChange} />
                                 </Col>
@@ -173,6 +221,7 @@ class ScannerNavbar extends Component {
                                     <FormControl
                                         name="createEmail"
                                         type="Email"
+                                        placeholder="Enter Email"
                                         value={this.state.createEmail}
                                         onChange={this.handleInputChange} />
                                 </Col>
@@ -185,6 +234,7 @@ class ScannerNavbar extends Component {
                                     <FormControl
                                         name="createPassword"
                                         type="password"
+                                        placeholder="Enter Password"
                                         value={this.state.createPassword}
                                         onChange={this.handleInputChange} />
                                 </Col>
@@ -197,22 +247,27 @@ class ScannerNavbar extends Component {
                                     <FormControl
                                         name="createGender"
                                         type="Gender"
+                                        placeholder="Enter Gender"
                                         value={this.state.createGender}
                                         onChange={this.handleInputChange} />
                                 </Col>
                             </FormGroup>
-                            <ButtonGroup>
-                                <Button value="Submit" type="submit">Submit</Button>
+
+
+
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <ButtonGroup className="createUserButtions">
+                                <Button
+                                    value="Submit"
+                                    type="submit">
+                                    Submit
+                                </Button>
                                 <Button onClick={this.handleHideNewUserModal}>Close</Button>
                             </ButtonGroup>
 
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-
-
-                    </Modal.Footer>
-
+                        </Modal.Footer>
+                    </Form>
                 </Modal>
 
             </Navbar>
