@@ -7,13 +7,26 @@ import Jumbotron from "../components/Jumbotron";
 import './pages.css';
 
 
+//To do -
+//Save product/ingredients to the USER profile (gotta wait for user profiles)
+//Match searched result ingredients to SAVED user ingredients. (Check allergens or any starred ingredients)
+// ---- For this to work we need check if user data is still persistent throughout the pages.
+//
+//Stuff to check - Confirmation modals. 
+//Perhaps putting the rendered list into a pop up modal to save screen space.
+//Perhaps getting a search list from typing a letter?
+//
+
+
+
 class Search extends Component {
     state = {
         searchedProduct: "",
         searchResults: [],
 
     }
-
+    
+    //basic input change handler.
     handleInputChange = event => {
         const { name, value } = event.target;
         this.setState({
@@ -35,7 +48,7 @@ class Search extends Component {
             .then(res => {
                 // console.log(res.data.results)
 
-                //I use a forEach to look for the brand name.
+                //Using a forEach to look for the brand name.
                 res.data.results.forEach(element => {
                     const brandName = element.openfda.brand_name
                     const activeIngredient = element.active_ingredient
@@ -68,6 +81,8 @@ class Search extends Component {
                 this.setState({ searchResults: brandNameArray })
             }).catch(err => console.log(err));
     };
+
+    //renders the page.
 
     render() {
         return (

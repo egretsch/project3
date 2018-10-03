@@ -25,6 +25,7 @@ class Profile extends Component {
     //1. Connect to Database where user profiles are.
     //2. Connect current logged in user with state information.
     //3. Let User change preferences 
+    //     -- Text input fields, and a check for gender (male female don't want to specify, etc.)
     
     //Questions:
     //Should users be able to search ingredients in here?
