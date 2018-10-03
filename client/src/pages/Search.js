@@ -121,7 +121,9 @@ class Search extends Component {
 
                 //Sets the state when we are done.
                 this.setState({ searchResults: brandNameArray })
+                this.showModal();
             }).catch(err => console.log(err));
+
     };
 
     //renders the page.
@@ -142,16 +144,23 @@ class Search extends Component {
                             />
                             <FormBtn
                                 disabled={!this.state.searchedProduct}
-                                onClick={
-                                    this.handleFormSubmit,
-                                    this.showModal
-                                        }
+                                onClick={this.handleFormSubmit}
                             >
-                        Search Product
+                            Search Product
                             </FormBtn>
                         </form>
                     </Col>
-                <Col size="md-6 sm-12">
+                </Row>
+                <Row>
+                    {/* Scanner Camera */}
+                    {/* <Col size='md-6'>
+                        <Scanner />
+                        <button className='btn btn-primary'>Scan Item</button>
+                    </Col> */}
+                </Row>
+
+                <SearchModal show={this.state.show}>
+                    <button onClick={this.hideModal}>Close</button>
                     <Jumbotron>
                         <h2>Search Results</h2>
                     </Jumbotron>
@@ -177,49 +186,11 @@ class Search extends Component {
                     ) : (
                             <h2 id='info'>No results to display!</h2>
                         )}
-                </Col>
-                </Row>
-            <Row>
-                {/* Scanner Camera */}
-                {/* <Col size='md-6'>
-                        <Scanner />
-                        <button className='btn btn-primary'>Scan Item</button>
-                    </Col> */}
-            </Row>
-
-            <SearchModal show={this.state.show}>
-                <Jumbotron>
-                    <h2>Search Results</h2>
-                </Jumbotron>
-                {/* Ternary Operation to see if there are results for a product */}
-                {this.state.searchResults.length ? (
-                    <List>
-                        {this.state.searchResults.map(product => (
-                            <ListItem key={product.brandName}>
-                                <h2 id='info'>{product.brandName}</h2>
-                                <h4 id='info'>Active Ingredient(s)</h4>
-                                <h4>{product.activeIngredient}</h4>
-                                <h4 id='info'>Inactive Ingredients</h4>
-                                <List>
-                                    {product.inactiveIngredient.map(ingredient => (
-                                        <ListItem key={product.brandName + ingredient}>
-                                            {ingredient}
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </ListItem>
-                        ))}
-                    </List>
-                ) : (
-                        <h2 id='info'>No results to display!</h2>
-                    )}
-                <button onClick={this.hideModal}>Close</button>
-            </SearchModal>
+                </SearchModal>
 
             </Container >
         );
     }
 }
-
 
 export default Search;
