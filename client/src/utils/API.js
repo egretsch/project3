@@ -6,6 +6,10 @@ export default {
         return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=20")
     },
 
+    // getproductbyScan: product => {
+    //     return axios.get() <--- put API for scanner in here.
+    // },
+
 
     //Need user model and data.
 
@@ -23,8 +27,8 @@ export default {
 
 
     //METHOD TO DELETE STUFF FOR USERS
-    deleteSavedIngredient: (user, id) => {
-        return axios.post('/api/' + user + '/ingredient/', id);
+    deleteSavedIngredient: (user, ingredient) => {
+        return axios.post('/api/' + user + '/ingredient/', ingredient);
 
     },
 
@@ -36,8 +40,8 @@ export default {
         return axios.post('/api/' + user + '/product', productData);
 
     },
-    deleteSavedProduct: (user, id) => {
-        return axios.post('/api/' + user + '/product', id);
+    deleteSavedProduct: (user, product) => {
+        return axios.post('/api/' + user + '/product', product);
 
     },
 

@@ -12,18 +12,16 @@
 
 #info {
     text-align: center;
-
     color: blue;
 }
 
 
 #favorite {
     text-align: center;
-
     color: green;
 }
 
 .btn {
-    margin:10px;
+    margin:5px;
 }
 

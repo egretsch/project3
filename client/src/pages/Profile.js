@@ -7,6 +7,7 @@ import { Input, TextArea, FormBtn } from "../components/Form";
 
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
+import API from "../utils/API";
 import './pages.css';
 
 
@@ -31,6 +32,13 @@ class Profile extends Component {
     //Should users be able to search ingredients in here?
     //Should users be able tp search products in here?
     //What else should be in this profile?
+
+
+
+
+    //Make Dummy Data.
+    //Get dummy data to fill in the sections
+    //get buttons to pop up a modal for updating stuff.
 
 
 
