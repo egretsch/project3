@@ -13,7 +13,7 @@ class Scanner extends React.Component {
     componentDidMount() {
         Quagga.init({
             inputStream: {
-                type : "LiveStream",
+                type : "ImageStream",
                 constraints: {
                     width: 640,
                     height: 480,

@@ -89,8 +89,7 @@ class Profile extends Component {
                             <button className='btn btn-success'>Placeholder Update Favorites</button>
                     </Col>
                 </Row>
-
-
+                
             </Container>
         )
     }

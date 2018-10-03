@@ -23,8 +23,8 @@ export default {
 
 
     //METHOD TO DELETE STUFF FOR USERS
-    deleteSavedProduct: (user, id) => {
-        return axios.post('/api/' + user + '/product/', id);
+    deleteSavedIngredient: (user, id) => {
+        return axios.post('/api/' + user + '/ingredient/', id);
 
     },
 

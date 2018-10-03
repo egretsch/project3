@@ -3,7 +3,11 @@ import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Input, TextArea, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
+import Scanner from "../components/Scanner";
+import SearchModal from "../components/SearchModal";
 import Jumbotron from "../components/Jumbotron";
+
+
 import './pages.css';
 
 
@@ -23,9 +27,9 @@ class Search extends Component {
     state = {
         searchedProduct: "",
         searchResults: [],
-
+        show: false
     }
-    
+
     //basic input change handler.
     handleInputChange = event => {
         const { name, value } = event.target;
@@ -34,12 +38,61 @@ class Search extends Component {
         });
     };
 
+    //Modal Functions
+    showModal = () => {
+        this.setState({ show: true });
+    };
+    hideModal = () => {
+        this.setState({ show: false });
+    };
+
+
+    //Dunno how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
+    handleActiveIngredients = activeIngredient => {
+        console.log(activeIngredient)
+        activeIngredient = activeIngredient.toString();
+        if (activeIngredient.includes('Active ingredients')) {
+            activeIngredient = activeIngredient.replace(/Active ingredients/i, '');
+            return activeIngredient
+        }
+        else if (activeIngredient.includes('ACTIVE INGREDIENTS')) {
+            activeIngredient = activeIngredient.replace(/ACTIVE INGREDIENTS/i, '');
+            return activeIngredient
+        }
+        else if (activeIngredient.includes('Active Ingredients')) {
+            activeIngredient = activeIngredient.replace(/Active Ingredients/i, '');
+            return activeIngredient
+        }
+        else if (activeIngredient.includes('Active ingredient')) {
+            activeIngredient = activeIngredient.replace(/Active ingredient/i, '');
+            return activeIngredient
+        }
+        else if (activeIngredient.includes('Active Ingredient')) {
+            activeIngredient = activeIngredient.replace(/Active ingredient/i, '');
+            return activeIngredient
+        }
+        else if (activeIngredient.includes('ACTIVE INGREDIENT')) {
+            activeIngredient = activeIngredient.replace(/ACTIVE INGREDIENT/i, '');
+            return activeIngredient
+        }
+        else {
+            return activeIngredient
+        }
+
+    }
+
+
+    handleInactiveIngredients = inactiveIngredient => {
+        //splits the inactive ingredients array and puts each ingredient into a string.
+        inactiveIngredient = inactiveIngredient.toString().replace('Inactive ingredients ', '').split(', ');
+        return inactiveIngredient;
+    }
+
+
     //HANDLES A PRODUCT SEARCH
     handleFormSubmit = event => {
-
         //Prevents page from refreshing.
         event.preventDefault();
-
         //makes a empty array so we can set this as the searched results later on.
         const brandNameArray = [];
 
@@ -53,26 +106,15 @@ class Search extends Component {
                     const brandName = element.openfda.brand_name
                     const activeIngredient = element.active_ingredient
                     const inactiveIngredient = element.inactive_ingredient
-                    const activeArray = activeIngredient.toString().replace('Active ingredient', '')
-                    console.log(activeArray)
 
-                    if (inactiveIngredient) {
-
-                        //splits the inactive ingredients array and puts each ingredient into a string.
-                        const inactiveArray = inactiveIngredient.toString().replace('Inactive ingredients ', '').split(', ');
-                        // console.log(inactiveArray)
-
-
-                        // if a brand name doesn't exist, we skip over it. 
-                        //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
-                        if (brandName) {
-                            brandNameArray.push({
-                                brandName: brandName,
-                                activeIngredient: activeIngredient,
-                                inactiveIngredient: inactiveArray
-                            });
-                        }
-
+                    // if a brand name doesn't exist, we skip over it. 
+                    //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
+                    if (brandName && activeIngredient && inactiveIngredient) {
+                        brandNameArray.push({
+                            brandName: brandName,
+                            activeIngredient: this.handleActiveIngredients(activeIngredient),
+                            inactiveIngredient: this.handleInactiveIngredients(inactiveIngredient)
+                        });
                     }
 
                 });
@@ -83,7 +125,6 @@ class Search extends Component {
     };
 
     //renders the page.
-
     render() {
         return (
             <Container fluid>
@@ -101,41 +142,84 @@ class Search extends Component {
                             />
                             <FormBtn
                                 disabled={!this.state.searchedProduct}
-                                onClick={this.handleFormSubmit}
+                                onClick={
+                                    this.handleFormSubmit,
+                                    this.showModal
+                                        }
                             >
-                                Search Product
+                        Search Product
                             </FormBtn>
                         </form>
                     </Col>
-                    <Col size="md-6 sm-12">
-                        <Jumbotron>
-                            <h2>Search Results</h2>
-                        </Jumbotron>
-                        {/* Ternary Operation to see if there are results for a product */}
-                        {this.state.searchResults.length ? (
-                            <List>
-                                {this.state.searchResults.map(product => (
-                                    <ListItem key={product.brandName}>
-                                        <h2 id='info'>{product.brandName}</h2>
-                                        <h4>{product.activeIngredient}</h4>
-                                        <h4 id='info'>Inactive Ingredients</h4>
-                                        <List>
-                                            {product.inactiveIngredient.map(ingredient => (
-                                                <ListItem key={product.brandName + ingredient}>
-                                                    {ingredient}
-                                                </ListItem>
-                                            ))}
-                                        </List>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        ) : (
-                                <h2 id='info'>No results to display</h2>
-                            )}
-                    </Col>
+                <Col size="md-6 sm-12">
+                    <Jumbotron>
+                        <h2>Search Results</h2>
+                    </Jumbotron>
+                    {/* Ternary Operation to see if there are results for a product */}
+                    {this.state.searchResults.length ? (
+                        <List>
+                            {this.state.searchResults.map(product => (
+                                <ListItem key={product.brandName}>
+                                    <h2 id='info'>{product.brandName}</h2>
+                                    <h4 id='info'>Active Ingredient(s)</h4>
+                                    <h4>{product.activeIngredient}</h4>
+                                    <h4 id='info'>Inactive Ingredients</h4>
+                                    <List>
+                                        {product.inactiveIngredient.map(ingredient => (
+                                            <ListItem key={product.brandName + ingredient}>
+                                                {ingredient}
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </ListItem>
+                            ))}
+                        </List>
+                    ) : (
+                            <h2 id='info'>No results to display!</h2>
+                        )}
+                </Col>
                 </Row>
-            </Container>
+            <Row>
+                {/* Scanner Camera */}
+                {/* <Col size='md-6'>
+                        <Scanner />
+                        <button className='btn btn-primary'>Scan Item</button>
+                    </Col> */}
+            </Row>
+
+            <SearchModal show={this.state.show}>
+                <Jumbotron>
+                    <h2>Search Results</h2>
+                </Jumbotron>
+                {/* Ternary Operation to see if there are results for a product */}
+                {this.state.searchResults.length ? (
+                    <List>
+                        {this.state.searchResults.map(product => (
+                            <ListItem key={product.brandName}>
+                                <h2 id='info'>{product.brandName}</h2>
+                                <h4 id='info'>Active Ingredient(s)</h4>
+                                <h4>{product.activeIngredient}</h4>
+                                <h4 id='info'>Inactive Ingredients</h4>
+                                <List>
+                                    {product.inactiveIngredient.map(ingredient => (
+                                        <ListItem key={product.brandName + ingredient}>
+                                            {ingredient}
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </ListItem>
+                        ))}
+                    </List>
+                ) : (
+                        <h2 id='info'>No results to display!</h2>
+                    )}
+                <button onClick={this.hideModal}>Close</button>
+            </SearchModal>
+
+            </Container >
         );
     }
 }
+
+
 export default Search;
