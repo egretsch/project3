@@ -28,12 +28,13 @@ class Profile extends Component {
     //3. Let User change preferences 
     //     -- Text input fields, and a check for gender (male female don't want to specify, etc.)
     
-    //Questions:
-    //Should users be able to search ingredients in here?
-    //Should users be able tp search products in here?
-    //What else should be in this profile?
+    getFavoriteProducts = () => {
+        console.log("This gets the Products saved in the database")
+    }
 
-
+    getStarredIngredients = () => {
+        console.log("This gets the saved user ingredients")
+    }
 
 
     //Make Dummy Data.

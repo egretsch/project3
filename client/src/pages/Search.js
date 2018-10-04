@@ -38,7 +38,7 @@ class Search extends Component {
             searchedProduct: "",
             searchResults: [],
             show: false,
-
+            savedIngredients: []
         }
     }
 
@@ -66,6 +66,25 @@ class Search extends Component {
         event.preventDefault();
         this.setState({ collapse: !this.state.collapse })
 
+    }
+
+    saveIngredient = event => {
+        event.preventDefault();
+        console.log("Hey this is clicked", this);
+    }
+
+    getSavedIngredients = () => {
+        console.log("This gets the ingredients from our DB")
+    }
+
+
+    //Match Ingredient to saved ingredient?
+    matchIngredients = productIngredient => {
+        savedIngredients.forEach = element => {
+            if (element === productIngredient){
+                console.log("It matches.") //Change ingredient css to red.
+            }
+        }
     }
 
     //Dunno how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
@@ -139,60 +158,61 @@ class Search extends Component {
         }
         else if (inactiveIngredient.includes('Inactive ingredient:')) {
             inactiveIngredient = inactiveIngredient.replace('Inactive ingredient: ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('INACTIVE INGREDIENTS:')) {
             inactiveIngredient = inactiveIngredient.replace('INACTIVE INGREDIENTS: ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('Inactive ingredients')) {
             inactiveIngredient = inactiveIngredient.replace('Inactive ingredients ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('INACTIVE INGREDIENTS')) {
             inactiveIngredient = inactiveIngredient.replace('INACTIVE INGREDIENTS ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('Inactive Ingredients')) {
 
             inactiveIngredient = inactiveIngredient.replace('Inactive Ingredients ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('Inactive ingredient')) {
 
             inactiveIngredient = inactiveIngredient.replace('Inactive ingredient ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('Inactive Ingredient')) {
 
             inactiveIngredient = inactiveIngredient.replace('Inactive Ingredient ' , '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('INACTIVE INGREDIENT')) {
             inactiveIngredient = inactiveIngredient.replace(/INACTIVE INGREDIENT/i , '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else {
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
 
             return inactiveIngredient.split(', ')
         }
     }
+
 
 
 
@@ -287,7 +307,7 @@ class Search extends Component {
                                     <Collapse isOpen={this.state.collapse}>
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => (
-                                                <ListItem key={product.brandName + 'inactive_' + ingredient}>
+                                                <ListItem onClick={this.saveIngredient} key={product.brandName + 'inactive_' + ingredient}>
                                                     {ingredient}
                                                 </ListItem>
                                             ))}
