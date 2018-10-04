@@ -13,7 +13,8 @@ class ScannerNavbar extends Component {
 
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
+        this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
 
         this.handleHideLoginModal = this.handleHideLoginModal.bind(this);
         this.handleShowLoginModal = this.handleShowLoginModal.bind(this);
@@ -90,7 +91,6 @@ class ScannerNavbar extends Component {
                 userName: this.state.loginUsername,
                 password: this.state.loginPassword
             }
-            console.log(loginObj)
             API.loginUser({
                 loginObj
             })

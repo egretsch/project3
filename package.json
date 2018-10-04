@@ -23,7 +23,9 @@
     "axios": "^0.16.2",
     "bcrypt": "^3.0.1",
     "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
     "express": "^4.15.4",
+    "express-session": "^1.15.6",
     "if-env": "^1.0.4",
     "mongoose": "^5.0.17"
   }
