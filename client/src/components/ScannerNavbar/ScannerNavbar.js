@@ -28,7 +28,9 @@ class ScannerNavbar extends Component {
             createUsername: "",
             createEmail: "",
             createPassword: "",
-            createGender: ""
+            createGender: "",
+            loginUsername: "",
+            loginPassword: ""
 
         };
     }
@@ -57,44 +59,44 @@ class ScannerNavbar extends Component {
     createUser = () => {
         var userAry = [];
         var userObj = {
-            name: `${this.state.createName}`,
-            userName: `${this.state.createUsername}`,
-            email: `${this.state.createEmail}`,
-            password: `${this.state.createPassword}`,
-            gender: `${this.state.createGender}`
+            name: this.state.createName,
+            userName: this.state.createUsername,
+            email: this.state.createEmail,
+            password: this.state.createPassword,
+            gender: this.state.createGender
         };
         userAry.push(userObj);
         API.postUser(userObj)
-            .then(userAry => console.log(userAry, 1) )
+            .then(res => console.log("submited data") )
             .catch(err => console.log(err));
     };
 
 
 
-    handleSubmit(event) {
-        //console.log(name)
-        //let name = this.state.createName.trim();
-        //var userAry = [];
-       // //var userObj = {
-            // "createName": `${this.state.createName}`,
-            // "username": `${this.state.createUsername}`,
-            // "email": `${this.state.createEmail}`,
-            // "password": `${this.state.createPassword}`,
-            // "gender": `${this.state.createGender}`
-        //};
-        //console.log(name)
-        //userAry.push(userObj);
-        alert(`An name was submitted:  ${this.state.createName}
-        An username was submitted:  ${this.state.createUsername}
-        An email was submitted:  ${this.state.createEmail}
-        An password was submitted:  ${this.state.createPassword}
-        An gender was submitted:  ${this.state.createGender}
-        `);
-
+    handleCreateSubmit(event) {
         this.createUser();
-        // this.createUserState();
+        this.createUserState();
 
         event.preventDefault();
+    }
+
+    
+
+
+    handleLoginSubmit(event) {
+        event.preventDefault();
+        if (this.state.loginUsername && this.state.loginPassword) {
+            const loginObj = {
+                userName: this.state.loginUsername,
+                password: this.state.loginPassword
+            }
+            console.log(loginObj)
+            API.loginUser({
+                loginObj
+            })
+                .then(res => console.log("Logedin"))
+                .catch(err => console.log(err));
+        }
     }
 
     handleShowLoginModal() {
@@ -145,14 +147,20 @@ class ScannerNavbar extends Component {
                             Login
                         </Modal.Title>
                     </Modal.Header>
+                    <Form horizontal onSubmit={this.handleLoginSubmit}>
                     <Modal.Body>
-                        <Form horizontal>
+                        
                             <FormGroup controlId="formHorizontalUsername">
                                 <Col componentClass={ControlLabel} sm={2}>
                                     Username
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl type="Username" placeholder="Username" />
+                                    <FormControl 
+                                        name="loginUsername"
+                                        type="Username"
+                                        placeholder="Enter Username"
+                                        value={this.state.loginUsername}
+                                        onChange={this.handleInputChange} />
                                 </Col>
                             </FormGroup>
                             <FormGroup controlId="formHorizontalPassword">
@@ -160,10 +168,15 @@ class ScannerNavbar extends Component {
                                     Password
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl type="password" placeholder="Password" />
+                                    <FormControl 
+                                        name="loginPassword"
+                                        type="Username"
+                                        placeholder="Enter Password"
+                                        value={this.state.loginPassword}
+                                        onChange={this.handleInputChange} />
                                 </Col>
                             </FormGroup>
-                        </Form>
+                        
                     </Modal.Body>
                     <Modal.Footer>
                         <ButtonGroup>
@@ -171,6 +184,7 @@ class ScannerNavbar extends Component {
                             <Button onClick={this.handleHideLoginModal}>Close</Button>
                         </ButtonGroup>
                     </Modal.Footer>
+                    </Form>
                 </Modal>
 
                 <Modal
@@ -184,7 +198,7 @@ class ScannerNavbar extends Component {
                             Create New Account
                         </Modal.Title>
                     </Modal.Header>
-                    <Form horizontal onSubmit={this.handleSubmit}>
+                    <Form horizontal onSubmit={this.handleCreateSubmit}>
                         <Modal.Body>
 
                             <FormGroup controlId="formHorizontalName">

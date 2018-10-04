@@ -10,14 +10,14 @@ module.exports = {
   //     .then(dbModel => res.json(dbModel))
   //     .catch(err => res.status(422).json(err));
   // },
-  // findById: function(req, res) {
-  //   db.Book
-  //     .findById(req.params.id)
-  //     .then(dbModel => res.json(dbModel))
-  //     .catch(err => res.status(422).json(err));
-  // },
+  findOne: function(req, res) {
+    console.log(req.body)
+    db.User
+      .findOne(req.body.userName)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
   create: function (req, res) {
-    console.log(req.body, 2)
     const saltRounds = 10;
     const myPlaintextPassword = req.body.password;
     bcrypt.genSalt(saltRounds, function (err, salt) {
@@ -28,7 +28,6 @@ module.exports = {
           .then(dbModel => res.json(dbModel))
           .catch(err => res.status(422).json(err));
       });
-
     });
   }
   // update: function(req, res) {

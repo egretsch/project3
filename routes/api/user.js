@@ -3,8 +3,9 @@ const uesrController = require("../../controllers/userController");
 
 // Matches with "/api/books"
 router.route("/")
-  // .get(uesrController.findAll)
   .post(uesrController.create);
+router.route("/login")
+  .post(uesrController.findOne);
 
 // Matches with "/api/books/:id"
 // router
