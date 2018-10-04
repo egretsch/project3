@@ -13,7 +13,7 @@ module.exports = {
   findOne: function(req, res) {
     console.log(req.body.loginObj.userName, "backend")
     db.User
-      .findOne(req.body.loginObj.userName)
+      .find(req.body.loginObj.userName)
       .then(users => {
         console.log(users)
         // console.log(data.dataValues + "This is the datavalues");
