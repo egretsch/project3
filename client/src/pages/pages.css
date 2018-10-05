@@ -1,0 +1,31 @@
+.jumbotron {
+    width: 100%;
+    background-color: maroon;
+    color: pink;
+    text-align: center;
+}
+
+#warning {
+    text-align: center;
+    color: red;
+}
+
+#info {
+    text-align: center;
+    color: blue;
+}
+
+
+#favorite {
+    text-align: center;
+    color: green;
+}
+
+.list-group-item {
+    font-size: 9pt;
+}
+
+.save-ingredients-button {
+    float: right;
+}
+

@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt')
 
 // Defining methods for the userController
 module.exports = {
-  
+
+ 
   findOne: function(req, res) {
     console.log(req.body.loginObj.userName, "backend")
     db.User
@@ -70,5 +71,5 @@ module.exports = {
     })
    
   }
-  
+
 };

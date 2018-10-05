@@ -1,14 +1,21 @@
-import React, { Component } from 'react';
-import ScannerNavbar from "./components/ScannerNavbar/ScannerNavbar";
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Search from "./pages/Search";
+import Profile from "./pages/Profile";
+//Landing page should be login page.
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <ScannerNavbar />
-      </div>
-    );
-  }
-}
+const App = () => (
+
+  <Router>
+    <div>
+      <Switch>
+        <Route path='/search' component={Search} />
+        <Route path='/profile' component={Profile}/>
+      </Switch>
+    </div>
+  </Router>
+  
+)
+
 
 export default App;

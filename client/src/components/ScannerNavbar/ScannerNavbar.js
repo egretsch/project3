@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 import "./ScannerNavbar.css";
-import API from "../../util/API";
+import API from "../../utils/API.js";
 
 class ScannerNavbar extends Component {
 

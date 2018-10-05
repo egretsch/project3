@@ -8,6 +8,4 @@ router.route("/")
 router.route("/login")
   .post(userController.findOne);
 
-
-
 module.exports = router;
