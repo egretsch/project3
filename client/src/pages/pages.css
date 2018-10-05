@@ -21,7 +21,11 @@
     color: green;
 }
 
-.btn {
-    margin:5px;
+.list-group-item {
+    font-size: 9pt;
+}
+
+.save-ingredients-button {
+    float: right;
 }
 

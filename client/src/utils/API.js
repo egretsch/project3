@@ -11,8 +11,8 @@ export default {
     // },
 
     // submit user info
-    postUser: function (userAry) {
-        return axios.post("/api/user", userAry);
+    postUser: function (userArray) {
+        return axios.post("/api/user", userArray);
     },
     // compare user info against login info
     loginUser: function (loginObj) {
@@ -20,33 +20,33 @@ export default {
     },
 
     // API TO GET USER DATA
-    getAllSavedIngredients: user => {
-        return axios.get('/api/' + user + '/ingredient')   
+    getAllSavedIngredients: ingredientsArray => {
+        return axios.get('/api/user', ingredientsArray )   
     },
 
 
     //METHOD TO POST STUFF FOR USERS
-    saveIngredient: (user, ingredientData) => {
-        return axios.post('/api/' + user + '/ingredient', ingredientData)
+    saveIngredient: (ingredient) => {
+        return axios.post('/api/user', ingredient)
     },
 
 
     //METHOD TO DELETE STUFF FOR USERS
-    deleteSavedIngredient: (user, ingredient) => {
-        return axios.post('/api/' + user + '/ingredient/', ingredient);
+    deleteSavedIngredient: (ingredient) => {
+        return axios.post('/api/user', ingredient);
 
     },
 
-    getAllSavedProducts: user => {
-        return axios.get('/api/' + user + '/product');
+    getAllSavedProducts: productsArray => {
+        return axios.get('/api/user', productsArray);
     },
 
-    saveProduct: (user, productData) => {
-        return axios.post('/api/' + user + '/product', productData);
+    saveProduct: (product) => {
+        return axios.post('/api/user', product);
 
     },
-    deleteSavedProduct: (user, product) => {
-        return axios.post('/api/' + user + '/product', product);
+    deleteSavedProduct: (product) => {
+        return axios.post('/api/user', product);
 
     },
 

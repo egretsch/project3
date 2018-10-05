@@ -40,7 +40,8 @@ class Search extends Component {
             searchedProduct: "",
             searchResults: [],
             show: false,
-            savedIngredients: []
+            savedIngredients: [],
+            isToggled: ""
         }
     }
 
@@ -66,15 +67,25 @@ class Search extends Component {
     //Shows or Collapses the list on tap.
     toggleCollapse = event => {
         event.preventDefault();
-        this.setState({ collapse: !this.state.collapse })
+        let toggleIndex = event.target.value
+        console.log(toggleIndex);
 
+        this.setState({ collapse: !this.state.collapse })
     }
 
-    // saveIngredient = event => {
-    //     event.preventDefault();
-    //     console.log("Hey this is clicked", this);
-        ///SOMETHING WITH EVENT.TARGET
-    // }
+    //button to save ingredients
+    saveIngredient = event => {
+        event.preventDefault();
+        let ingredient = event.target.value;
+        console.log("Hey this ingredient is clicked: ", ingredient);
+    }
+
+    //button to save products
+    saveProduct = event => {
+        event.preventDefault();
+        let product = event.target.value;
+        console.log("Hey this product was clicked: ", product);
+    }
 
     // getSavedIngredients = () => {
     //     console.log("This gets the ingredients from our DB")
@@ -297,24 +308,28 @@ class Search extends Component {
                 <SearchModal show={this.state.show}>
                     <Jumbotron style={{ margin: 0 }}>
                         <h2>Search Results</h2>
-                        <button className='btn btn-primary text-center' onClick={this.hideModal}>Close</button>
+                        <button className='btn btn-danger text-center' onClick={this.hideModal}>Close</button>
                     </Jumbotron>
                     {/* Ternary Operation to see if there are results for a product */}
                     {this.state.searchResults.length ? (
                         <List >
-                            {this.state.searchResults.map(product => (
+                            {this.state.searchResults.map((product, index) => (
                                 <ListItem key={product.brandName + product.activeIngredient}>
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
+                                    <button value={product.brandName} onClick={this.saveProduct} className='btn btn-primary'>Save</button>
                                     <h4 id='info'>Active Ingredient(s)</h4>
                                     <h4 style={{ textAlign: 'center' }}>{product.activeIngredient}</h4>
                                     
                                     
-                                    <button onClick={this.toggleCollapse} className='btn btn-success'>Tap for Inactive Ingredients</button>
+
+                                    {/*This is to let the list be collapsable */}
+                                    <button value={index} onClick={ e => this.toggleCollapse(e)} className='btn btn-success'>Tap for Inactive Ingredients</button>
                                     <Collapse isOpen={this.state.collapse}>
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => (
-                                                <ListItem onClick={this.saveIngredient} key={product.brandName + 'inactive_' + ingredient}>
+                                                <ListItem key={product.brandName + 'inactive_' + ingredient}>
                                                     {ingredient}
+                                                    <button className='save-ingredients-button' value={ingredient} onClick={this.saveIngredient}>Save</button>
                                                 </ListItem>
                                             ))}
                                         </List>
