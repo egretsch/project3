@@ -20,8 +20,8 @@ export default {
     },
 
     // API TO GET USER DATA
-    getAllSavedIngredients: ingredientsArray => {
-        return axios.get('/api/user', ingredientsArray )   
+    getAllSavedIngredients: ingredients => {
+        return axios.get('/api/user', ingredients )   
     },
 
 
@@ -37,8 +37,8 @@ export default {
 
     },
 
-    getAllSavedProducts: productsArray => {
-        return axios.get('/api/user', productsArray);
+    getAllSavedProducts: bookmarkedProducts => {
+        return axios.get('/api/user', bookmarkedProducts);
     },
 
     saveProduct: (product) => {

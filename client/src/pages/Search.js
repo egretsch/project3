@@ -37,6 +37,7 @@ class Search extends Component {
         super(props);
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.state = {
+            user: "jason", //placeholder
             searchedProduct: "",
             searchResults: [],
             show: false,
@@ -87,9 +88,10 @@ class Search extends Component {
         console.log("Hey this product was clicked: ", product);
     }
 
-    // getSavedIngredients = () => {
-    //     console.log("This gets the ingredients from our DB")
-    // }
+    getSavedIngredients = () => {
+        API.getAllSavedIngredients(this.state.user).then
+        console.log("This gets the ingredients from our DB")
+    }
 
 
     // //Match Ingredient to saved ingredient?
