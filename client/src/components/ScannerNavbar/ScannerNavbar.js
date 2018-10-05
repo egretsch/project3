@@ -33,7 +33,10 @@ class ScannerNavbar extends Component {
             createPassword: "",
             createGender: "",
             loginUsername: "",
-            loginPassword: ""
+            loginPassword: "",
+            userMessage: "",
+            color: "black"
+            
 
         };
     }
@@ -70,7 +73,19 @@ class ScannerNavbar extends Component {
         };
         userAry.push(userObj);
         API.postUser(userObj)
-            .then(res => console.log("submited data") )
+            .then(res => {
+                console.log("submited data and here is res: ", res) 
+
+                if(!res.data){
+                    console.log("we made it to the second layer");
+                    // alert("Username already exists! Please use another");
+                    this.setState({
+                        userMessage: "Username or Password already exsists",
+                        color: "#FF000"
+                    })
+                }
+            
+            })
             .catch(err => console.log(err));
     };
 
@@ -118,7 +133,7 @@ class ScannerNavbar extends Component {
     }
 
     handleShowNewUserModal() {
-        this.setState({ showNewUserModal: true });
+        this.setState({ showNewUserModal: true, userMessage: "Create New Account" });
     }
 
     handleHideNewUserModal() {
@@ -206,8 +221,8 @@ class ScannerNavbar extends Component {
                     dialogClassName="custom-modal"
                 >
                     <Modal.Header closeButton>
-                        <Modal.Title id="contained-modal-title-lg">
-                            Create New Account
+                        <Modal.Title  id="contained-modal-title-lg">
+                            <div style={{ color: this.state.color }}>{this.state.userMessage}</div>
                         </Modal.Title>
                     </Modal.Header>
                     <Form horizontal onSubmit={this.handleCreateSubmit}>
