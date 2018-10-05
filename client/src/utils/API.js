@@ -10,9 +10,14 @@ export default {
     //     return axios.get() <--- put API for scanner in here.
     // },
 
-
-    //Need user model and data.
-
+    // submit user info
+    postUser: function (userAry) {
+        return axios.post("/api/user", userAry);
+    },
+    // compare user info against login info
+    loginUser: function (loginObj) {
+        return axios.post("/api/user/login", loginObj);
+    },
 
     // API TO GET USER DATA
     getAllSavedIngredients: user => {
