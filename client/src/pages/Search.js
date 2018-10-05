@@ -7,6 +7,8 @@ import { Input, TextArea, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
 import SearchModal from "../components/SearchModal";
 import Jumbotron from "../components/Jumbotron";
+import ScannerNavbar from "../components/ScannerNavbar";
+
 
 //The Scanner
 import Scanner from "../components/Scanner";
@@ -71,6 +73,7 @@ class Search extends Component {
     // saveIngredient = event => {
     //     event.preventDefault();
     //     console.log("Hey this is clicked", this);
+        ///SOMETHING WITH EVENT.TARGET
     // }
 
     // getSavedIngredients = () => {
@@ -96,7 +99,7 @@ class Search extends Component {
         else {
             activeIngredient = activeIngredient.toString();
         }
-        
+
         if (activeIngredient.includes('Active Ingredients:')) {
             activeIngredient = activeIngredient.replace(/Active Ingredients:/i, '');
             return activeIngredient
@@ -195,13 +198,13 @@ class Search extends Component {
         }
         else if (inactiveIngredient.includes('Inactive Ingredient')) {
 
-            inactiveIngredient = inactiveIngredient.replace('Inactive Ingredient ' , '').split(', ')
+            inactiveIngredient = inactiveIngredient.replace('Inactive Ingredient ', '').split(', ')
             // console.log(inactiveIngredient)
 
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('INACTIVE INGREDIENT')) {
-            inactiveIngredient = inactiveIngredient.replace(/INACTIVE INGREDIENT/i , '').split(', ')
+            inactiveIngredient = inactiveIngredient.replace(/INACTIVE INGREDIENT/i, '').split(', ')
             // console.log(inactiveIngredient)
 
             return inactiveIngredient
@@ -234,7 +237,7 @@ class Search extends Component {
                     const activeIngredient = element.active_ingredient
                     const inactiveIngredient = element.inactive_ingredient
 
-                
+
 
                     // if a brand name doesn't exist, we skip over it. 
                     //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
@@ -261,6 +264,7 @@ class Search extends Component {
     render() {
         return (
             <Container fluid>
+            <ScannerNavbar />
                 <Row>
                     <Col size='md-12'>
                         <Jumbotron>
@@ -303,6 +307,8 @@ class Search extends Component {
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
                                     <h4 id='info'>Active Ingredient(s)</h4>
                                     <h4 style={{ textAlign: 'center' }}>{product.activeIngredient}</h4>
+                                    
+                                    
                                     <button onClick={this.toggleCollapse} className='btn btn-success'>Tap for Inactive Ingredients</button>
                                     <Collapse isOpen={this.state.collapse}>
                                         <List>
@@ -313,6 +319,8 @@ class Search extends Component {
                                             ))}
                                         </List>
                                     </Collapse>
+
+
                                 </ListItem>
                             ))}
                         </List>

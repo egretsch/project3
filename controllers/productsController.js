@@ -1,4 +1,4 @@
-const db = require("../models/product");
+const db = require("../models/bookmarkedProducts");
 
 // Defining methods for the productsController
 module.exports = {

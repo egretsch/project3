@@ -1,4 +1,4 @@
-const db = require("../models/ingredient");
+const db = require("../models/ingredients");
 
 // Defining methods for the ingredientsController
 module.exports = {
