@@ -68,24 +68,24 @@ class Search extends Component {
 
     }
 
-    saveIngredient = event => {
-        event.preventDefault();
-        console.log("Hey this is clicked", this);
-    }
+    // saveIngredient = event => {
+    //     event.preventDefault();
+    //     console.log("Hey this is clicked", this);
+    // }
 
-    getSavedIngredients = () => {
-        console.log("This gets the ingredients from our DB")
-    }
+    // getSavedIngredients = () => {
+    //     console.log("This gets the ingredients from our DB")
+    // }
 
 
-    //Match Ingredient to saved ingredient?
-    matchIngredients = productIngredient => {
-        savedIngredients.forEach = element => {
-            if (element === productIngredient){
-                console.log("It matches.") //Change ingredient css to red.
-            }
-        }
-    }
+    // //Match Ingredient to saved ingredient?
+    // matchIngredients = productIngredient => {
+    //     savedIngredients.forEach = element => {
+    //         if (element === productIngredient){
+    //             console.log("It matches.") //Change ingredient css to red.
+    //         }
+    //     }
+    // }
 
     //Dunno how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
     handleActiveIngredients = activeIngredient => {
