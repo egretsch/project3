@@ -13,6 +13,8 @@ class ScannerNavbar extends Component {
 
 
         this.handleInputChange = this.handleInputChange.bind(this);
+
+        
         this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
         this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
 
@@ -35,7 +37,7 @@ class ScannerNavbar extends Component {
 
         };
     }
-
+    // handles all input change
     handleInputChange(event) {
         const target = event.target;
         const value = target.value;
@@ -46,7 +48,7 @@ class ScannerNavbar extends Component {
         });
     }
 
-
+    // clear user submit
     createUserState() {
         this.setState({
             createName: "",
@@ -56,7 +58,7 @@ class ScannerNavbar extends Component {
             createGender: ""
         });
     }
-
+    // CREATe user data
     createUser = () => {
         var userAry = [];
         var userObj = {
@@ -72,7 +74,7 @@ class ScannerNavbar extends Component {
             .catch(err => console.log(err));
     };
 
-
+    // Create USER Submit
 
     handleCreateSubmit(event) {
         this.createUser();
@@ -80,25 +82,33 @@ class ScannerNavbar extends Component {
 
         event.preventDefault();
     }
+    // CLEAR login state
+    clearLoginState() {
+        this.setState({
+            loginUsername: "",
+            loginPassword: ""
+        });
+    }
 
-    
-
-
+    // handle Login Submit
     handleLoginSubmit(event) {
         event.preventDefault();
+        
         if (this.state.loginUsername && this.state.loginPassword) {
             const loginObj = {
                 userName: this.state.loginUsername,
                 password: this.state.loginPassword
             }
+        
             API.loginUser({
                 loginObj
             })
                 .then(res => console.log("Logedin"))
                 .catch(err => console.log(err));
         }
+        this.clearLoginState()
     }
-
+    // shows modals and hides them
     handleShowLoginModal() {
         this.setState({ showLoginModal: true });
     }
@@ -117,6 +127,7 @@ class ScannerNavbar extends Component {
 
     render() {
         return (
+            // navbar
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
@@ -135,7 +146,7 @@ class ScannerNavbar extends Component {
                 </Navbar.Collapse>
 
 
-
+                {/* login modal */}
                 <Modal
                     {...this.props}
                     show={this.state.showLoginModal}
@@ -170,7 +181,7 @@ class ScannerNavbar extends Component {
                                 <Col sm={10}>
                                     <FormControl 
                                         name="loginPassword"
-                                        type="Username"
+                                        type="password"
                                         placeholder="Enter Password"
                                         value={this.state.loginPassword}
                                         onChange={this.handleInputChange} />
@@ -187,6 +198,7 @@ class ScannerNavbar extends Component {
                     </Form>
                 </Modal>
 
+                {/* create user modal */}
                 <Modal
                     {...this.props}
                     show={this.state.showNewUserModal}

@@ -13,40 +13,43 @@ module.exports = {
   findOne: function(req, res) {
     console.log(req.body.loginObj.userName, "backend")
     db.User
-      .find(req.body.loginObj.userName)
+      .findOne({userName: req.body.loginObj.userName})
       .then(users => {
         console.log(users)
-        // console.log(data.dataValues + "This is the datavalues");
-        // console.log(data.dataValues.userName + "This is the userName");
-        // console.log(data.dataValues.password + "This is the password");
-        // if (!data && typeof data === object) {
-        //   res.status(404).send('Invalid username or password. Please try again');
-        // } else {
-        //   bcrypt.compare(req.body.password, data.dataValues.password).then(function (bcryptRes) {
-        //     // res == true
+        
+        console.log(users.userName, "This is the userName");
+        console.log(users.password, "This is the password");
+        if (!users && typeof users === object) {
+          res.status(404).send('Invalid username or password. Please try again');
+        } else {
+          bcrypt.compare(req.body.loginObj.password, users.password).then(function (bcryptRes) {
+            // res == true
 
-        //     if (!bcryptRes) {
-        //       console.log("it worked1");
-        //       res.status(404).send('Invalid username or password. Please try again');
-        //     } else {
-        //       console.log("it worked 2");
+            if (!bcryptRes) {
+              console.log("it worked1");
+              res.status(404).send('Invalid username or password. Please try again');
+            } else {
+              console.log("it worked 2");
 
-        //       var userObj = {
-        //         id: data.dataValues._id,
-        //         name: data.dataValues.name,
-        //         email: data.dataValues.email,
-        //         userName: data.dataValues.userName,
-        //         gender: data.dataValues.gender
-        //       }
-        //       console.log(userObj);
-        //       req.session.user.loggedIn = true;
-        //       req.session.user.currentUser = userObj;
-        //       res.json(userObj);
-        //     }
-        //   });
-        // }
+              var userObj = {
+                id: users._id,
+                name: users.name,
+                email: users.email,
+                userName: users.userName,
+                gender: users.gender
+              }
+              console.log(userObj);
+              req.session.user.loggedIn = true;
+              req.session.user.currentUser = userObj;
+              res.json(userObj);
+            }
+          });
+        }
       })
-      .catch(err => res.status(422).json(err));
+      .catch((err) => {
+        console.log(err)
+        res.status(422).json(err)
+      });
   },
   create: function (req, res) {
     const saltRounds = 10;

@@ -1,17 +1,13 @@
 const router = require("express").Router();
-const uesrController = require("../../controllers/userController");
+const userController = require("../../controllers/userController");
 
-// Matches with "/api/books"
+// routes user info to server
 router.route("/")
-  .post(uesrController.create);
+  .post(userController.create);
+// routes login info to server
 router.route("/login")
-  .post(uesrController.findOne);
+  .post(userController.findOne);
 
-// Matches with "/api/books/:id"
-// router
-//   .route("/:id")
-//   .get(uesrController.findById)
-//   .put(uesrController.update)
-//   .delete(uesrController.remove);
+
 
 module.exports = router;
