@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 
 // Login
 module.exports = {
+
+ 
   findOne: function(req, res) {
     console.log(req.body.loginObj.userName, "backend")
     db.User
@@ -44,17 +46,30 @@ module.exports = {
         res.status(422).json(err)
       });
   },
+
+  
   create: function (req, res) {
-    const saltRounds = 10;
-    const myPlaintextPassword = req.body.password;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
-        req.body.password = hash;
-        db.User
-          .create(req.body)
-          .then(dbModel => res.json(dbModel))
-          .catch(err => res.status(422).json(err));
-      });
-    });
+
+    db.User.find({$or: [{userName: req.body.userName}, {email: req.body.email}]}).then(dbData =>{
+      console.log("This is dbData inside create: ", dbData);
+
+      if(dbData.length === 0){
+        const saltRounds = 10;
+        const myPlaintextPassword = req.body.password;
+        bcrypt.genSalt(saltRounds, function (err, salt) {
+          bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
+            req.body.password = hash;
+            db.User
+              .create(req.body)
+              .then(dbModel => res.json(dbModel))
+              .catch(err => res.status(422).json(err));
+          });
+        });
+      }else{
+        res.json(false);
+      }
+    })
+   
   }
+
 };
