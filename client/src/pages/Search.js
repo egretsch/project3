@@ -42,7 +42,8 @@ class Search extends Component {
             searchResults: [],
             show: false,
             savedIngredients: [],
-            isToggled: ""
+            collapse: false,
+            isToggled: []
         }
     }
 
@@ -66,12 +67,10 @@ class Search extends Component {
     };
 
     //Shows or Collapses the list on tap.
-    toggleCollapse = event => {
-        event.preventDefault();
-        let toggleIndex = event.target.value
-        console.log(toggleIndex);
-
-        this.setState({ collapse: !this.state.collapse })
+    toggleCollapse = (brandName, inactiveIngredient) => {
+        this.setState({
+            [brandName + inactiveIngredient]: !this.state[brandName + inactiveIngredient]
+        });
     }
 
     //button to save ingredients
@@ -84,8 +83,10 @@ class Search extends Component {
     //button to save products
     saveProduct = event => {
         event.preventDefault();
+
+
+        // API.saveProduct
         let product = event.target.value;
-        console.log("Hey this product was clicked: ", product);
     }
 
     getSavedIngredients = () => {
@@ -267,6 +268,16 @@ class Search extends Component {
                 //Sets the state when we are done.
                 this.setState({ searchResults: brandNameArray })
                 this.showModal();
+
+
+                for (let i = 0; i < brandNameArray.length; i++) {
+                    this.setState({
+                        [brandNameArray[i].brandName + brandNameArray[i].inactiveIngredient]: false
+                    });
+
+                    
+                }
+
             }).catch(err => this.setState({
                 show: true
             }));
@@ -325,8 +336,8 @@ class Search extends Component {
                                     
 
                                     {/*This is to let the list be collapsable */}
-                                    <button value={index} onClick={ e => this.toggleCollapse(e)} className='btn btn-success'>Tap for Inactive Ingredients</button>
-                                    <Collapse isOpen={this.state.collapse}>
+                                    <button value={index} onClick={() => {this.toggleCollapse(product.brandName, product.inactiveIngredient)}} className='btn btn-success'>Tap for Inactive Ingredients</button>                                    
+                                    <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => (
                                                 <ListItem key={product.brandName + 'inactive_' + ingredient}>
