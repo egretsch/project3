@@ -1,0 +1,25 @@
+to do -
+
+Get Scanner to work with Product Search
+--This means:
+    - Save the scanned product code into a database WITH the brand name of product
+        (this is so if the product is scanned again, there won't be a need to input the name again)
+    - Getting the information from the database and putting it in the product search.
+
+Get Database routes to work:
+--This means:
+    - Saving users into a database with information.
+    - Getting user tokens to be throughout the website.
+
+Get the information from the database onto their respective pages:
+--This means:
+    - Profile page should receive user information from the database.
+    - Search page should see user saved ingredients and warn them appropriately on products with their ingredients
+
+Let users update their information
+--This means:
+    - Getting working buttons onto ingredients, buttons that are pushed will save into 
+        their user route (preferably ingredients route).
+    - Getting working buttons on the user profile to delete saved products or saved ingredients.
+    - Getting working buttons onto Products, buttons that are pushed will save into 
+        their user route (preferably products route).
