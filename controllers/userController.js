@@ -1,7 +1,7 @@
 const db = require("../models");
 const bcrypt = require('bcrypt')
 
-// Defining methods for the booksController
+// Login
 module.exports = {
   findOne: function(req, res) {
     console.log(req.body.loginObj.userName, "backend")

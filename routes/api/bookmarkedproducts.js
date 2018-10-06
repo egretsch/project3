@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const bookmarkedProductsController = require("../../controllers/bookmarkedProductsController");
 
+
+//Thinking about what the controllers are doing, the data should be coming from user instead of products.
+//So how do we fix this?
+
+
 // Matches with "/api/products"
 router.route("/")
   .get(bookmarkedProductsController.findAll)
@@ -14,3 +19,4 @@ router
   .delete(bookmarkedProductsController.remove);
 
 module.exports = router;
+  

@@ -1,6 +1,10 @@
 const db = require("../models/ingredients");
 
 // Defining methods for the ingredientsController
+
+
+//ASK: if we just put it in our users.ingredients array, would that work? How would we do it?
+
 module.exports = {
   findAll: function(req, res) {
     console.log(req);
@@ -10,21 +14,9 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  findById: function(req, res) {
-    db.Ingredients
-      .findById(req.params.id)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
   create: function(req, res) {
     db.Ingredients
       .create(req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  update: function(req, res) {
-    db.Ingredients
-      .findOneAndUpdate({ _id: req.params.id }, req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
