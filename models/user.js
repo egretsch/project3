@@ -9,18 +9,8 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   gender: { type: String, required: true },
-  ingredients: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Ingredients"
-    }
-  ],
-  bookmarkedProducts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "BookmarkedProducts"
-    }
-  ]
+  ingredients: {type: String, unique: true},
+  bookmarkedProducts: {type: String, unique: true}
 });
 
 const User = mongoose.model("User", userSchema);

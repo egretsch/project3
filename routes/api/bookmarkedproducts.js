@@ -6,17 +6,15 @@ const bookmarkedProductsController = require("../../controllers/bookmarkedProduc
 //So how do we fix this?
 
 
-// Matches with "/api/products"
 router.route("/")
   .get(bookmarkedProductsController.findAll)
   .post(bookmarkedProductsController.create);
 
-// Matches with "/api/products/:id"
-router
-  .route("/:id")
-  .get(bookmarkedProductsController.findById)
-  .put(bookmarkedProductsController.update)
-  .delete(bookmarkedProductsController.remove);
+// router
+  // .route("/:id")
+  // .get(bookmarkedProductsController.findById)
+  // .put(bookmarkedProductsController.update)
+  // .delete(bookmarkedProductsController.remove);
 
 module.exports = router;
   

@@ -1,30 +1,47 @@
-const db = require("../models/bookmarkedProducts");
-
-// Defining methods for the bookmarkedProductsController
+const db = require("../models");
 
 
-//ASK: if we just put it in our users.bookmarkedProducts array, would that work? How would we do it?
 
 
 module.exports = {
-  findAll: function(req, res) {
-    db.BookmarkedProducts
-      .find(req.query)
-      .sort({ date: -1 })
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+  saveProduct: function (req, res) {
+    const userId = req.session.user.currentUser.id
+    const product = req.body.product;
+    db.User
+      .findOneAndUpdate({
+        _id: userId
+      },
+      {
+        $push: {bookmarkedProducts: product}
+      }
+      )
+      .then(results => {
+        console.log(results);
+      })
   },
-  create: function(req, res) {
-    db.BookmarkedProducts
-      .create(req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  remove: function(req, res) {
-    db.BookmarkedProducts
-      .findById({ _id: req.params.id })
-      .then(dbModel => dbModel.remove())
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  }
+
+
+
+
+
+  // findAll: function(req, res) {
+  //   db.BookmarkedProducts
+  //     .find(req.query)
+  //     .sort({ date: -1 })
+  //     .then(dbModel => res.json(dbModel))
+  //     .catch(err => res.status(422).json(err));
+  // },
+  // create: function(req, res) {
+  //   db.BookmarkedProducts
+  //     .create(req.body)
+  //     .then(dbModel => res.json(dbModel))
+  //     .catch(err => res.status(422).json(err));
+  // },
+  // remove: function(req, res) {
+  //   db.BookmarkedProducts
+  //     .findById({ _id: req.params.id })
+  //     .then(dbModel => dbModel.remove())
+  //     .then(dbModel => res.json(dbModel))
+  //     .catch(err => res.status(422).json(err));
+  // }
 };

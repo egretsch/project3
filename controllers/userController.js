@@ -47,9 +47,8 @@ module.exports = {
       });
   },
 
-  
-  create: function (req, res) {
 
+  create: function (req, res) {
     db.User.find({$or: [{userName: req.body.userName}, {email: req.body.email}]}).then(dbData =>{
       console.log("This is dbData inside create: ", dbData);
 

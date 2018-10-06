@@ -27,7 +27,7 @@ export default {
 
     //METHOD TO POST STUFF FOR USERS
     saveIngredient: (ingredient) => {
-        return axios.post('/api/user', ingredient)
+        return axios.post('/api/user/ingredient', ingredient)
     },
 
 
@@ -42,7 +42,8 @@ export default {
     },
 
     saveProduct: (product) => {
-        return axios.post('/api/user', product);
+        console.log("inside API", product);
+        return axios.post('/api/user/products', product);
 
     },
     deleteSavedProduct: (product) => {

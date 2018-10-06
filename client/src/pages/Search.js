@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import API from "../utils/API";
 
@@ -8,7 +9,6 @@ import { List, ListItem } from "../components/List";
 import SearchModal from "../components/SearchModal";
 import Jumbotron from "../components/Jumbotron";
 import ScannerNavbar from "../components/ScannerNavbar";
-
 
 //The Scanner
 import Scanner from "../components/Scanner";
@@ -43,12 +43,10 @@ class Search extends Component {
             show: false,
             savedIngredients: [],
             collapse: false,
-            isToggled: []
         }
     }
 
-
-
+    
 
     //basic input change handler.
     handleInputChange = event => {
@@ -66,8 +64,14 @@ class Search extends Component {
         this.setState({ show: false });
     };
 
+
+
     //Shows or Collapses the list on tap.
     toggleCollapse = (brandName, inactiveIngredient) => {
+
+        //The click sets the list to true, which shows the list.
+        //Another click will put it to false. 
+
         this.setState({
             [brandName + inactiveIngredient]: !this.state[brandName + inactiveIngredient]
         });
@@ -76,22 +80,30 @@ class Search extends Component {
     //button to save ingredients
     saveIngredient = event => {
         event.preventDefault();
-        let ingredient = event.target.value;
-        console.log("Hey this ingredient is clicked: ", ingredient);
+        let ingredient = {
+            ingredient: event.target.value
+        }
+        API.saveIngredient(ingredient).then(
+            console.log("IT WORKED!")
+        )
     }
 
     //button to save products
     saveProduct = event => {
         event.preventDefault();
-
-
-        // API.saveProduct
-        let product = event.target.value;
+        let product = {
+            product: event.target.value
+        }
+        
+        API.saveProduct(product).then(
+            console.log("IT WORKED!")
+        )
     }
 
     getSavedIngredients = () => {
-        API.getAllSavedIngredients(this.state.user).then
-        console.log("This gets the ingredients from our DB")
+        API.getAllSavedIngredients(this.state.user).then( res => {
+            console.log("Ingredients test: ", res);
+        })
     }
 
 
@@ -252,7 +264,6 @@ class Search extends Component {
                     const inactiveIngredient = element.inactive_ingredient
 
 
-
                     // if a brand name doesn't exist, we skip over it. 
                     //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
                     if (brandName) {
@@ -268,8 +279,7 @@ class Search extends Component {
                 //Sets the state when we are done.
                 this.setState({ searchResults: brandNameArray })
                 this.showModal();
-
-
+                //Creates a state for each list, and sets them to false so the lists are collapsed.
                 for (let i = 0; i < brandNameArray.length; i++) {
                     this.setState({
                         [brandNameArray[i].brandName + brandNameArray[i].inactiveIngredient]: false
@@ -336,6 +346,7 @@ class Search extends Component {
                                     
 
                                     {/*This is to let the list be collapsable */}
+                                    {/* On click is an anonymous function that must be clicked to use the toggleCollapse function */}
                                     <button value={index} onClick={() => {this.toggleCollapse(product.brandName, product.inactiveIngredient)}} className='btn btn-success'>Tap for Inactive Ingredients</button>                                    
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
