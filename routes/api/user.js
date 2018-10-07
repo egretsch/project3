@@ -11,10 +11,15 @@ router.route("/login")
   .post(userController.findOne);
 
 
-router.route('/products')
-  .post(bookmarkedProductsController.saveProduct);
+router
+  .route('/products')
+  .post(bookmarkedProductsController.saveProduct)
+  .get(bookmarkedProductsController.getSavedProducts)
+  
 
-router.route('/ingredients')
-  .post(ingredientsController.saveIngredient);
+router
+  .route('/ingredients')
+  .post(ingredientsController.saveIngredient)
+  .get(ingredientsController.getSavedIngredients)
 
 module.exports = router;

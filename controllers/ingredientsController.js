@@ -8,7 +8,6 @@ module.exports = {
   saveIngredient: function (req, res) {
     const userId = req.session.user.currentUser.id
     const ingredient = req.body.ingredient;
-    console.log(ingredient)
     db.User
       .findOneAndUpdate({
         _id: userId
@@ -18,7 +17,21 @@ module.exports = {
       }
       )
       .then(results => {
-        console.log(results);
-      })
+        console.log("Successfully added Ingredient!")
+        })
   },
+
+  getSavedIngredients: function (req, res){
+    const userId = req.session.user.currentUser.id;
+    console.log(userId)
+    db.User
+      .findOne({
+        _id: userId
+      })
+      .then(dbModel => {
+        console.log(dbModel);
+        res.json(dbModel);
+      })
+      .catch (err => res.status(422).json(err))
+  }
 };

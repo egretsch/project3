@@ -77,6 +77,11 @@ class Search extends Component {
         });
     }
 
+
+    componentDidMount(){
+        this.getSavedIngredients();
+    }
+
     //button to save ingredients
     saveIngredient = event => {
         event.preventDefault();
@@ -84,8 +89,10 @@ class Search extends Component {
             ingredient: event.target.value
         }
         API.saveIngredient(ingredient).then(
-            console.log("IT WORKED!")
+            console.log("Ingredient successfully added")
         )
+
+
     }
 
     //button to save products
@@ -101,10 +108,12 @@ class Search extends Component {
     }
 
     getSavedIngredients = () => {
-        API.getAllSavedIngredients(this.state.user).then( res => {
-            console.log("Ingredients test: ", res);
-        })
-    }
+        API.getSavedIngredients()
+            .then(res => {
+            console.log("Ingredients test: ", res.data)
+            })
+            .catch(err => console.log(err));
+    }   
 
 
     // //Match Ingredient to saved ingredient?

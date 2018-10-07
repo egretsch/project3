@@ -21,19 +21,19 @@ class Profile extends Component {
         favoriteProducts: ['Asprin', 'Gummy Vitamins', 'Honey Chapstick', 'Nyquil'],
         starredIngredients: ['Peanuts', 'Lead', 'Uranium', 'Cyanide']
     }
-    
-    // TO DOs
-    //1. Connect to Database where user profiles are.
-    //2. Connect current logged in user with state information.
-    //3. Let User change preferences 
-    //     -- Text input fields, and a check for gender (male female don't want to specify, etc.)
-    
-    getFavoriteProducts = () => {
-        console.log("This gets the Products saved in the database")
+
+
+    getSavedProducts = () => {
+        API.getSavedProducts().then(res => {
+            console.log("This gets ingredients.")
+        })
+        .catch(err => console.log(err))
     }
 
-    getStarredIngredients = () => {
-        console.log("This gets the saved user ingredients")
+    getSavedIngredients = () => {
+        API.getSavedIngredients().then(res => {
+            console.log("This gets the saved user ingredients")
+        }).catch(err => console.log(err))
     }
 
 
@@ -63,7 +63,7 @@ class Profile extends Component {
                     </Col>
 
                     <Col size='md-4'>
-                    <h3 id='warning'>Ingredient Warnings</h3>
+                        <h3 id='warning'>Ingredient Warnings</h3>
                         {this.state.starredIngredients.length ? (
                             <List>
                                 {/* Ternary Operation to see if User has any marked Ingredients */}
@@ -76,13 +76,13 @@ class Profile extends Component {
                         ) : (
                                 <h2>No Ingredients Warnings Found</h2>
                             )}
-                            <button className='btn btn-success'>Placeholder Update Ingredients Warnings</button>
+                        <button className='btn btn-success'>Placeholder Update Ingredients Warnings</button>
                     </Col>
                 </Row>
 
                 <Row>
                     <Col size='md-4'>
-                    <h3 id='favorite'>Favorite Products</h3>
+                        <h3 id='favorite'>Favorite Products</h3>
                         {this.state.favoriteProducts.length ? (
                             <List>
                                 {/* Ternary Operation to see if User has any favorite products */}
@@ -95,10 +95,10 @@ class Profile extends Component {
                         ) : (
                                 <h2>No Favorite Products Found</h2>
                             )}
-                            <button className='btn btn-success'>Placeholder Update Favorites</button>
+                        <button className='btn btn-success'>Placeholder Update Favorites</button>
                     </Col>
                 </Row>
-                
+
             </Container>
         )
     }

@@ -21,8 +21,9 @@
     color: green;
 }
 
-.list-group-item {
+.inactive-ingredients-list {
     font-size: 9pt;
+
 }
 
 .save-ingredients-button {

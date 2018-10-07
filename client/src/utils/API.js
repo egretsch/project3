@@ -20,25 +20,24 @@ export default {
     },
 
     // API TO GET USER DATA
-    getAllSavedIngredients: ingredients => {
-        return axios.get('/api/user', ingredients )   
+    getSavedIngredients: () => {
+        return axios.get('/api/user/ingredients')   
     },
 
-
     //METHOD TO POST STUFF FOR USERS
-    saveIngredient: (ingredient) => {
+    saveIngredient: ingredient => {
         return axios.post('/api/user/ingredients', ingredient)
     },
 
 
     //METHOD TO DELETE STUFF FOR USERS
     deleteSavedIngredient: (ingredient) => {
-        return axios.post('/api/user', ingredient);
+        return axios.delete('/api/user', ingredient);
 
     },
 
-    getAllSavedProducts: bookmarkedProducts => {
-        return axios.get('/api/user', bookmarkedProducts);
+    getSavedProducts: () => {
+        return axios.get('/api/user/products');
     },
 
     saveProduct: (product) => {
@@ -47,7 +46,7 @@ export default {
 
     },
     deleteSavedProduct: (product) => {
-        return axios.post('/api/user', product);
+        return axios.delete('/api/user', product);
 
     },
 

@@ -19,13 +19,14 @@ module.exports = {
         console.log("Successfully added product.");
       })
   },
-  getProducts: function (req, res){
+  getSavedProducts: function (req, res){
     const userId = req.session.user.currentUser.id
-    dbUser
+    db.User
       .findOne({
         _id: userId
-      }).then(results => {
-        console.log(results)
+      }).then(result => {
+        console.log(result.bookmarkedProducts)
+        res.json(result)
       });
   }
 
