@@ -27,7 +27,7 @@ export default {
 
     //METHOD TO POST STUFF FOR USERS
     saveIngredient: (ingredient) => {
-        return axios.post('/api/user/ingredient', ingredient)
+        return axios.post('/api/user/ingredients', ingredient)
     },
 
 

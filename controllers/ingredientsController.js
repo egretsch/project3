@@ -1,30 +1,24 @@
-const db = require("../models/ingredients");
+const db = require("../models");
 
 // Defining methods for the ingredientsController
 
 
-//ASK: if we just put it in our users.ingredients array, would that work? How would we do it?
 
 module.exports = {
-  findAll: function(req, res) {
-    console.log(req);
-    db.Ingredients
-      .find(req.query)
-      .sort({ date: -1 })
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+  saveIngredient: function (req, res) {
+    const userId = req.session.user.currentUser.id
+    const ingredient = req.body.ingredient;
+    console.log(ingredient)
+    db.User
+      .findOneAndUpdate({
+        _id: userId
+      },
+      {
+        $push: {ingredients: ingredient}
+      }
+      )
+      .then(results => {
+        console.log(results);
+      })
   },
-  create: function(req, res) {
-    db.Ingredients
-      .create(req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  remove: function(req, res) {
-    db.Ingredients
-      .findById({ _id: req.params.id })
-      .then(dbModel => dbModel.remove())
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  }
 };

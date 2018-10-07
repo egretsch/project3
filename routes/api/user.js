@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bookmarkedProductsController = require("../../controllers/bookmarkedProductsController");
 const userController = require("../../controllers/userController");
+const ingredientsController = require("../../controllers/ingredientsController");
 
 // routes user info to server
 router.route("/")
@@ -9,13 +10,11 @@ router.route("/")
 router.route("/login")
   .post(userController.findOne);
 
-// router.post('/products', function (req, res) {
-  // console.log(req.body);
-  // console.log(req.session.user);
-// })
 
 router.route('/products')
   .post(bookmarkedProductsController.saveProduct);
 
+router.route('/ingredients')
+  .post(ingredientsController.saveIngredient);
 
 module.exports = router;
