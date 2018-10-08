@@ -36,16 +36,17 @@ export default {
 
     },
 
-    getSavedProducts: () => {
+    getBookmarkedProducts: () => {
         return axios.get('/api/user/products');
     },
 
-    saveProduct: (product) => {
-        console.log("inside API", product);
+    bookmarkProduct: (product) => {
+        // console.log("inside API", product);
         return axios.post('/api/user/products', product);
 
     },
-    deleteSavedProduct: (product) => {
+    
+    deleteBookmarkedProduct: (product) => {
         return axios.delete('/api/user', product);
 
     },

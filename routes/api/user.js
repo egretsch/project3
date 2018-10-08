@@ -13,8 +13,8 @@ router.route("/login")
 
 router
   .route('/products')
-  .post(bookmarkedProductsController.saveProduct)
-  .get(bookmarkedProductsController.getSavedProducts)
+  .post(bookmarkedProductsController.bookmarkProduct)
+  .get(bookmarkedProductsController.getBookmarkedProducts)
   
 
 router

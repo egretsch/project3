@@ -9,6 +9,7 @@ import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import './pages.css';
+import ScannerNavbar from "../components/ScannerNavbar";
 
 
 class Profile extends Component {
@@ -18,36 +19,32 @@ class Profile extends Component {
         username: "Test Account",
         email: "test@email.com",
         gender: "None Specified",
-        favoriteProducts: ['Asprin', 'Gummy Vitamins', 'Honey Chapstick', 'Nyquil'],
-        starredIngredients: ['Peanuts', 'Lead', 'Uranium', 'Cyanide']
+        bookmarkedProducts: [],
+        savedIngredients: []
     }
 
 
-    getSavedProducts = () => {
-        API.getSavedProducts().then(res => {
-            console.log("This gets ingredients.")
-        })
-        .catch(err => console.log(err))
+    getBookmarkedProducts = () => {
+        API.getBookmarkedProducts()
+            .then(res => this.setState({bookmarkedProducts: res.data.bookmarkedProducts.split(',')}))
+            .catch(err => console.log(err))
     }
 
     getSavedIngredients = () => {
-        API.getSavedIngredients().then(res => {
-            console.log("This gets the saved user ingredients")
-        }).catch(err => console.log(err))
+        API.getSavedIngredients()
+            .then(res =>
+               this.setState({savedIngredients: res.data.ingredients.split(',')})
+            // console.log(res.data.ingredients.split(','))
+             )
+            .catch(err => console.log(err));
     }
-
-
-    //Make Dummy Data.
-    //Get dummy data to fill in the sections
-    //get buttons to pop up a modal for updating stuff.
-
 
 
 
 
     render() {
         return (
-            <Container>
+            <Container fluid>
                 <Row>
                     <Jumbotron>
                         <h3>Your Profile</h3>
@@ -64,17 +61,17 @@ class Profile extends Component {
 
                     <Col size='md-4'>
                         <h3 id='warning'>Ingredient Warnings</h3>
-                        {this.state.starredIngredients.length ? (
+                        {this.state.savedIngredients.length ? (
                             <List>
                                 {/* Ternary Operation to see if User has any marked Ingredients */}
-                                {this.state.starredIngredients.map(ingredient => (
+                                {this.state.savedIngredients.map(ingredient => (
                                     <ListItem key={ingredient}>
                                         <p>{ingredient}</p>
                                     </ListItem>
                                 ))}
                             </List>
                         ) : (
-                                <h2>No Ingredients Warnings Found</h2>
+                                <h4 style={{textAlign: 'center'}}>No Ingredients Warnings Found</h4>
                             )}
                         <button className='btn btn-success'>Placeholder Update Ingredients Warnings</button>
                     </Col>
@@ -83,17 +80,17 @@ class Profile extends Component {
                 <Row>
                     <Col size='md-4'>
                         <h3 id='favorite'>Favorite Products</h3>
-                        {this.state.favoriteProducts.length ? (
+                        {this.state.bookmarkedProducts.length ? (
                             <List>
                                 {/* Ternary Operation to see if User has any favorite products */}
-                                {this.state.favoriteProducts.map(product => (
+                                {this.state.bookmarkedProducts.map(product => (
                                     <ListItem key={product}>
                                         <p>{product}</p>
                                     </ListItem>
                                 ))}
                             </List>
                         ) : (
-                                <h2>No Favorite Products Found</h2>
+                                <h4 style={{textAlign: 'center'}}>No Favorite Products Found</h4>
                             )}
                         <button className='btn btn-success'>Placeholder Update Favorites</button>
                     </Col>

@@ -39,14 +39,16 @@ class Search extends Component {
         this.state = {
             user: "jason", //placeholder
             searchedProduct: "",
-            searchResults: [],
+            collapse: false,
             show: false,
             savedIngredients: [],
-            collapse: false,
+            bookmarkedProducts: [],
+            searchResults: [],
+            match: 0
         }
     }
 
-    
+
 
     //basic input change handler.
     handleInputChange = event => {
@@ -64,8 +66,6 @@ class Search extends Component {
         this.setState({ show: false });
     };
 
-
-
     //Shows or Collapses the list on tap.
     toggleCollapse = (brandName, inactiveIngredient) => {
 
@@ -77,9 +77,27 @@ class Search extends Component {
         });
     }
 
+    // componentDidMount(){
+    //     this.getSavedIngredients();
+    // }
 
-    componentDidMount(){
-        this.getSavedIngredients();
+    //button to save products
+    bookmarkProduct = event => {
+        event.preventDefault();
+        let product = {
+            product: event.target.value
+        }
+
+        API.bookmarkProduct(product).then(
+            console.log(product.product + " saved to database")
+        )
+            .catch(err => console.log(err))
+    }
+
+    getBookmarkedProducts = () => {
+        API.getBookmarkedProducts()
+            .then(res => this.setState({ bookmarkedProducts: res.data.bookmarkedProducts.split(',') }))
+            .catch(err => console.log(err))
     }
 
     //button to save ingredients
@@ -88,44 +106,35 @@ class Search extends Component {
         let ingredient = {
             ingredient: event.target.value
         }
-        API.saveIngredient(ingredient).then(
-            console.log("Ingredient successfully added")
-        )
-
-
-    }
-
-    //button to save products
-    saveProduct = event => {
-        event.preventDefault();
-        let product = {
-            product: event.target.value
-        }
-        
-        API.saveProduct(product).then(
-            console.log("IT WORKED!")
-        )
+        API.saveIngredient(ingredient)
+            .then(res => this.getSavedIngredients())
+            .catch(err => console.log(err))
     }
 
     getSavedIngredients = () => {
         API.getSavedIngredients()
-            .then(res => {
-            console.log("Ingredients test: ", res.data)
-            })
+            .then(res =>
+                this.setState({ savedIngredients: res.data.ingredients.split(',') })
+                // console.log(res.data.ingredients.split(','))
+            )
             .catch(err => console.log(err));
-    }   
+    }
 
 
-    // //Match Ingredient to saved ingredient?
-    // matchIngredients = productIngredient => {
-    //     savedIngredients.forEach = element => {
-    //         if (element === productIngredient){
-    //             console.log("It matches.") //Change ingredient css to red.
-    //         }
-    //     }
-    // }
 
-    //Dunno how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
+    //Handle match function
+    handleMatching = (ingredient) => {
+        this.state.savedIngredients.forEach(element => {
+            if (element === ingredient) {
+                this.setState({
+                    match: 1
+                })
+            }
+        });
+    }
+
+
+    //I don't know how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
     handleActiveIngredients = activeIngredient => {
         // console.log(activeIngredient)
         if (activeIngredient === undefined) {
@@ -294,7 +303,7 @@ class Search extends Component {
                         [brandNameArray[i].brandName + brandNameArray[i].inactiveIngredient]: false
                     });
 
-                    
+
                 }
 
             }).catch(err => this.setState({
@@ -307,7 +316,7 @@ class Search extends Component {
     render() {
         return (
             <Container fluid>
-            <ScannerNavbar />
+                <ScannerNavbar />
                 <Row>
                     <Col size='md-12'>
                         <Jumbotron>
@@ -344,19 +353,19 @@ class Search extends Component {
                     </Jumbotron>
                     {/* Ternary Operation to see if there are results for a product */}
                     {this.state.searchResults.length ? (
-                        <List >
+                        <List>
                             {this.state.searchResults.map((product, index) => (
                                 <ListItem key={product.brandName + product.activeIngredient}>
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
-                                    <button value={product.brandName} onClick={this.saveProduct} className='btn btn-primary'>Save</button>
+                                    <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>
                                     <h4 id='info'>Active Ingredient(s)</h4>
                                     <h4 style={{ textAlign: 'center' }}>{product.activeIngredient}</h4>
-                                    
-                                    
+
+
 
                                     {/*This is to let the list be collapsable */}
                                     {/* On click is an anonymous function that must be clicked to use the toggleCollapse function */}
-                                    <button value={index} onClick={() => {this.toggleCollapse(product.brandName, product.inactiveIngredient)}} className='btn btn-success'>Tap for Inactive Ingredients</button>                                    
+                                    <button value={index} onClick={() => { this.toggleCollapse(product.brandName, product.inactiveIngredient) }} className='btn btn-success'>Tap for Inactive Ingredients</button>
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => (
@@ -367,8 +376,6 @@ class Search extends Component {
                                             ))}
                                         </List>
                                     </Collapse>
-
-
                                 </ListItem>
                             ))}
                         </List>
@@ -377,6 +384,33 @@ class Search extends Component {
                         )}
                 </SearchModal>
 
+
+
+
+
+
+
+                {/* Saved Data test */}
+                <h3>Saved Ingredients</h3>
+                <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
+                <List>
+                    {this.state.savedIngredients.map((ingredient, index) => (
+                        <ListItem key={ingredient + this.state.user + index}>
+                            {ingredient}
+                        </ListItem>
+                    ))}
+                </List>
+
+
+                <h3>Bookmarked Products</h3>
+                <button onClick={this.getBookmarkedProducts}>Get Bookmarked Products</button>
+                <List>
+                    {this.state.bookmarkedProducts.map((product, index) => (
+                        <ListItem key={product + this.state.user + index}>
+                            {product}
+                        </ListItem>
+                    ))}
+                </List>
             </Container >
         );
     }

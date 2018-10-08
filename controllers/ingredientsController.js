@@ -23,13 +23,12 @@ module.exports = {
 
   getSavedIngredients: function (req, res){
     const userId = req.session.user.currentUser.id;
-    console.log(userId)
     db.User
       .findOne({
         _id: userId
       })
       .then(dbModel => {
-        console.log(dbModel);
+        // console.log(dbModel);
         res.json(dbModel);
       })
       .catch (err => res.status(422).json(err))

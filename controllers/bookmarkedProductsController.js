@@ -4,7 +4,7 @@ const db = require("../models");
 
 
 module.exports = {
-  saveProduct: function (req, res) {
+  bookmarkProduct: function (req, res) {
     const userId = req.session.user.currentUser.id
     const product = req.body.product;
     db.User
@@ -19,15 +19,15 @@ module.exports = {
         console.log("Successfully added product.");
       })
   },
-  getSavedProducts: function (req, res){
+
+  getBookmarkedProducts: function (req, res){
     const userId = req.session.user.currentUser.id
     db.User
       .findOne({
         _id: userId
-      }).then(result => {
-        console.log(result.bookmarkedProducts)
-        res.json(result)
-      });
+      }).then(dbModel => {
+        res.json(dbModel)
+      }).catch(err => res.status(422).json(err))
   }
 
 
