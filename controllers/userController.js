@@ -4,7 +4,14 @@ const bcrypt = require('bcrypt')
 // Defining methods for the userController
 module.exports = {
 
- 
+  currentUser: function (req, res) {
+    const currentUserObject = req.session.user.currentUser
+    console.log(currentUserObject)
+    res.json(currentUserObject);
+    
+  },
+
+
   findOne: function(req, res) {
     console.log(req.body.loginObj.userName, "backend")
     db.User
@@ -27,7 +34,6 @@ module.exports = {
               console.log("it worked 2");
 
               var userObj = {
-                id: users._id,
                 name: users.name,
                 email: users.email,
                 userName: users.userName,

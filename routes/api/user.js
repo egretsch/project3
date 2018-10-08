@@ -3,6 +3,7 @@ const userController = require("../../controllers/userController");
 
 // routes user info to server
 router.route("/")
+  .get(userController.currentUser)
   .post(userController.create);
 // routes login info to server
 router.route("/login")
