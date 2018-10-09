@@ -14,6 +14,9 @@ export default {
     postUser: function (userArray) {
         return axios.post("/api/user", userArray);
     },
+    currentUser: function (currentUserObject) {
+        return axios.get("/api/user", currentUserObject);
+    },
     // compare user info against login info
     loginUser: function (loginObj) {
         return axios.post("/api/user/login", loginObj);
