@@ -28,10 +28,20 @@ module.exports = {
       }).then(dbModel => {
         res.json(dbModel)
       }).catch(err => res.status(422).json(err))
+  },
+
+  deleteBookmarkedProduct: function (req, res) {
+    const userId = req.session.user.currentUser.id;
+    const product = req.body.product;
+    db.User
+      .findOne({
+        _id: userId
+      },
+      {
+        $pull: {bookmarkedProducts: product}
+      }).then(dbModel => {
+          res.json(dbModel)
+      }).catch(err => res.status(422).json(err))
   }
-
-
-
-
   
 };

@@ -32,5 +32,21 @@ module.exports = {
         res.json(dbModel);
       })
       .catch (err => res.status(422).json(err))
-  }
+  },
+
+  deleteSavedIngredient: function (req,res) {
+    const userId = req.session.user.currentUser.id;
+    const ingredient = req.body.ingredient;
+    db.User
+      .findOne({
+        _id:userId
+      },
+      {
+        $pull: {ingredients: ingredient}
+      })
+      .then(dbModel => {
+        res.json(dbModel);
+      })
+      .catch (err => res.status (422).json(err))
+  },
 };
