@@ -14,6 +14,7 @@ export default {
     postUser: function (userArray) {
         return axios.post("/api/user", userArray);
     },
+
     currentUser: function (currentUserObject) {
         return axios.get("/api/user", currentUserObject);
     },
@@ -35,7 +36,7 @@ export default {
 
     //METHOD TO DELETE STUFF FOR USERS
     deleteSavedIngredient: (ingredient) => {
-        return axios.delete('/api/user', ingredient);
+        return axios.post('/api/user', ingredient);
 
     },
 
@@ -50,7 +51,7 @@ export default {
     },
     
     deleteBookmarkedProduct: (product) => {
-        return axios.delete('/api/user', product);
+        return axios.post('/api/user', product);
 
     },
 

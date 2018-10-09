@@ -96,7 +96,14 @@ class Search extends Component {
 
     getBookmarkedProducts = () => {
         API.getBookmarkedProducts()
-            .then(res => this.setState({ bookmarkedProducts: res.data.bookmarkedProducts.split(',') }))
+            .then(res => {
+                if (res.data.bookmarkedProducts) {
+                    this.setState({ bookmarkedProducts: res.data.bookmarkedProducts.split(',') })
+                }
+                else {
+                    this.setState({ bookmarkedProducts: ["No Bookmarked Products"] })
+                }
+            })
             .catch(err => console.log(err))
     }
 
@@ -106,6 +113,7 @@ class Search extends Component {
         let ingredient = {
             ingredient: event.target.value
         }
+        // console.log(ingredient)
         API.saveIngredient(ingredient)
             .then(res => this.getSavedIngredients())
             .catch(err => console.log(err))
@@ -113,10 +121,16 @@ class Search extends Component {
 
     getSavedIngredients = () => {
         API.getSavedIngredients()
-            .then(res =>
-                this.setState({ savedIngredients: res.data.ingredients.split(',') })
-                // console.log(res.data.ingredients.split(','))
-            )
+            .then(res => {
+                console.log(res.data.ingredients);
+                if (res.data.ingredients) {
+                    this.setState({ savedIngredients: res.data.ingredients.split(',') })
+                    // console.log(res)
+                }
+                else {
+                    this.setState({ savedIngredients: ["No Ingredients Saved"] })
+                }
+            })
             .catch(err => console.log(err));
     }
 
@@ -391,6 +405,7 @@ class Search extends Component {
 
 
                 {/* Saved Data test */}
+                {/* WILL BE DELETED ONCE FINISHED */}
                 <h3>Saved Ingredients</h3>
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
@@ -411,7 +426,7 @@ class Search extends Component {
                         </ListItem>
                     ))}
                 </List>
-            </Container >
+            </Container>
         );
     }
 }

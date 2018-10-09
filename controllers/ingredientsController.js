@@ -1,16 +1,12 @@
 const db = require("../models");
 
-// Defining methods for the ingredientsController
-
-
-
 module.exports = {
   saveIngredient: function (req, res) {
-    const userId = req.session.user.currentUser.id
+    const userEmail = req.session.user.currentUser.email
     const ingredient = req.body.ingredient;
     db.User
       .findOneAndUpdate({
-        _id: userId
+        email: userEmail
       },
       {
         $push: {ingredients: ingredient}
@@ -22,10 +18,10 @@ module.exports = {
   },
 
   getSavedIngredients: function (req, res){
-    const userId = req.session.user.currentUser.id;
+    const userEmail = req.session.user.currentUser.email
     db.User
       .findOne({
-        _id: userId
+        email: userEmail
       })
       .then(dbModel => {
         // console.log(dbModel);
@@ -35,17 +31,20 @@ module.exports = {
   },
 
   deleteSavedIngredient: function (req,res) {
-    const userId = req.session.user.currentUser.id;
+    const userEmail = req.session.user.currentUser.email
     const ingredient = req.body.ingredient;
+    console.log("Deleted Ingredient: " + ingredient)
     db.User
-      .findOne({
-        _id:userId
+      .findOneAndUpdate({
+        email: userEmail
       },
       {
         $pull: {ingredients: ingredient}
       })
       .then(dbModel => {
+        
         res.json(dbModel);
+        console.log("AFTER DELETE: " + dbModel);
       })
       .catch (err => res.status (422).json(err))
   },

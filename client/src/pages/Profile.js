@@ -1,16 +1,10 @@
+
 import React, { Component } from "react";
 import { Col as MyCol, Row, Container } from "../components/Grid";
-
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
-//Should this be here? (Look at questions)
-import { Input, TextArea, FormBtn } from "../components/Form";
-
-
-
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
 import ConfirmationModal from "../components/ConfirmationModal";
-
 import API from "../utils/API";
 import './pages.css';
 import ScannerNavbar from "../components/ScannerNavbar";
@@ -34,14 +28,20 @@ class Profile extends Component {
             updateUserName: "",
             updatePassword: "",
             updateGender: "",
-            bookmarkedProducts: ['Chapstick', 'Sunscreen', 'Mints'],
-            savedIngredients: ['cyanide', 'lead', 'nuclear waste'],
+            bookmarkedProducts:[],
+            savedIngredients: [],
             confirmIngredient: "",
             confirmProduct: "",
             show: false,
-
         };
 
+    }
+
+    
+    componentDidMount() {
+        this.loadCurrentUser();
+        this.getBookmarkedProducts();
+        this.getSavedIngredients();
     }
 
     showModal = () => {
@@ -54,16 +54,28 @@ class Profile extends Component {
 
     getBookmarkedProducts = () => {
         API.getBookmarkedProducts()
-            .then(res => this.setState({ bookmarkedProducts: res.data.bookmarkedProducts.split(',') }))
+            .then(res => {
+                if (res.data.bookmarkedProducts) {
+                    this.setState({ bookmarkedProducts: res.data.bookmarkedProducts.split(',') })
+                }
+                else {
+                    this.setState({ bookmarkedProducts: ["No Bookmarked Products"] })
+                }
+            })
             .catch(err => console.log(err))
     }
 
     getSavedIngredients = () => {
         API.getSavedIngredients()
-            .then(res =>
-                this.setState({ savedIngredients: res.data.ingredients.split(',') })
-                // console.log(res.data.ingredients.split(','))
-            )
+            .then(res => {
+                if (res.data.ingredients) {
+                    this.setState({ savedIngredients: res.data.ingredients.split(',') })
+                    // console.log(res)
+                }
+                else {
+                    this.setState({ savedIngredients: ["No Ingredients Saved"] })
+                }
+            })
             .catch(err => console.log(err));
     }
 
@@ -74,17 +86,6 @@ class Profile extends Component {
         })
         this.showModal();
 
-    }
-
-
-    // TO DOs
-    //1. Connect to Database where user profiles are.
-    //2. Connect current logged in user with state information.
-    //3. Let User change preferences 
-    //     -- Text input fields, and a check for gender (male female don't want to specify, etc.)
-
-    getFavoriteProducts = () => {
-        console.log("This gets the Products saved in the database")
     }
 
     deleteBookmarkedProduct = event => {
@@ -107,26 +108,46 @@ class Profile extends Component {
     confirmDelete = () => {
         if (this.state.confirmProduct) {
             let product = {
-                product: this.confirmProduct
+                product: this.state.confirmProduct
             }
+
+            console.log("product you want to delete: " + product.product)
             API.deleteBookmarkedProduct(product)
-                .then(res => this.getBookmarkedProducts(), this.reset())
-                .then(err => console.log(err))
+                .then(res => {
+                    console.log(product.product + " should be deleted. Here's the response: \n" + res.data)
+                    this.getBookmarkedProducts(); 
+                    this.reset();
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.reset();
+                })
         }
         else if (this.state.confirmIngredient) {
             let ingredient = {
-                ingredient: this.confirmIngredient
+                ingredient: this.state.confirmIngredient
             }
+
+            console.log("ingredient you want to delete: " + ingredient.ingredient)
+
             API.deleteSavedIngredient(ingredient)
-                .then(res => this.getSavedIngredients(), this.reset())
-                .catch(err => console.log(err))
+                .then(res => {
+
+                    console.log(ingredient.ingredient + " should be deleted. Here's the response: \n" + res.data)
+                    this.getSavedIngredients();
+                    this.reset();
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.reset();
+                })
+        }
+        else {
+            console.log("Error on Confirmation")
         }
 
     }
 
-    componentDidMount() {
-        this.loadCurrentUser();
-    }
 
     // handles all input change
     handleInputChange(event) {
@@ -159,6 +180,7 @@ class Profile extends Component {
     render() {
         return (
             <Container>
+                <ScannerNavbar />
                 <Row>
                     <Jumbotron>
                         <h3>Your Profile</h3>
@@ -202,7 +224,6 @@ class Profile extends Component {
 
 
                 {/* Products Here */}
-
                 <Row>
                     <Col size='md-4'>
                         <h3 id='favorite'>Favorite Products</h3>
@@ -223,6 +244,8 @@ class Profile extends Component {
                 </Row>
                 {/* Products end */}
 
+
+                {/* Confirmation Modal Here */}
                 {this.state.confirmIngredient ?
                     (
 
@@ -239,8 +262,8 @@ class Profile extends Component {
                             </div>
 
                                 <div className='modal-footer'>
-                                    <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset() }}>Cancel</button>
-                                    <button className='btn btn-danger' onClick={() => { this.hideModal(); this.confirmDelete(); }}>Confirm</button>
+                                    <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
+                                    <button className='btn btn-danger' onClick={() => { this.confirmDelete(); this.hideModal();  }}>Confirm</button>
                                 </div>
 
                             </div>
@@ -262,14 +285,15 @@ class Profile extends Component {
                             </div>
 
                                 <div className='modal-footer'>
-                                    <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset() }}>Cancel</button>
-                                    <button className='btn btn-danger' onClick={() => { this.hideModal(); this.confirmDelete(); }}>Confirm</button>
+                                    <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
+                                    <button className='btn btn-danger' onClick={() => { this.confirmDelete(); this.hideModal(); }}>Confirm</button>
                                 </div>
 
                             </div>
                         </ConfirmationModal>
                     )
                 }
+                {/* Confirmation Modal End */}
 
                 {/* Update Modal Here */}
                 <Modal

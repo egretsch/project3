@@ -1,15 +1,12 @@
 const db = require("../models");
 
-
-
-
 module.exports = {
   bookmarkProduct: function (req, res) {
-    const userId = req.session.user.currentUser.id
+    const userEmail = req.session.user.currentUser.email
     const product = req.body.product;
     db.User
       .findOneAndUpdate({
-        _id: userId
+        email: userEmail
       },
       {
         $push: {bookmarkedProducts: product}
@@ -21,25 +18,27 @@ module.exports = {
   },
 
   getBookmarkedProducts: function (req, res){
-    const userId = req.session.user.currentUser.id
+    const userEmail = req.session.user.currentUser.email
     db.User
       .findOne({
-        _id: userId
+        email: userEmail
       }).then(dbModel => {
         res.json(dbModel)
+        console.log(dbModel)
       }).catch(err => res.status(422).json(err))
   },
 
   deleteBookmarkedProduct: function (req, res) {
-    const userId = req.session.user.currentUser.id;
+    const userEmail = req.session.user.currentUser.email
     const product = req.body.product;
     db.User
-      .findOne({
-        _id: userId
+      .findOneAndUpdate({
+        email: userEmail
       },
       {
         $pull: {bookmarkedProducts: product}
-      }).then(dbModel => {
+      }
+      ).then(dbModel => {
           res.json(dbModel)
       }).catch(err => res.status(422).json(err))
   }
