@@ -372,17 +372,23 @@ class Search extends Component {
                     {this.state.searchResults.length ? (
                         <List>
                             {this.state.searchResults.map((product, index) => {
-                                // console.log(product);
+
+
+                                //Makes a button variable for our for loop. The regular Save Button
                                 let button = <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>;
 
+                                //A For loop to compare both bookmarked products and our searched products
                                 for (let e = 0; e < product.brandName.length; e++) {
                                     for (let s = 0; s < this.state.bookmarkedProducts.length; s++) {
+
+                                        //If they match, it disables the save button and makes sure the user knows its saved.
                                         if (this.state.bookmarkedProducts[s] === product.brandName[e]) {
-                                            button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>
+                                            button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-warning'>Saved</button>
                                         }
-                                        // Test ForEach End
                                     }
                                 }
+
+                                //Else it returns the regular buttons and brand names
                                 return <ListItem key={product.brandName + product.activeIngredient}>
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
                                     {button}
@@ -398,16 +404,26 @@ class Search extends Component {
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => {
+
+                                                //Similar to the code above, we save variables for what's going to be the outliers.
+                                                
                                                 let button = <button value={ingredient} onClick={this.saveIngredient} className='save-ingredients-button'>Save</button>;
-                                                let style = {textAlign: 'center', fontSize: '10px'}
-                                                let warning = {textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442"}
+                                                
+                                                //the usual style
+                                                let style = { textAlign: 'center', fontSize: '10px' }
+
+                                                //the style if the user's saved ingredients match up with the searched ingredients.
+                                                let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
+
+                                                //the for loop that compares it all.
                                                 for (let n = 0; n < this.state.savedIngredients.length; n++) {
                                                     if (this.state.savedIngredients[n] === ingredient) {
                                                         button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
                                                         style = warning
-
                                                     }
                                                 }
+
+                                                //else it just returns the above variables to be saved. 
                                                 return <ListItem style={style} key={product.brandName + 'inactive_' + ingredient}>
                                                     {ingredient}
                                                     {button}
@@ -419,6 +435,7 @@ class Search extends Component {
                             })}
                         </List>
                     ) : (
+                            //If nothing comes from the API.
                             <h2 id='info'>No results to display!</h2>
                         )}
                 </SearchModal>
