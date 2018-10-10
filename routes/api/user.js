@@ -8,6 +8,11 @@ router.route("/")
   .get(userController.currentUser)
   .post(userController.create);
 
+router.route("/update")
+  .post(userController.updateUser);
+
+
+
 // routes login info to server
 router.route("/login")
   .post(userController.findOne);

@@ -305,7 +305,7 @@ class ScannerNavbar extends Component {
                                 <Button
                                     value="Submit"
                                     type="submit"
-                                    onClick={this.handleHideNewUserModal}
+                                    // onClick={this.handleHideNewUserModal}
                                     >
                                     Submit
                                 </Button>
