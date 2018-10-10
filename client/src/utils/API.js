@@ -14,39 +14,47 @@ export default {
     postUser: function (userArray) {
         return axios.post("/api/user", userArray);
     },
+
+    currentUser: function (currentUserObject) {
+        return axios.get("/api/user", currentUserObject);
+    },
     // compare user info against login info
     loginUser: function (loginObj) {
         return axios.post("/api/user/login", loginObj);
     },
-
-    // API TO GET USER DATA
-    getAllSavedIngredients: ingredients => {
-        return axios.get('/api/user', ingredients )   
+    updateUser: updateUserObj => {
+        return axios.post('/api/user/update', updateUserObj)
     },
 
+    // API TO GET USER DATA
+    getSavedIngredients: () => {
+        return axios.get('/api/user/ingredients')   
+    },
 
     //METHOD TO POST STUFF FOR USERS
-    saveIngredient: (ingredient) => {
-        return axios.post('/api/user', ingredient)
+    saveIngredient: ingredient => {
+        return axios.post('/api/user/ingredients', ingredient)
     },
 
 
     //METHOD TO DELETE STUFF FOR USERS
     deleteSavedIngredient: (ingredient) => {
-        return axios.post('/api/user', ingredient);
+        return axios.post('/api/user/ingredients/delete', ingredient);
 
     },
 
-    getAllSavedProducts: bookmarkedProducts => {
-        return axios.get('/api/user', bookmarkedProducts);
+    getBookmarkedProducts: () => {
+        return axios.get('/api/user/products');
     },
 
-    saveProduct: (product) => {
-        return axios.post('/api/user', product);
+    bookmarkProduct: (product) => {
+        // console.log("inside API", product);
+        return axios.post('/api/user/products', product);
 
     },
-    deleteSavedProduct: (product) => {
-        return axios.post('/api/user', product);
+    
+    deleteBookmarkedProduct: (product) => {
+        return axios.post('/api/user/products/delete', product);
 
     },
 

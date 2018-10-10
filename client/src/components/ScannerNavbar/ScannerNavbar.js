@@ -206,7 +206,10 @@ class ScannerNavbar extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <ButtonGroup>
-                            <Button type="submit">Sign in</Button>
+                            <Button 
+                                type="submit"
+                                onClick={this.handleHideLoginModal}
+                            >Sign in</Button>
                             <Button onClick={this.handleHideLoginModal}>Close</Button>
                         </ButtonGroup>
                     </Modal.Footer>
@@ -301,7 +304,9 @@ class ScannerNavbar extends Component {
                             <ButtonGroup className="createUserButtions">
                                 <Button
                                     value="Submit"
-                                    type="submit">
+                                    type="submit"
+                                    // onClick={this.handleHideNewUserModal}
+                                    >
                                     Submit
                                 </Button>
                                 <Button onClick={this.handleHideNewUserModal}>Close</Button>
