@@ -44,7 +44,8 @@ class Search extends Component {
             savedIngredients: [],
             bookmarkedProducts: [],
             searchResults: [],
-            match: 0
+            match: 0,
+            disableSave: false
         }
     }
 
@@ -134,18 +135,6 @@ class Search extends Component {
             .catch(err => console.log(err));
     }
 
-
-
-    //Handle match function
-    handleMatching = (ingredient) => {
-        this.state.savedIngredients.forEach(element => {
-            if (element === ingredient) {
-                this.setState({
-                    match: 1
-                })
-            }
-        });
-    }
 
 
     //I don't know how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
@@ -274,13 +263,24 @@ class Search extends Component {
         }
     }
 
+    handleMatch = (searchedElement, savedElement) => {
 
+        const inCommon = savedElement.filter(function (val) {
+            return searchedElement.indexOf(val) != -1;
+        });
+
+        if (inCommon) {
+            this.setState({
+                disableSave: true
+            });
+        }
+    }
 
 
     //HANDLES A PRODUCT SEARCH
     handleFormSubmit = event => {
         //Prevents page from refreshing.
-        event.preventDefault();
+        event.preventDefault(); 0
         //makes a empty array so we can set this as the searched results later on.
         const brandNameArray = [];
 
@@ -370,10 +370,23 @@ class Search extends Component {
                     {/* Ternary Operation to see if there are results for a product */}
                     {this.state.searchResults.length ? (
                         <List>
-                            {this.state.searchResults.map((product, index) => (
-                                <ListItem key={product.brandName + product.activeIngredient}>
+                            {this.state.searchResults.map((product, index) => {
+                                // console.log(product);
+                                let button = <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>;
+
+                                for (let e = 0; e < product.brandName.length; e++) {
+                                    if (!this.state.bookmarkedProducts.indexOf( product.brandName[e])) {
+                                        button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>
+                                    }
+                                    else {
+                                        console.log(product.brandName + ' is not found')
+                                    }
+                                    // Test ForEach End
+                                }
+                                    
+                                return <ListItem key={product.brandName + product.activeIngredient} bookmarkedProducts={this.state.bookmarkedProducts}>
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
-                                    <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>
+                                    {button}
                                     <h4 id='info'>Active Ingredient(s)</h4>
                                     <h4 style={{ textAlign: 'center' }}>{product.activeIngredient}</h4>
 
@@ -382,11 +395,11 @@ class Search extends Component {
                                     {/*This is to let the list be collapsable */}
                                     {/* On click is an anonymous function that must be clicked to use the toggleCollapse function */}
                                     <button value={index} onClick={() => { this.toggleCollapse(product.brandName, product.inactiveIngredient) }} className='btn btn-success'>Tap for Inactive Ingredients</button>
-                                    
+
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => (
-                                                <ListItem key={product.brandName + 'inactive_' + ingredient}>
+                                                <ListItem key={product.brandName + 'inactive_' + ingredient} savedIngredients={this.state.savedIngredients} >
                                                     {ingredient}
                                                     <button className='save-ingredients-button' value={ingredient} onClick={this.saveIngredient}>Save</button>
                                                 </ListItem>
@@ -394,7 +407,7 @@ class Search extends Component {
                                         </List>
                                     </Collapse>
                                 </ListItem>
-                            ))}
+                            })}
                         </List>
                     ) : (
                             <h2 id='info'>No results to display!</h2>
