@@ -37,19 +37,14 @@ class Search extends Component {
         super(props);
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.state = {
-            user: "jason", //placeholder
             searchedProduct: "",
             collapse: false,
             show: false,
             savedIngredients: [],
             bookmarkedProducts: [],
             searchResults: [],
-            match: 0,
-            disableSave: false
         }
     }
-
-
 
     //basic input change handler.
     handleInputChange = event => {
@@ -78,24 +73,14 @@ class Search extends Component {
         });
     }
 
+    //Gets the data once the user logs on and the page loads.
     // componentDidMount(){
     //     this.getSavedIngredients();
     //     this.getBookmarkedProducts();
     // }
 
-    //button to save products
-    bookmarkProduct = event => {
-        event.preventDefault();
-        let product = {
-            product: event.target.value
-        }
 
-        API.bookmarkProduct(product).then(
-            console.log(product.product + " saved to database")
-        )
-            .catch(err => console.log(err))
-    }
-
+    //function to get bookmarked products
     getBookmarkedProducts = () => {
         API.getBookmarkedProducts()
             .then(res => {
@@ -109,18 +94,7 @@ class Search extends Component {
             .catch(err => console.log(err))
     }
 
-    //button to save ingredients
-    saveIngredient = event => {
-        event.preventDefault();
-        let ingredient = {
-            ingredient: event.target.value
-        }
-        // console.log(ingredient)
-        API.saveIngredient(ingredient)
-            .then(res => this.getSavedIngredients())
-            .catch(err => console.log(err))
-    }
-
+    //function to get saved ingredients.
     getSavedIngredients = () => {
         API.getSavedIngredients()
             .then(res => {
@@ -135,6 +109,33 @@ class Search extends Component {
             })
             .catch(err => console.log(err));
     }
+
+    //function for click event to bookmark products.
+    bookmarkProduct = event => {
+        event.preventDefault();
+        let product = {
+            product: event.target.value
+        }
+
+        API.bookmarkProduct(product).then(
+            console.log(product.product + " saved to database")
+        )
+            .catch(err => console.log(err))
+    }
+
+
+    //function for the click event to save ingredients
+    saveIngredient = event => {
+        event.preventDefault();
+        let ingredient = {
+            ingredient: event.target.value
+        }
+        // console.log(ingredient)
+        API.saveIngredient(ingredient)
+            .then(res => this.getSavedIngredients())
+            .catch(err => console.log(err))
+    }
+
 
 
 
@@ -189,7 +190,6 @@ class Search extends Component {
         }
 
     }
-
 
     handleInactiveIngredients = inactiveIngredient => {
         //splits the inactive ingredients array and puts each ingredient into a string.
@@ -264,20 +264,6 @@ class Search extends Component {
         }
     }
 
-    handleMatch = (searchedElement, savedElement) => {
-
-        const inCommon = savedElement.filter(function (val) {
-            return searchedElement.indexOf(val) != -1;
-        });
-
-        if (inCommon) {
-            this.setState({
-                disableSave: true
-            });
-        }
-    }
-
-
     //HANDLES A PRODUCT SEARCH
     handleFormSubmit = event => {
         //Prevents page from refreshing.
@@ -321,11 +307,9 @@ class Search extends Component {
 
 
                 }
-
             }).catch(err => this.setState({
                 show: true
             }));
-
     };
 
     //renders the page.
@@ -354,6 +338,8 @@ class Search extends Component {
                         </form>
                     </Col>
                 </Row>
+
+                {/* Scanner area */}
                 <Row>
                     {/* Scanner Camera */}
                     {/* <Col size='md-6'>
@@ -362,6 +348,8 @@ class Search extends Component {
                     </Col> */}
                 </Row>
 
+
+                {/* Search Modal begins */}
                 <SearchModal show={this.state.show}>
                     <Jumbotron style={{ margin: 0 }}>
                         <h2>Search Results</h2>
@@ -406,9 +394,9 @@ class Search extends Component {
                                             {product.inactiveIngredient.map(ingredient => {
 
                                                 //Similar to the code above, we save variables for what's going to be the outliers.
-                                                
+
                                                 let button = <button value={ingredient} onClick={this.saveIngredient} className='save-ingredients-button'>Save</button>;
-                                                
+
                                                 //the usual style
                                                 let style = { textAlign: 'center', fontSize: '10px' }
 
@@ -439,7 +427,7 @@ class Search extends Component {
                             <h2 id='info'>No results to display!</h2>
                         )}
                 </SearchModal>
-
+                {/* Search Modal ends */}
 
 
 
@@ -447,7 +435,7 @@ class Search extends Component {
 
 
                 {/* Saved Data test */}
-                {/* WILL BE DELETED ONCE FINISHED WITH LOGIN SESSION COMPLETED */}
+                {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
                 <h3>Saved Ingredients</h3>
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
@@ -457,8 +445,6 @@ class Search extends Component {
                         </ListItem>
                     ))}
                 </List>
-
-
                 <h3>Bookmarked Products</h3>
                 <button onClick={this.getBookmarkedProducts}>Get Bookmarked Products</button>
                 <List>
