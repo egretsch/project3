@@ -1,7 +1,7 @@
 const db = require("../models");
 const bcrypt = require('bcrypt')
 
-// Defining methods for the userController
+// Login
 module.exports = {
 
   // updateUser: function (req, res) {
@@ -136,10 +136,17 @@ module.exports = {
   },
 
 
+
   create: function (req, res) {
 
     db.User.find({ $or: [{ userName: req.body.userName }, { email: req.body.email }] }).then(dbData => {
       
+
+
+  create: function (req, res) {
+    db.User.find({$or: [{userName: req.body.userName}, {email: req.body.email}]}).then(dbData =>{
+      console.log("This is dbData inside create: ", dbData);
+
 
       if (dbData.length === 0) {
         console.log(2)

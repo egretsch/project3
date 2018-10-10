@@ -8,7 +8,6 @@ Get Scanner to work with Product Search
 
 Get Database routes to work:
 --This means:
-    - Saving users into a database with information.
     - Getting user tokens to be throughout the website.
 
 Get the information from the database onto their respective pages:
@@ -19,7 +18,7 @@ Get the information from the database onto their respective pages:
 Let users update their information
 --This means:
     - Getting working buttons onto ingredients, buttons that are pushed will save into 
-        their user route (preferably ingredients route).
+        their user route 
     - Getting working buttons on the user profile to delete saved products or saved ingredients.
     - Getting working buttons onto Products, buttons that are pushed will save into 
-        their user route (preferably products route).
+        their user route 
