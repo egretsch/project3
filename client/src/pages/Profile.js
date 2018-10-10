@@ -58,9 +58,6 @@ class Profile extends Component {
                 if (res.data.bookmarkedProducts) {
                     this.setState({ bookmarkedProducts: res.data.bookmarkedProducts.split(',') })
                 }
-                else {
-                    this.setState({ bookmarkedProducts: ["No Bookmarked Products"] })
-                }
             })
             .catch(err => console.log(err))
     }
@@ -71,9 +68,6 @@ class Profile extends Component {
                 if (res.data.ingredients) {
                     this.setState({ savedIngredients: res.data.ingredients.split(',') })
                     // console.log(res)
-                }
-                else {
-                    this.setState({ savedIngredients: ["No Ingredients Saved"] })
                 }
             })
             .catch(err => console.log(err));
@@ -114,7 +108,7 @@ class Profile extends Component {
             console.log("product you want to delete: " + product.product)
             API.deleteBookmarkedProduct(product)
                 .then(res => {
-                    console.log(product.product + " should be deleted. Here's the response: \n" + res.data)
+                    // console.log(product.product + " should be deleted. Here's the response: \n" + res.data)
                     this.getBookmarkedProducts(); 
                     this.reset();
                 })
@@ -133,7 +127,7 @@ class Profile extends Component {
             API.deleteSavedIngredient(ingredient)
                 .then(res => {
 
-                    console.log(ingredient.ingredient + " should be deleted. Here's the response: \n" + res.data)
+                    // console.log(ingredient.ingredient + " should be deleted. Here's the response: \n" + res.data)
                     this.getSavedIngredients();
                     this.reset();
                 })

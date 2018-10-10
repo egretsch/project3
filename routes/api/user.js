@@ -17,13 +17,20 @@ router
   .route('/products')
   .post(bookmarkedProductsController.bookmarkProduct)
   .get(bookmarkedProductsController.getBookmarkedProducts)
-  .post(bookmarkedProductsController.deleteBookmarkedProduct)
   
-
-router
+  
+  router
   .route('/ingredients')
   .post(ingredientsController.saveIngredient)
   .get(ingredientsController.getSavedIngredients)
+  
+  
+  //delete route because we can't use the same routes for two posts
+  router
+  .route('/ingredients/delete')
   .post(ingredientsController.deleteSavedIngredient)
-
+  
+  router
+  .route('/products/delete')
+  .post(bookmarkedProductsController.deleteBookmarkedProduct)
 module.exports = router;

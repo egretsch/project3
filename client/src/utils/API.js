@@ -36,7 +36,7 @@ export default {
 
     //METHOD TO DELETE STUFF FOR USERS
     deleteSavedIngredient: (ingredient) => {
-        return axios.post('/api/user', ingredient);
+        return axios.post('/api/user/ingredients/delete', ingredient);
 
     },
 
@@ -51,7 +51,7 @@ export default {
     },
     
     deleteBookmarkedProduct: (product) => {
-        return axios.post('/api/user', product);
+        return axios.post('/api/user/products/delete', product);
 
     },
 

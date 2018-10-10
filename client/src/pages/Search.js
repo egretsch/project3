@@ -311,6 +311,7 @@ class Search extends Component {
                 //Sets the state when we are done.
                 this.setState({ searchResults: brandNameArray })
                 this.showModal();
+
                 //Creates a state for each list, and sets them to false so the lists are collapsed.
                 for (let i = 0; i < brandNameArray.length; i++) {
                     this.setState({
@@ -365,6 +366,7 @@ class Search extends Component {
                         <h2>Search Results</h2>
                         <button className='btn btn-danger text-center' onClick={this.hideModal}>Close</button>
                     </Jumbotron>
+
                     {/* Ternary Operation to see if there are results for a product */}
                     {this.state.searchResults.length ? (
                         <List>
@@ -380,6 +382,7 @@ class Search extends Component {
                                     {/*This is to let the list be collapsable */}
                                     {/* On click is an anonymous function that must be clicked to use the toggleCollapse function */}
                                     <button value={index} onClick={() => { this.toggleCollapse(product.brandName, product.inactiveIngredient) }} className='btn btn-success'>Tap for Inactive Ingredients</button>
+                                    
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => (

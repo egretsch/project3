@@ -42,9 +42,9 @@ module.exports = {
         $pull: {ingredients: ingredient}
       })
       .then(dbModel => {
-        
+
+        // console.log("AFTER DELETE: " + dbModel);
         res.json(dbModel);
-        console.log("AFTER DELETE: " + dbModel);
       })
       .catch (err => res.status (422).json(err))
   },
