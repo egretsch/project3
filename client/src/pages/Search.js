@@ -11,7 +11,8 @@ import Jumbotron from "../components/Jumbotron";
 import ScannerNavbar from "../components/ScannerNavbar";
 
 //The Scanner
-import Scanner from "../components/Scanner";
+import ScannerSettings from "../components/Scanner/ScannerSettings.js";
+import ScannerResults from "../components/Scanner/ScannerResults.js";
 
 //for the collapsable list.
 import { Collapse } from 'reactstrap';
@@ -30,6 +31,8 @@ class Search extends Component {
             savedIngredients: [],
             bookmarkedProducts: [],
             searchResults: [],
+            scanResults: [],
+            toggleScanner: false
         }
     }
 
@@ -123,6 +126,19 @@ class Search extends Component {
             .catch(err => console.log(err))
     }
 
+
+    _scan = () => {
+        this.setState({ toggleScanner: !this.state.toggleScanner });
+    };
+
+    //when something is detected
+    _onDetected = result => {
+        if (this.state.scanResults.length < 5) {
+            this.setState;
+            console.log("RESULT:", result);
+            this.setState({ results: this.state.scanResults.concat([result]) });
+        }
+    };
 
 
 
@@ -326,14 +342,6 @@ class Search extends Component {
                     </Col>
                 </Row>
 
-                {/* Scanner area */}
-                <Row>
-                    <Col size='md-6'>
-                        <Scanner />
-                    </Col>
-                </Row>
-
-
                 {/* Search Modal begins */}
                 <SearchModal show={this.state.show}>
                     <Jumbotron style={{ margin: 0 }}>
@@ -415,8 +423,19 @@ class Search extends Component {
                 {/* Search Modal ends */}
 
 
-
-
+                {/* Scanner Start */}
+                <div className='text-center' style={{ margin: '10px' }}>
+                    <button className='btn btn-primary' onClick={this._scan}>
+                        {this.state.toggleScanner ? "Stop Scanner" : "Use Scanner"}
+                    </button>
+                    <ul className="results">
+                        {this.state.scanResults.map(result => (
+                            <ScannerResults key={result.codeResult.code} result={result} />
+                        ))}
+                    </ul>
+                    {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
+                </div>
+                {/* Scanner End */}
 
 
                 {/* Saved Data test */}

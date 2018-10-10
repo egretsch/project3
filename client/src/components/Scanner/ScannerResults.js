@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class ScannerResults extends React.Component{
 
     render() {
-        const result = this.props.result;
+        const result = this.props.scanResults;
 
         if (!result) {
             return null;
