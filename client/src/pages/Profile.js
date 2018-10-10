@@ -19,6 +19,16 @@ class Profile extends Component {
 
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.updateUserState = this.updateUserState.bind(this);
+        this.handleUpdateUserSubmit = this.handleUpdateUserSubmit.bind(this);
+        // this.handleInputChange = this.handleInputChange.bind(this);
+        // this.handleInputChange = this.handleInputChange.bind(this);
+
+
+
+
+
+
 
         this.handleShowUpdateUserModal = this.handleShowUpdateUserModal.bind(this);
         this.handleHideUpdateUserModal = this.handleHideUpdateUserModal.bind(this);
@@ -84,15 +94,70 @@ class Profile extends Component {
     };
 
     handleShowUpdateUserModal() {
-        this.setState({ showUpdateUserModal: true });
+        this.setState({ 
+            showUpdateUserModal: true, 
+            updateName: this.state.profileName,
+            updateEmail: this.state.email,
+            updateUserName: this.state.userName,
+            updatePassword: "",
+            updateGender: this.state.gender
+        });
     }
 
     handleHideUpdateUserModal() {
         this.setState({ showUpdateUserModal: false });
     }
 
+    updateUser = () => {
+        
+        var updateUserObj = {
+            name: this.state.updateName,
+            userName: this.state.updateUserName,
+            email: this.state.updateEmail,
+            password: this.state.updatePassword,
+            gender: this.state.updateGender
+        };
+        console.log(updateUserObj, 1)
+        API.updateUser(updateUserObj)
+            .then(res => {
+                //console.log("submited data and here is res: ", res)
+                console.log(res, 2)
+
+                //if (!res.data) {
+                //    console.log("we made it to the second layer");
+                    // alert("Username already exists! Please use another");
+                //    this.setState({
+                //        userMessage: "Username or Password already exsists",
+                //        color: "#FF000"
+                //    })
+                //}
+
+            })
+            .catch(err => console.log(err));
+    };
+
+    // update USER Submit
+
+    handleUpdateUserSubmit(event) {
+        event.preventDefault();
+        this.updateUserState();
+        // console.log(state)
+        this.updateUser();
+        // this.createUserState();
+
+        
+    }
+    updateUserState(){
+        this.setState({
+            profileName: this.state.updateName,
+            email: this.state.updateEmail,
+            userName: this.state.updateUserName,
+            gender: this.state.updateGender
+        });
+    }
 
     render() {
+        console.log(this.state)
         return (
             <Container>
                 <Row>
@@ -109,6 +174,8 @@ class Profile extends Component {
                         <p>Gender: {this.state.gender}</p>
                         <button onClick={this.handleShowUpdateUserModal} className='btn btn-success'>Profile Update</button>
                     </Col>
+
+
                     <Modal
                         {...this.props}
                         show={this.state.showUpdateUserModal}
@@ -117,10 +184,10 @@ class Profile extends Component {
                     >
                         <Modal.Header closeButton>
                             <Modal.Title id="contained-modal-title-lg">
-                                <div style={{ color: this.state.color }}>{this.state.userMessage}</div>
+                                Update Profile
                             </Modal.Title>
                         </Modal.Header>
-                        <Form horizontal onSubmit={this.handleCreateSubmit}>
+                        <Form horizontal onSubmit={this.handleUpdateUserSubmit}>
                             <Modal.Body>
 
                                 <FormGroup controlId="formHorizontalName">
@@ -170,7 +237,7 @@ class Profile extends Component {
                                         <FormControl
                                             name="updatePassword"
                                             type="password"
-                                            placeholder="Enter Password"
+                                            placeholder="Enter New Password"
                                             value={this.state.updatePassword}
                                             onChange={this.handleInputChange} />
                                     </Col>

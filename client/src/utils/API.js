@@ -21,6 +21,9 @@ export default {
     loginUser: function (loginObj) {
         return axios.post("/api/user/login", loginObj);
     },
+    updateUser: updateUserObj => {
+        return axios.post('/api/user/update', updateUserObj)
+    },
 
     // API TO GET USER DATA
     getAllSavedIngredients: ingredients => {
