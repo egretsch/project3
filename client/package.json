@@ -11,6 +11,7 @@
     "express-session": "^1.15.6",
     "if-env": "^1.0.4",
     "mongoose": "^5.0.17",
+    "prop-types": "^15.6.2",
     "quagga": "^0.12.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",

@@ -1,66 +1,55 @@
-import React from 'react';
-import Quagga from 'quagga';
-import PropTypes from 'prop-types';
+import React from "react";
+import ScannerSettings from "./ScannerSettings";
+import ScannerResults from "./ScannerResults";
 
-class Scanner extends React.Component {
-    
-    render() {
-        return (
-            <div id="interactive" className="viewport"/>
-        );
+class Scanner extends React.Component{
+  constructor() {
+    super();
+
+    this.state = {
+      scanning: false,
+      results: []
+    };
+  }
+  
+  //turns scanner on.
+  _scan = () => {
+    this.setState({ scanning: !this.state.scanning });
+  };
+
+  //when something is detected
+  _onDetected = result => {
+    if (this.state.results.length < 5) {
+      this.setState;
+      console.log("RESULT:", result);
+      this.setState({ results: this.state.results.concat([result]) });
     }
+  };
 
-    componentDidMount() {
-        Quagga.init({
-            inputStream: {
-                type : "ImageStream",
-                constraints: {
-                    width: 640,
-                    height: 480,
-                    facingMode: "environment" // or user
-                }
-            },
-            locator: {
-                patchSize: "medium",
-                halfSample: true
-            },
-            numOfWorkers: 2,
-            decoder: {
-                readers : [ 
-                // "code_128_reader",
-                'ean_reader',
-                // 'ean_8_reader',
-                // 'code_39_reader',
-                // 'code_39_vin_reader',
-                // 'codabar_reader',
-                // 'upc_reader',
-                // 'upc_e_reader',
-                // 'i2of5_reader',
-                // '2of5_reader',
-                // 'code_93_reader'
-            ]
-            },
-            locate: true
-        }, function(err) {
-            if (err) {
-                return console.log(err);
-            }
-            Quagga.start();
-        });
-        Quagga.onDetected(this._onDetected);
-    }
 
-    componentWillUnmount() {
-        Quagga.offDetected(this._onDetected);
-    }
+  render() {
+    return (
+      <div className='text-center' style={{margin: '10px'}}>
+        <button className='btn btn-primary' onClick={this._scan}>
+          {this.state.scanning ? "Stop Scanner" : "Use Scanner"}
+        </button>
+        <ul className="results">
+          {this.state.results.map(result => (
+            <ScannerResults key={result.codeResult.code} result={result} />
+          ))}
+        </ul>
+        {this.state.scanning ? <ScannerSettings onDetected={this._onDetected} /> : null}
 
-    _onDetected = (result) => {
-        this.props.onDetected(result);
-    }
-};
-
-Scanner.propTypes = {
-    onDetected: PropTypes.func.isRequired
+        <form>
+          <label>
+            Enter New Product's Brand name:
+            <input type="text" name="name" />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+    );
+  }
 }
 
 export default Scanner;

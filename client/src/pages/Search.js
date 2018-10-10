@@ -18,19 +18,6 @@ import { Collapse } from 'reactstrap';
 
 import './pages.css';
 
-
-//To do -
-//Save product/ingredients to the USER profile (gotta wait for user profiles)
-//Match searched result ingredients to SAVED user ingredients. (Check allergens or any starred ingredients)
-// ---- For this to work we need check if user data is still persistent throughout the pages.
-//
-//Stuff to check - Confirmation modals. 
-//Perhaps putting the rendered list into a pop up modal to save screen space.
-//Perhaps getting a search list from typing a letter?
-//
-
-
-
 class Search extends Component {
 
     constructor(props) {
@@ -341,11 +328,9 @@ class Search extends Component {
 
                 {/* Scanner area */}
                 <Row>
-                    {/* Scanner Camera */}
-                    {/* <Col size='md-6'>
+                    <Col size='md-6'>
                         <Scanner />
-                        <button className='btn btn-primary'>Scan Item</button>
-                    </Col> */}
+                    </Col>
                 </Row>
 
 
