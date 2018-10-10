@@ -80,6 +80,7 @@ class Search extends Component {
 
     // componentDidMount(){
     //     this.getSavedIngredients();
+    //     this.getBookmarkedProducts();
     // }
 
     //button to save products
@@ -123,7 +124,7 @@ class Search extends Component {
     getSavedIngredients = () => {
         API.getSavedIngredients()
             .then(res => {
-                console.log(res.data.ingredients);
+                // console.log(res.data.ingredients);
                 if (res.data.ingredients) {
                     this.setState({ savedIngredients: res.data.ingredients.split(',') })
                     // console.log(res)
@@ -375,16 +376,14 @@ class Search extends Component {
                                 let button = <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>;
 
                                 for (let e = 0; e < product.brandName.length; e++) {
-                                    if (!this.state.bookmarkedProducts.indexOf( product.brandName[e])) {
-                                        button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>
+                                    for (let s = 0; s < this.state.bookmarkedProducts.length; s++) {
+                                        if (this.state.bookmarkedProducts[s] === product.brandName[e]) {
+                                            button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>
+                                        }
+                                        // Test ForEach End
                                     }
-                                    else {
-                                        console.log(product.brandName + ' is not found')
-                                    }
-                                    // Test ForEach End
                                 }
-                                    
-                                return <ListItem key={product.brandName + product.activeIngredient} bookmarkedProducts={this.state.bookmarkedProducts}>
+                                return <ListItem key={product.brandName + product.activeIngredient}>
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
                                     {button}
                                     <h4 id='info'>Active Ingredient(s)</h4>
@@ -398,12 +397,22 @@ class Search extends Component {
 
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
-                                            {product.inactiveIngredient.map(ingredient => (
-                                                <ListItem key={product.brandName + 'inactive_' + ingredient} savedIngredients={this.state.savedIngredients} >
+                                            {product.inactiveIngredient.map(ingredient => {
+                                                let button = <button value={ingredient} onClick={this.saveIngredient} className='save-ingredients-button'>Save</button>;
+                                                let style = {textAlign: 'center', fontSize: '10px'}
+                                                let warning = {textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442"}
+                                                for (let n = 0; n < this.state.savedIngredients.length; n++) {
+                                                    if (this.state.savedIngredients[n] === ingredient) {
+                                                        button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
+                                                        style = warning
+
+                                                    }
+                                                }
+                                                return <ListItem style={style} key={product.brandName + 'inactive_' + ingredient}>
                                                     {ingredient}
-                                                    <button className='save-ingredients-button' value={ingredient} onClick={this.saveIngredient}>Save</button>
+                                                    {button}
                                                 </ListItem>
-                                            ))}
+                                            })}
                                         </List>
                                     </Collapse>
                                 </ListItem>
@@ -421,7 +430,7 @@ class Search extends Component {
 
 
                 {/* Saved Data test */}
-                {/* WILL BE DELETED ONCE FINISHED */}
+                {/* WILL BE DELETED ONCE FINISHED WITH LOGIN SESSION COMPLETED */}
                 <h3>Saved Ingredients</h3>
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
