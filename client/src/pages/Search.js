@@ -27,6 +27,7 @@ class Search extends Component {
         this.state = {
             searchedProduct: "",
             collapse: false,
+            scannerModalShow: false,
             show: false,
             savedIngredients: [],
             bookmarkedProducts: [],
@@ -51,6 +52,15 @@ class Search extends Component {
     hideModal = () => {
         this.setState({ show: false });
     };
+
+    //for the scanner modal
+    showScannerModal = () => {
+        this.setState({ scannerModalShow: true });
+    };
+    hideScannerModal = () => {
+        this.setState({ scannerModalShow: false });
+    };
+
 
     //Shows or Collapses the list on tap.
     toggleCollapse = (brandName, inactiveIngredient) => {
@@ -435,6 +445,10 @@ class Search extends Component {
                     </ul>
                     {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
                 </div>
+
+                <SearchModal scannerModalShow ={this.state.scannerModalShow}>
+
+                </SearchModal>
                 {/* Scanner End */}
 
 

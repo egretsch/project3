@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require("../models/");
 
 module.exports = {
     getScannedProduct: function (req, res) {
@@ -14,6 +14,7 @@ module.exports = {
             })
             .catch(err => res.status(422).json(err))
     },
+
     saveScannedProduct: function (req, res) {
         console.log(req)
         const brandName = req.body.brandName

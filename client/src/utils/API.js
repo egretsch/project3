@@ -2,13 +2,21 @@ import axios from "axios";
 
 //Gets products from our API website. Limit 20 because I don't want to break their server or something.
 export default {
+
+    //Search through products in the API.
     getProduct: product => {
         return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=20")
     },
 
-    // getproductbyScan: product => {
-    //     return axios.get() <--- put API for scanner in here.
-    // },
+
+    //Get the exact scanned product. 
+    getproductbyScan: product => {
+        return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=1")
+    },
+
+    saveScannedProduct: product => {
+        return axios.post('/api/product', product)
+    },
 
     // submit user info
     postUser: function (userArray) {
