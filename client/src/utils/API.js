@@ -8,12 +8,17 @@ export default {
         return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=20")
     },
 
-
     //Get the exact scanned product. 
     getProductByScan: product => {
         return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=1")
     },
 
+    //Try getting the scanned product inside the database
+    getScannedProduct: upcCode => {
+        return axios.get("/api/product?code=" + upcCode);
+    },
+
+    //Saving scanned product to Database
     saveScannedProduct: product => {
         return axios.post('/api/product', product)
     },
@@ -33,7 +38,7 @@ export default {
 
     // API TO GET USER DATA
     getSavedIngredients: () => {
-        return axios.get('/api/user/ingredients')   
+        return axios.get('/api/user/ingredients')
     },
 
     //METHOD TO POST STUFF FOR USERS
@@ -57,13 +62,11 @@ export default {
         return axios.post('/api/user/products', product);
 
     },
-    
+
     deleteBookmarkedProduct: (product) => {
         return axios.post('/api/user/products/delete', product);
 
     },
-
-    
 
 
 }

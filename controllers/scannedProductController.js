@@ -3,7 +3,7 @@ const db = require("../models/");
 module.exports = {
     getScannedProduct: function (req, res) {
         console.log(req)
-        const code = req.body.code
+        const code = req.params.code
         db.Product
             .findOne({
                 upcCode: code

@@ -142,10 +142,18 @@ class Search extends Component {
 
     //when something is detected
     _onDetected = result => {
-        if (this.state.scanResults.length < 5) {
-            this.setState;
-            console.log("RESULT:", result);
-            this.setState({ results: this.state.scanResults.concat([result]) });
+        if (this.state.scanResults.length < 1) {
+            this.setState({ scanResults: this.state.scanResults.concat([result]) });
+            console.log("RESULT:", this.state.scanResults);
+
+        //     API.getProductByScan(result.codeResult.code)
+        //         .then(res => {
+        //             console.log(res);
+
+        //         })
+        //         .catch(err => {
+        //             console.log(res);
+        //         });
         }
     };
 
