@@ -4,13 +4,13 @@ import axios from "axios";
 export default {
 
     //Search through products in the API.
-    getProduct: product => {
+    getProducts: product => {
         return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=20")
     },
 
 
     //Get the exact scanned product. 
-    getproductbyScan: product => {
+    getProductByScan: product => {
         return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=1")
     },
 

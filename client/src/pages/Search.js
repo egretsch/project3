@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import API from "../utils/API";
 
@@ -123,7 +122,6 @@ class Search extends Component {
         )
             .catch(err => console.log(err))
     }
-
 
     //function for the click event to save ingredients
     saveIngredient = event => {
@@ -291,7 +289,7 @@ class Search extends Component {
         const brandNameArray = [];
 
         //Our API Call.
-        API.getProduct(this.state.searchedProduct)
+        API.getProducts(this.state.searchedProduct)
             .then(res => {
                 // console.log(res.data.results)
 
@@ -402,7 +400,7 @@ class Search extends Component {
                                         <List>
                                             {product.inactiveIngredient.map(ingredient => {
 
-                                                //Similar to the code above, we save variables for what's going to be the outliers.
+                                                //Similar to the code above in the product area, we save variables for what's going to be the outliers.
 
                                                 let button = <button value={ingredient} onClick={this.saveIngredient} className='save-ingredients-button'>Save</button>;
 
