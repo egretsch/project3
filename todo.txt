@@ -7,6 +7,30 @@ Get Scanner to work with Product Search
         (this is so if the product is scanned again, there won't be a need to input the name again)
     - Getting the information from the database and putting it in the product search.
 
+
+    --Scanner User Story
+        --Search Page - Button is tapped to start scanner
+
+                Scanner scans an item for its UPC Code -
+                   - Code is checked inside the database
+                        -Scanner scans an item that is NOT in the database.
+                            -Modal pops up saying product not found, user has to put in the BRAND NAME  (tell them it's required).
+                                - cancel - modal closes, search stops.
+                            - user inputs BRAND NAME of item.
+                            - brand name of item + upc code goes into database.
+                            - brand name is SEARCHED in the product search.
+                            - search results popped up. (SHOULD ONLY BRING UP THE PRODUCT ITSELF. We'll need to specifically input the brand name we want.
+                                                        Perhaps making something specific inside our database model?)
+                            -if product is not found in API, return modal (no search results found)
+                            
+                        -Scanner scans an item that IS INSIDE THE DATABASE
+                            - Modal pops up (CAN BE OPTIONAL) saying product is found
+                            - Product results are then shown. (SHOULD ONLY BRING UP THE PRODUCT ITSELF)
+                            - if product is not found in API return modal (no search results found)
+
+
+
+
 Let users update their information
 --This means:
     - Getting working buttons onto ingredients, buttons that are pushed will save into 
