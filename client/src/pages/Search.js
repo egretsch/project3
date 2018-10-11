@@ -33,7 +33,8 @@ class Search extends Component {
             bookmarkedProducts: [],
             searchResults: [],
             scanResults: [],
-            toggleScanner: false
+            toggleScanner: false,
+            scannedProductName: ""
         }
     }
 
@@ -136,7 +137,7 @@ class Search extends Component {
             .catch(err => console.log(err))
     }
 
-
+    // Scanner functions
     _scan = () => {
         this.setState({ toggleScanner: !this.state.toggleScanner });
     };
@@ -150,6 +151,11 @@ class Search extends Component {
         }
     };
 
+    saveScannedProduct = () => {
+        API.saveScannedProduct
+    }
+
+    // End Scanner Functions
 
 
     //I don't know how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
@@ -278,7 +284,7 @@ class Search extends Component {
     }
 
     //HANDLES A PRODUCT SEARCH
-    handleFormSubmit = event => {
+    handleProductSearch = event => {
         //Prevents page from refreshing.
         event.preventDefault(); 0
         //makes a empty array so we can set this as the searched results later on.
@@ -344,7 +350,7 @@ class Search extends Component {
                             />
                             <FormBtn
                                 disabled={!this.state.searchedProduct}
-                                onClick={this.handleFormSubmit}
+                                onClick={this.handleProductSearch}
                             >
                                 Search Product
                             </FormBtn>
@@ -446,9 +452,36 @@ class Search extends Component {
                     {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
                 </div>
 
-                <SearchModal scannerModalShow ={this.state.scannerModalShow}>
+                <SearchModal scannerModalShow={this.state.scannerModalShow}>
+                    <div className='modal-content'>
+                        <div className='modal-header'>
+                            <h4 className='modal-title'></h4>
+                        </div>
 
+                        <div className='modal-body'>
+                            <form className='text-center'>
+                                <Input
+                                    value={this.state.scannedProductName}
+                                    onChange={this.handleInputChange}
+                                    name="scannerProductName"
+                                    placeholder="Brand Name (required)"
+                                />
+                                <FormBtn
+                                    disabled={!this.state.scannedProductName}
+                                    onClick={this.handleFormSubmit}
+                                >
+                                    Submit
+                                </FormBtn>
+                            </form>
+                        </div>
+
+                        <div className='modal-footer'>
+                            <button className='btn btn-secondary' onClick={() => { this.hideScannerModal() }}>Cancel</button>
+                            <button className='btn btn-primary' onClick={() => { this.hideScannerModal() }}>Confirm</button>
+                        </div>
+                    </div>
                 </SearchModal>
+
                 {/* Scanner End */}
 
 
