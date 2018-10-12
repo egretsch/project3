@@ -23,6 +23,7 @@
 
 .list-group-item {
     font-size: 9pt;
+
 }
 
 .save-ingredients-button {
@@ -42,5 +43,9 @@
       max-width: 50%;
       margin-left: 25%;
   }
+}
+
+.delete-button {
+    float: right;
 }
 
