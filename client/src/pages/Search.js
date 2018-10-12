@@ -3,7 +3,7 @@ import API from "../utils/API";
 
 //Parts of the app
 import { Col, Row, Container } from "../components/Grid";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import { Input, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
 import SearchModal from "../components/SearchModal";
 import Jumbotron from "../components/Jumbotron";
@@ -11,7 +11,7 @@ import ScannerNavbar from "../components/ScannerNavbar";
 
 
 //The Scanner
-import Scanner from "../components/Scanner";
+// import Scanner from "../components/Scanner";
 
 //for the collapsable list.
 import { Collapse } from 'reactstrap';
@@ -88,10 +88,10 @@ class Search extends Component {
         console.log("Hey this product was clicked: ", product);
     }
 
-    getSavedIngredients = () => {
-        API.getAllSavedIngredients(this.state.user).then
-        console.log("This gets the ingredients from our DB")
-    }
+    // getSavedIngredients = () => {
+    //     API.getAllSavedIngredients(this.state.user).then
+    //     console.log("This gets the ingredients from our DB")
+    // }
 
 
     // //Match Ingredient to saved ingredient?

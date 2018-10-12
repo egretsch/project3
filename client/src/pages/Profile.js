@@ -3,7 +3,7 @@ import { Col as MyCol, Row, Container } from "../components/Grid";
 
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 //Should this be here? (Look at questions)
-import { Input, TextArea, FormBtn } from "../components/Form";
+
 
 
 import { List, ListItem } from "../components/List";
@@ -21,15 +21,7 @@ class Profile extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateUserState = this.updateUserState.bind(this);
         this.handleUpdateUserSubmit = this.handleUpdateUserSubmit.bind(this);
-        // this.handleInputChange = this.handleInputChange.bind(this);
-        // this.handleInputChange = this.handleInputChange.bind(this);
-
-
-
-
-
-
-
+    
         this.handleShowUpdateUserModal = this.handleShowUpdateUserModal.bind(this);
         this.handleHideUpdateUserModal = this.handleHideUpdateUserModal.bind(this);
 

@@ -28,4 +28,19 @@
 .save-ingredients-button {
     float: right;
 }
+@media all and (min-width: 480px) {
+  .Login {
+    padding: 60px 0;
+  }
+
+  .Login form {
+    margin: 0 auto;
+    max-width: 30%;
+    margin-top: 10%;
+  }
+  .loginButtion{
+      max-width: 50%;
+      margin-left: 25%;
+  }
+}
 
