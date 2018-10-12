@@ -1,41 +1,20 @@
 Stuff left to do:
 
+Get exact matches out of API
+    -play around with the brand_name: query. Refine the search.
+    -White spaces are filled with %20, but it only works with two words?
+    
 
-Get Scanner to work with Product Search
---This means:
-    - Save the scanned product code into a database WITH the brand name of product
-        (this is so if the product is scanned again, there won't be a need to input the name again)
-    - Getting the information from the database and putting it in the product search.
+Get it Deployed
+    -If any Heroku problems, then we will fix ASAP.
 
-
-    --Scanner User Flow
-        --Search Page - Button is tapped to start scanner
-
-                Scanner scans an item for its UPC Code -
-                   - Code is checked inside the database
-                        -Scanner scans an item that is NOT in the database.
-                            -Modal pops up saying product not found AND IT SHOWS THE UPC Code that is scanned
-                            (ctrl + f,  Scanner Start to find it, please test this out).
-                            
-                            - IF cancel is hit - modal closes, search stops (Needs test, I think it's done).
-                            
-                            - user inputs BRAND NAME of item and hits submit button.
-                            
-                            - brand name of item + upc code goes into database (needs to be done).
-                            
-                            - brand name is SEARCHED in the product search (needs to be done).
-                            - search results popped up. (SHOULD ONLY BRING UP THE PRODUCT ITSELF. 
-                              I limited the website API call to 1, so the search needs to be EXACT)
-                            
-                            -if product is not found in API, return modal (no search results found)
-
-                        -Scanner scans an item that IS INSIDE THE DATABASE
-                            - Modal pops up (CAN BE OPTIONAL) saying product is found
-                            - Product results are then shown. (SHOULD ONLY BRING UP THE PRODUCT ITSELF)
-                            - if product is not found in API return modal (no search results found)
-
-
-
+Login Page merged with the rest of the App
+    -Check if any bugs logging in or out.
+    -Check if all buttons work when logged in.
+    -Check if information is pulled from database.
+    
+    (optional bugs)
+        --Get rid of/prevent any Duplicates of saved information and/or profiles.
 
 Let users update their information
 --This means:
@@ -44,3 +23,11 @@ Let users update their information
     - Getting working buttons on the user profile to delete saved products or saved ingredients.
     - Getting working buttons onto Products, buttons that are pushed will save into 
         their user route 
+
+
+Make it pretty
+    --Any loading animations
+    --Any thematic things we want to products
+    --Specific font styles?
+    --Is it mobile friendly? (The Scanner Modal needs some work)
+    --Need an about page? Footer? etc. 
