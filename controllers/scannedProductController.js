@@ -2,7 +2,8 @@ const db = require("../models/");
 
 module.exports = {
     getScannedProduct: function (req, res) {
-        console.log(req)
+        console.log("HEY TEST THIS OUT!")
+        console.log('this is thething', req)
         const code = req.params.code
         db.Product
             .findOne({

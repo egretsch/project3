@@ -3,11 +3,11 @@ import API from "../utils/API";
 
 //Parts of the app
 import { Col, Row, Container } from "../components/Grid";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import { Input, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
 import ScannerNavbar from "../components/ScannerNavbar";
-import { Modal, ButtonGroup } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 
 //The Scanner
 import ScannerSettings from "../components/Scanner/ScannerSettings.js";
@@ -145,10 +145,11 @@ class Search extends Component {
         if (this.state.scanResults.length < 1) {
             this.setState({ scanResults: this.state.scanResults.concat(result) });
             console.log("RESULT:", this.state.scanResults[0].codeResult.code);
-
-            API.getProductByScan(result.codeResult.code)
+            console.log(result.codeResult.code)
+            API.getScannedProduct(result.codeResult.code)
                 .then(res => {
-                    console.log(res);
+                    
+                    console.log("RECEIEVED RESPONSE: ", res);
 
                 })
                 .catch(err => {
@@ -161,18 +162,18 @@ class Search extends Component {
     };
 
     saveScannedProduct = event => {
-
         event.preventDefault();
 
-        let product ={
-            product: this.state.scannedProductName
-        }
+        let product = this.state.scannedProductName
+        
+
+        // console.log(product);
 
         API.saveScannedProduct(product)
-            .then(res=>{ 
-                console.log("Product Saved");
+            .then(res => {
+                console.log(res);
                 this.hideScannerModal();
-                this.getScannedProduct();
+                // this.getScannedProduct();
             })
             .catch(err => {
                 console.log(err);
@@ -181,8 +182,8 @@ class Search extends Component {
 
     getScannedProduct = () => {
         let brandNameArray = [];
-        API.getProductByScan(this.state.scannedProductName)
-            .then(res =>{
+        API.getProductByScan(this.state.scannedProductName.replace(" ", "%20"))
+            .then(res => {
                 res.data.results.forEach(element => {
                     let brandName = element.openfda.brand_name
                     let activeIngredient = element.active_ingredient
@@ -198,7 +199,6 @@ class Search extends Component {
                             inactiveIngredient: this.handleInactiveIngredients(inactiveIngredient)
                         });
                     }
-
                 });
 
                 //Sets the state when we are done.
@@ -218,7 +218,7 @@ class Search extends Component {
             }));
     }
 
-    
+
     // End Scanner Functions
 
 
@@ -278,7 +278,7 @@ class Search extends Component {
         //splits the inactive ingredients array and puts each ingredient into a string.
         if (inactiveIngredient === undefined) {
             inactiveIngredient = ['No Results']
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
             return inactiveIngredient
         }
         else {
@@ -287,7 +287,7 @@ class Search extends Component {
 
         if (inactiveIngredient.includes('Inactive Ingredients:')) {
             inactiveIngredient = inactiveIngredient.replace('Inactive Ingredients: ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('Inactive ingredient:')) {
@@ -350,7 +350,7 @@ class Search extends Component {
     //HANDLES A PRODUCT SEARCH
     handleProductSearch = event => {
         //Prevents page from refreshing.
-        event.preventDefault(); 
+        event.preventDefault();
         //makes a empty array so we can set this as the searched results later on.
         let brandNameArray = [];
 
@@ -450,7 +450,7 @@ class Search extends Component {
                                 }
 
                                 //Else it returns the regular buttons and brand names
-                                return <ListItem key={product.brandName + product.activeIngredient}>
+                                return <ListItem key={product + index + index}>
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
                                     {button}
                                     <h4 id='info'>Active Ingredient(s)</h4>
@@ -464,7 +464,7 @@ class Search extends Component {
 
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
-                                            {product.inactiveIngredient.map(ingredient => {
+                                            {product.inactiveIngredient.map((ingredient, index) => {
 
                                                 //Similar to the code above in the product area, we save variables for what's going to be the outliers.
 
@@ -485,7 +485,7 @@ class Search extends Component {
                                                 }
 
                                                 //else it just returns the above variables to be saved. 
-                                                return <ListItem style={style} key={product.brandName + 'inactive_' + ingredient}>
+                                                return <ListItem style={style} key={ingredient + index}>
                                                     {ingredient}
                                                     {button}
                                                 </ListItem>
@@ -509,8 +509,8 @@ class Search extends Component {
                         {this.state.toggleScanner ? "Stop Scanner" : "Use Scanner"}
                     </button>
                     <ul className="results">
-                        {this.state.scanResults.map(result => (
-                            <ScannerResults key={result.codeResult.code} result={result} />
+                        {this.state.scanResults.map((result, index) => (
+                            <ScannerResults key={result + index + index} result={result} />
                         ))}
                     </ul>
                     {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
@@ -518,7 +518,7 @@ class Search extends Component {
 
                 <Modal show={this.state.scannerModalShow}>
                     <Modal.Header>
-                        <h3 style={{color: 'red'}} className='modal-title'>Product Not Found!</h3>
+                        <h3 style={{ color: 'red' }} className='modal-title'>Product Not Found!</h3>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -553,7 +553,7 @@ class Search extends Component {
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
                     {this.state.savedIngredients.map((ingredient, index) => (
-                        <ListItem key={ingredient + this.state.user + index}>
+                        <ListItem key={ingredient + index + index + index}>
                             {ingredient}
                         </ListItem>
                     ))}
@@ -562,7 +562,7 @@ class Search extends Component {
                 <button onClick={this.getBookmarkedProducts}>Get Bookmarked Products</button>
                 <List>
                     {this.state.bookmarkedProducts.map((product, index) => (
-                        <ListItem key={product + this.state.user + index}>
+                        <ListItem key={index + product + index}>
                             {product}
                         </ListItem>
                     ))}

@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { Col as MyCol, Row, Container } from "../components/Grid";
+import { Col as Row, Container } from "../components/Grid";
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";

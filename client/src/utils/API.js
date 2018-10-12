@@ -14,8 +14,8 @@ export default {
     },
 
     //Try getting the scanned product inside the database
-    getScannedProduct: upcCode => {
-        return axios.get("/api/product?code=" + upcCode);
+    getScannedProduct: code => {
+        return axios.get("/api/product/:" + code);
     },
 
     //Saving scanned product to Database
