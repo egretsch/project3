@@ -160,10 +160,65 @@ class Search extends Component {
         }
     };
 
-    saveScannedProduct = () => {
-        API.saveScannedProduct
+    saveScannedProduct = event => {
+
+        event.preventDefault();
+
+        let product ={
+            product: this.state.scannedProductName
+        }
+
+        API.saveScannedProduct(product)
+            .then(res=>{ 
+                console.log("Product Saved");
+                this.hideScannerModal();
+                this.getScannedProduct();
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
+    getScannedProduct = () => {
+        let brandNameArray = [];
+        API.getProductByScan(this.state.scannedProductName)
+            .then(res =>{
+                res.data.results.forEach(element => {
+                    let brandName = element.openfda.brand_name
+                    let activeIngredient = element.active_ingredient
+                    let inactiveIngredient = element.inactive_ingredient
+
+
+                    // if a brand name doesn't exist, we skip over it. 
+                    //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
+                    if (brandName) {
+                        brandNameArray.push({
+                            brandName: brandName,
+                            activeIngredient: this.handleActiveIngredients(activeIngredient),
+                            inactiveIngredient: this.handleInactiveIngredients(inactiveIngredient)
+                        });
+                    }
+
+                });
+
+                //Sets the state when we are done.
+                this.setState({ searchResults: brandNameArray })
+                this.showResultsModal();
+
+                //Creates a state for each list, and sets them to false so the lists are collapsed.
+                for (let i = 0; i < brandNameArray.length; i++) {
+                    this.setState({
+                        [brandNameArray[i].brandName + brandNameArray[i].inactiveIngredient]: false
+                    });
+
+
+                }
+            }).catch(err => this.setState({
+                showResultsModal: true
+            }));
+    }
+
+    
     // End Scanner Functions
 
 
@@ -295,20 +350,20 @@ class Search extends Component {
     //HANDLES A PRODUCT SEARCH
     handleProductSearch = event => {
         //Prevents page from refreshing.
-        event.preventDefault(); 0
+        event.preventDefault(); 
         //makes a empty array so we can set this as the searched results later on.
-        const brandNameArray = [];
+        let brandNameArray = [];
 
         //Our API Call.
-        API.getProducts(this.state.searchedProduct)
+        API.getProducts(this.state.searchedProduct.replace(" ", "%20"))
             .then(res => {
                 // console.log(res.data.results)
 
                 //Using a forEach to look for the brand name.
                 res.data.results.forEach(element => {
-                    const brandName = element.openfda.brand_name
-                    const activeIngredient = element.active_ingredient
-                    const inactiveIngredient = element.inactive_ingredient
+                    let brandName = element.openfda.brand_name
+                    let activeIngredient = element.active_ingredient
+                    let inactiveIngredient = element.inactive_ingredient
 
 
                     // if a brand name doesn't exist, we skip over it. 
@@ -480,7 +535,7 @@ class Search extends Component {
                                 <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={this.hideScannerModal}>Cancel</button>
                                 <FormBtn
                                     disabled={!this.state.scannedProductName}
-                                    onClick={this.handleFormSubmit}
+                                    onClick={this.saveScannedProduct}
                                 >
                                     Submit
                                 </FormBtn>
