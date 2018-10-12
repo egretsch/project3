@@ -4,26 +4,17 @@ Get exact matches out of API
     -play around with the brand_name: query. Refine the search.
     -White spaces are filled with %20, but it only works with two words?
     
-
 Get it Deployed
     -If any Heroku problems, then we will fix ASAP.
 
 Login Page merged with the rest of the App
     -Check if any bugs logging in or out.
-    -Check if all buttons work when logged in.
+    -Check if all buttons work when logged in. (in the navbar)
     -Check if information is pulled from database.
     
-    (optional bugs)
-        --Get rid of/prevent any Duplicates of saved information and/or profiles.
-
 Let users update their information
 --This means:
-    - Getting working buttons onto ingredients, buttons that are pushed will save into 
-        their user route 
-    - Getting working buttons on the user profile to delete saved products or saved ingredients.
-    - Getting working buttons onto Products, buttons that are pushed will save into 
-        their user route 
-
+    - Changing their name, email, and password.
 
 Make it pretty
     --Any loading animations
@@ -31,3 +22,17 @@ Make it pretty
     --Specific font styles?
     --Is it mobile friendly? (The Scanner Modal needs some work)
     --Need an about page? Footer? etc. 
+
+Create a README
+    -- The Project name
+    -- Our individual github/linkedin, and any other extra Stuff
+    -- What the App does
+    -- The Dependencies
+    -- How to use it
+    -- What bugs there are
+    -- Next steps
+    -- any other stuff. 
+
+(optional bugs)
+    --Get rid of/prevent any Duplicates of saved information and/or profiles.
+    --More dynamic, make buttons instantly go saved or danger if saving ingredients/products

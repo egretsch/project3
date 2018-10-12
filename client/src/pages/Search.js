@@ -73,12 +73,11 @@ class Search extends Component {
         });
     }
 
-    //Gets the data once the user logs on and the page loads.
-    // componentDidMount(){
-    //     this.getSavedIngredients();
-    //     this.getBookmarkedProducts();
-    // }
-
+    // Gets the data once the user logs on and the page loads.
+    componentDidMount(){
+        this.getSavedIngredients();
+        this.getBookmarkedProducts();
+    }
 
     //function to get bookmarked products
     getBookmarkedProducts = () => {
@@ -116,10 +115,8 @@ class Search extends Component {
         let product = {
             product: event.target.value
         }
-
-        API.bookmarkProduct(product).then(
-            console.log(product.product + " saved to database")
-        )
+        API.bookmarkProduct(product)
+            .then(res => this.getBookmarkedProducts())
             .catch(err => console.log(err))
     }
 
@@ -171,24 +168,12 @@ class Search extends Component {
             upcCode: this.state.scanResults,
         })
             .then(res => {
-
                 console.log(res);
                 this.hideScannerModal();
                 this.searchScannedProduct();
-                if (res.data.ingredients) {
-                    this.setState({ savedIngredients: res.data.ingredients.split(',') })
-                    // console.log(res)
-                }
-                else {
-                    this.setState({ savedIngredients: ["No Ingredients Saved"] })
-                }
             })
             .catch(err => {
                 console.log(err);
-
-                // console.log(res.data.ingredients);
-                
-
             })
     }
 
@@ -456,17 +441,13 @@ class Search extends Component {
 
                                         //If they match, it disables the save button and makes sure the user knows its saved.
                                         if (this.state.bookmarkedProducts[s] === product.brandName[e]) {
-                                            button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-warning'>Saved</button>
+                                            button = <button disabled value={product.brandName} className='btn btn-warning'>Saved</button>
                                         }
                                     }
                                 }
 
                                 //Else it returns the regular buttons and brand names
-
                                 return <ListItem key={product + index + index}>
-
-                                //return <ListItem key={product.brandName + product.activeIngredient}>
-
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
                                     {button}
                                     <h4 id='info'>Active Ingredient(s)</h4>
@@ -480,7 +461,6 @@ class Search extends Component {
 
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
-
                                             {product.inactiveIngredient.map((ingredient, index) => {
 
                                                 //Similar to the code above in the product area, we save variables for what's going to be the outliers.
@@ -494,19 +474,19 @@ class Search extends Component {
                                                 let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
 
                                                 //the for loop that compares it all.
+
                                                 for (let n = 0; n < this.state.savedIngredients.length; n++) {
                                                     if (this.state.savedIngredients[n] === ingredient) {
                                                         button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
+                                                        style = warning
+                                                    }else if ('No Results' === ingredient){
+                                                        button = ""
                                                         style = warning
                                                     }
                                                 }
 
                                                 //else it just returns the above variables to be saved. 
-
                                                 return <ListItem style={style} key={ingredient + index}>
-
-                                                //return <ListItem style={style} key={product.brandName + 'inactive_' + ingredient}>
-
                                                     {ingredient}
                                                     {button}
                                                 </ListItem>
@@ -552,7 +532,6 @@ class Search extends Component {
                                 name="scannedProductName"
                                 placeholder="Brand Name (required)"
                             />
-
                             <Modal.Footer>
                                 <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => {event.preventDefault(); this.hideScannerModal();}}>Cancel</button>
                                 <FormBtn
@@ -565,21 +544,10 @@ class Search extends Component {
                         </form>
                     </Modal.Body>
                 </Modal>
-
                 {/* Scanner End */}
-
-
                 {/* Saved Data test */}
                 {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
-
-
-
                 {/* <h3>Saved Ingredients</h3>
-
-                {/* Saved Data test */}
-                {/* WILL BE DELETED ONCE FINISHED WITH LOGIN SESSION COMPLETED */}
-                <h3>Saved Ingredients</h3>
-
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
                     {this.state.savedIngredients.map((ingredient, index) => (
@@ -597,16 +565,10 @@ class Search extends Component {
                         </ListItem>
                     ))}
                 </List>
-
-
                 <h3>Cameraless  test</h3>
                 <button onClick={this._onDetected}>Test Button</button> */}
             </Container>
-
-
-
         );
     }
 }
-
 export default Search;
