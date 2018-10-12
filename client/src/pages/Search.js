@@ -171,12 +171,24 @@ class Search extends Component {
             upcCode: this.state.scanResults,
         })
             .then(res => {
+
                 console.log(res);
                 this.hideScannerModal();
                 this.searchScannedProduct();
+                if (res.data.ingredients) {
+                    this.setState({ savedIngredients: res.data.ingredients.split(',') })
+                    // console.log(res)
+                }
+                else {
+                    this.setState({ savedIngredients: ["No Ingredients Saved"] })
+                }
             })
             .catch(err => {
                 console.log(err);
+
+                // console.log(res.data.ingredients);
+                
+
             })
     }
 
@@ -450,7 +462,11 @@ class Search extends Component {
                                 }
 
                                 //Else it returns the regular buttons and brand names
+
                                 return <ListItem key={product + index + index}>
+
+                                //return <ListItem key={product.brandName + product.activeIngredient}>
+
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
                                     {button}
                                     <h4 id='info'>Active Ingredient(s)</h4>
@@ -464,6 +480,7 @@ class Search extends Component {
 
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
+
                                             {product.inactiveIngredient.map((ingredient, index) => {
 
                                                 //Similar to the code above in the product area, we save variables for what's going to be the outliers.
@@ -485,7 +502,11 @@ class Search extends Component {
                                                 }
 
                                                 //else it just returns the above variables to be saved. 
+
                                                 return <ListItem style={style} key={ingredient + index}>
+
+                                                //return <ListItem style={style} key={product.brandName + 'inactive_' + ingredient}>
+
                                                     {ingredient}
                                                     {button}
                                                 </ListItem>
@@ -552,7 +573,13 @@ class Search extends Component {
                 {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
 
 
+
                 {/* <h3>Saved Ingredients</h3>
+
+                {/* Saved Data test */}
+                {/* WILL BE DELETED ONCE FINISHED WITH LOGIN SESSION COMPLETED */}
+                <h3>Saved Ingredients</h3>
+
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
                     {this.state.savedIngredients.map((ingredient, index) => (
