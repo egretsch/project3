@@ -28,6 +28,7 @@
     "express-session": "^1.15.6",
     "if-env": "^1.0.4",
     "mongoose": "^5.0.17",
+    "prop-types": "^15.6.2",
     "react-bootstrap": "^0.32.4"
   }
 }

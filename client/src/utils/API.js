@@ -2,13 +2,26 @@ import axios from "axios";
 
 //Gets products from our API website. Limit 20 because I don't want to break their server or something.
 export default {
-    getProduct: product => {
-        return axios.get("https://api.fda.gov/drug/label.json?search=brand_name=" + product + "&limit=20")
+
+    //Search through products in the API.
+    getProducts: product => {
+        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + product + "&limit=20")
     },
 
-    // getproductbyScan: product => {
-    //     return axios.get() <--- put API for scanner in here.
-    // },
+    //Get the exact scanned product. 
+    getProductByScan: product => {
+        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + product + "&limit=1")
+    },
+
+    //Try getting the scanned product inside the database
+    getScannedProduct: code => {
+        return axios.get("/api/products/"+ code);
+    },
+
+    //Saving scanned product to Database
+    saveScannedProduct: product => {
+        return axios.post('/api/products', product)
+    },
 
     // submit user info
     postUser: function (userArray) {
@@ -28,7 +41,7 @@ export default {
 
     // API TO GET USER DATA
     getSavedIngredients: () => {
-        return axios.get('/api/user/ingredients')   
+        return axios.get('/api/user/ingredients')
     },
 
     //METHOD TO POST STUFF FOR USERS
@@ -52,13 +65,11 @@ export default {
         return axios.post('/api/user/products', product);
 
     },
-    
+
     deleteBookmarkedProduct: (product) => {
         return axios.post('/api/user/products/delete', product);
 
     },
-
-    
 
 
 }

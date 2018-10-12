@@ -2,7 +2,7 @@ import React from 'react';
 import Quagga from 'quagga';
 import PropTypes from 'prop-types';
 
-class Scanner extends React.Component {
+class ScannerSettings extends React.Component {
     
     render() {
         return (
@@ -13,7 +13,7 @@ class Scanner extends React.Component {
     componentDidMount() {
         Quagga.init({
             inputStream: {
-                type : "ImageStream",
+                type : "LiveStream",
                 constraints: {
                     width: 640,
                     height: 480,
@@ -27,22 +27,15 @@ class Scanner extends React.Component {
             numOfWorkers: 2,
             decoder: {
                 readers : [ 
-                // "code_128_reader",
-                'ean_reader',
-                // 'ean_8_reader',
-                // 'code_39_reader',
-                // 'code_39_vin_reader',
-                // 'codabar_reader',
-                // 'upc_reader',
-                // 'upc_e_reader',
-                // 'i2of5_reader',
-                // '2of5_reader',
-                // 'code_93_reader'
-            ]
+                'upc_reader',
+                'upc_e_reader'
+                ]
+                
             },
             locate: true
         }, function(err) {
             if (err) {
+                alert("Camera not found")
                 return console.log(err);
             }
             Quagga.start();
@@ -59,8 +52,8 @@ class Scanner extends React.Component {
     }
 };
 
-Scanner.propTypes = {
+ScannerSettings.propTypes = {
     onDetected: PropTypes.func.isRequired
 }
 
-export default Scanner;
+export default ScannerSettings;
