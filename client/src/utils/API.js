@@ -15,12 +15,12 @@ export default {
 
     //Try getting the scanned product inside the database
     getScannedProduct: code => {
-        return axios.get("/api/product/:" + code);
+        return axios.get("/api/products/"+ code);
     },
 
     //Saving scanned product to Database
     saveScannedProduct: product => {
-        return axios.post('/api/product', product)
+        return axios.post('/api/products', product)
     },
 
     // submit user info

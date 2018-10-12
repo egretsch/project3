@@ -2,12 +2,14 @@ const db = require("../models/");
 
 module.exports = {
     getScannedProduct: function (req, res) {
+        
         console.log("HEY TEST THIS OUT!")
-        console.log('this is thething', req)
-        const code = req.params.code
+
+        console.log("params", req.params.code);
+        
         db.Product
             .findOne({
-                upcCode: code
+                upcCode: req.params.code
             })
             .then(dbModel => {
                 // console.log(dbModel);
@@ -17,9 +19,13 @@ module.exports = {
     },
 
     saveScannedProduct: function (req, res) {
-        console.log(req)
+        console.log("REQ BODY", req.body)
         const brandName = req.body.brandName
-        const code = req.body.code
+        const code = req.body.upcCode
+
+        console.log(
+                    '\nbrand name: ', brandName,
+                    '\nthe code: ', code);
         db.Product
             .create({
                 brandName: brandName,

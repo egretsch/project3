@@ -144,12 +144,14 @@ class Search extends Component {
     _onDetected = result => {
         if (this.state.scanResults.length < 1) {
             this.setState({ scanResults: this.state.scanResults.concat(result) });
-            console.log("RESULT:", this.state.scanResults[0].codeResult.code);
             console.log(result.codeResult.code)
-            API.getScannedProduct(result.codeResult.code)
+            this.setState({scanResults: "678"})
+            API.getScannedProduct(this.state.scanResults)
                 .then(res => {
-                    
-                    console.log("RECEIEVED RESPONSE: ", res);
+                    console.log('Name: ', res.data.brandName,
+                                'upcCode: ', res.data.upcCode)
+                    this.setState({scannedProductName: res.data.brandName})
+                    this.searchScannedProduct();
 
                 })
                 .catch(err => {
@@ -157,30 +159,28 @@ class Search extends Component {
                     this.setState({
                         scannerModalShow: true
                     })
-                });
+                })
         }
     };
 
     saveScannedProduct = event => {
         event.preventDefault();
 
-        let product = this.state.scannedProductName
-        
-
-        // console.log(product);
-
-        API.saveScannedProduct(product)
+        API.saveScannedProduct({
+            brandName: this.state.scannedProductName,
+            upcCode: this.state.scanResults,
+        })
             .then(res => {
                 console.log(res);
                 this.hideScannerModal();
-                // this.getScannedProduct();
+                this.searchScannedProduct();
             })
             .catch(err => {
                 console.log(err);
             })
     }
 
-    getScannedProduct = () => {
+    searchScannedProduct = () => {
         let brandNameArray = [];
         API.getProductByScan(this.state.scannedProductName.replace(" ", "%20"))
             .then(res => {
@@ -522,6 +522,7 @@ class Search extends Component {
                     </Modal.Header>
 
                     <Modal.Body>
+                        <h5>UPC Code Found: {this.state.scanResults}</h5>
                         <h4>Please input product's brand name!</h4>
                         <form className='text-center'>
                             <Input
@@ -532,7 +533,7 @@ class Search extends Component {
                             />
 
                             <Modal.Footer>
-                                <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={this.hideScannerModal}>Cancel</button>
+                                <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => {event.preventDefault(); this.hideScannerModal();}}>Cancel</button>
                                 <FormBtn
                                     disabled={!this.state.scannedProductName}
                                     onClick={this.saveScannedProduct}
@@ -549,7 +550,9 @@ class Search extends Component {
 
                 {/* Saved Data test */}
                 {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
-                <h3>Saved Ingredients</h3>
+
+
+                {/* <h3>Saved Ingredients</h3>
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
                     {this.state.savedIngredients.map((ingredient, index) => (
@@ -567,7 +570,14 @@ class Search extends Component {
                         </ListItem>
                     ))}
                 </List>
+
+
+                <h3>Cameraless  test</h3>
+                <button onClick={this._onDetected}>Test Button</button> */}
             </Container>
+
+
+
         );
     }
 }

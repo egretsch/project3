@@ -35,6 +35,7 @@ class ScannerSettings extends React.Component {
             locate: true
         }, function(err) {
             if (err) {
+                alert("Camera not found")
                 return console.log(err);
             }
             Quagga.start();
