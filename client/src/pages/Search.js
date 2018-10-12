@@ -5,9 +5,9 @@ import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Input, TextArea, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
-import SearchModal from "../components/SearchModal";
 import Jumbotron from "../components/Jumbotron";
 import ScannerNavbar from "../components/ScannerNavbar";
+import { Modal, ButtonGroup } from 'react-bootstrap'
 
 //The Scanner
 import ScannerSettings from "../components/Scanner/ScannerSettings.js";
@@ -27,7 +27,7 @@ class Search extends Component {
             searchedProduct: "",
             collapse: false,
             scannerModalShow: false,
-            show: false,
+            resultsModalShow: false,
             savedIngredients: [],
             bookmarkedProducts: [],
             searchResults: [],
@@ -46,11 +46,11 @@ class Search extends Component {
     };
 
     //Modal Functions
-    showModal = () => {
-        this.setState({ show: true });
+    showResultsModal = () => {
+        this.setState({ resultsModalShow: true });
     };
-    hideModal = () => {
-        this.setState({ show: false });
+    hideResultsModal = () => {
+        this.setState({ resultsModalShow: false });
     };
 
     //for the scanner modal
@@ -143,17 +143,20 @@ class Search extends Component {
     //when something is detected
     _onDetected = result => {
         if (this.state.scanResults.length < 1) {
-            this.setState({ scanResults: this.state.scanResults.concat([result]) });
-            console.log("RESULT:", this.state.scanResults);
+            this.setState({ scanResults: this.state.scanResults.concat(result) });
+            console.log("RESULT:", this.state.scanResults[0].codeResult.code);
 
-        //     API.getProductByScan(result.codeResult.code)
-        //         .then(res => {
-        //             console.log(res);
+            API.getProductByScan(result.codeResult.code)
+                .then(res => {
+                    console.log(res);
 
-        //         })
-        //         .catch(err => {
-        //             console.log(res);
-        //         });
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        scannerModalShow: true
+                    })
+                });
         }
     };
 
@@ -322,7 +325,7 @@ class Search extends Component {
 
                 //Sets the state when we are done.
                 this.setState({ searchResults: brandNameArray })
-                this.showModal();
+                this.showResultsModal();
 
                 //Creates a state for each list, and sets them to false so the lists are collapsed.
                 for (let i = 0; i < brandNameArray.length; i++) {
@@ -333,7 +336,7 @@ class Search extends Component {
 
                 }
             }).catch(err => this.setState({
-                show: true
+                showResultsModal: true
             }));
     };
 
@@ -365,10 +368,10 @@ class Search extends Component {
                 </Row>
 
                 {/* Search Modal begins */}
-                <SearchModal show={this.state.show}>
+                <Modal show={this.state.resultsModalShow}>
                     <Jumbotron style={{ margin: 0 }}>
                         <h2>Search Results</h2>
-                        <button className='btn btn-danger text-center' onClick={this.hideModal}>Close</button>
+                        <button className='btn btn-danger text-center' onClick={this.hideResultsModal}>Close</button>
                     </Jumbotron>
 
                     {/* Ternary Operation to see if there are results for a product */}
@@ -441,7 +444,7 @@ class Search extends Component {
                             //If nothing comes from the API.
                             <h2 id='info'>No results to display!</h2>
                         )}
-                </SearchModal>
+                </Modal>
                 {/* Search Modal ends */}
 
 
@@ -458,35 +461,33 @@ class Search extends Component {
                     {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
                 </div>
 
-                <SearchModal scannerModalShow={this.state.scannerModalShow}>
-                    <div className='modal-content'>
-                        <div className='modal-header'>
-                            <h4 className='modal-title'></h4>
-                        </div>
+                <Modal show={this.state.scannerModalShow}>
+                    <Modal.Header>
+                        <h3 style={{color: 'red'}} className='modal-title'>Product Not Found!</h3>
+                    </Modal.Header>
 
-                        <div className='modal-body'>
-                            <form className='text-center'>
-                                <Input
-                                    value={this.state.scannedProductName}
-                                    onChange={this.handleInputChange}
-                                    name="scannerProductName"
-                                    placeholder="Brand Name (required)"
-                                />
+                    <Modal.Body>
+                        <h4>Please input product's brand name!</h4>
+                        <form className='text-center'>
+                            <Input
+                                value={this.state.scannedProductName}
+                                onChange={this.handleInputChange}
+                                name="scannedProductName"
+                                placeholder="Brand Name (required)"
+                            />
+
+                            <Modal.Footer>
+                                <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={this.hideScannerModal}>Cancel</button>
                                 <FormBtn
                                     disabled={!this.state.scannedProductName}
                                     onClick={this.handleFormSubmit}
                                 >
                                     Submit
                                 </FormBtn>
-                            </form>
-                        </div>
-
-                        <div className='modal-footer'>
-                            <button className='btn btn-secondary' onClick={() => { this.hideScannerModal() }}>Cancel</button>
-                            <button className='btn btn-primary' onClick={() => { this.hideScannerModal() }}>Confirm</button>
-                        </div>
-                    </div>
-                </SearchModal>
+                            </Modal.Footer>
+                        </form>
+                    </Modal.Body>
+                </Modal>
 
                 {/* Scanner End */}
 
