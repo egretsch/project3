@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import API from "../utils/API";
 
@@ -6,30 +5,18 @@ import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
 import { Input, FormBtn } from "../components/Form";
 import { List, ListItem } from "../components/List";
-import SearchModal from "../components/SearchModal";
 import Jumbotron from "../components/Jumbotron";
 import ScannerNavbar from "../components/ScannerNavbar";
+import { Modal } from 'react-bootstrap'
 
 //The Scanner
-// import Scanner from "../components/Scanner";
+import ScannerSettings from "../components/Scanner/ScannerSettings.js";
+import ScannerResults from "../components/Scanner/ScannerResults.js";
 
 //for the collapsable list.
 import { Collapse } from 'reactstrap';
 
 import './pages.css';
-
-
-//To do -
-//Save product/ingredients to the USER profile (gotta wait for user profiles)
-//Match searched result ingredients to SAVED user ingredients. (Check allergens or any starred ingredients)
-// ---- For this to work we need check if user data is still persistent throughout the pages.
-//
-//Stuff to check - Confirmation modals. 
-//Perhaps putting the rendered list into a pop up modal to save screen space.
-//Perhaps getting a search list from typing a letter?
-//
-
-
 
 class Search extends Component {
 
@@ -37,19 +24,18 @@ class Search extends Component {
         super(props);
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.state = {
-            user: "jason", //placeholder
             searchedProduct: "",
             collapse: false,
-            show: false,
+            scannerModalShow: false,
+            resultsModalShow: false,
             savedIngredients: [],
             bookmarkedProducts: [],
             searchResults: [],
-            match: 0,
-            disableSave: false
+            scanResults: [],
+            toggleScanner: false,
+            scannedProductName: ""
         }
     }
-
-
 
     //basic input change handler.
     handleInputChange = event => {
@@ -60,12 +46,21 @@ class Search extends Component {
     };
 
     //Modal Functions
-    showModal = () => {
-        this.setState({ show: true });
+    showResultsModal = () => {
+        this.setState({ resultsModalShow: true });
     };
-    hideModal = () => {
-        this.setState({ show: false });
+    hideResultsModal = () => {
+        this.setState({ resultsModalShow: false });
     };
+
+    //for the scanner modal
+    showScannerModal = () => {
+        this.setState({ scannerModalShow: true });
+    };
+    hideScannerModal = () => {
+        this.setState({ scannerModalShow: false });
+    };
+
 
     //Shows or Collapses the list on tap.
     toggleCollapse = (brandName, inactiveIngredient) => {
@@ -78,23 +73,14 @@ class Search extends Component {
         });
     }
 
+    //Gets the data once the user logs on and the page loads.
     // componentDidMount(){
     //     this.getSavedIngredients();
+    //     this.getBookmarkedProducts();
     // }
 
-    //button to save products
-    bookmarkProduct = event => {
-        event.preventDefault();
-        let product = {
-            product: event.target.value
-        }
 
-        API.bookmarkProduct(product).then(
-            console.log(product.product + " saved to database")
-        )
-            .catch(err => console.log(err))
-    }
-
+    //function to get bookmarked products
     getBookmarkedProducts = () => {
         API.getBookmarkedProducts()
             .then(res => {
@@ -108,22 +94,11 @@ class Search extends Component {
             .catch(err => console.log(err))
     }
 
-    //button to save ingredients
-    saveIngredient = event => {
-        event.preventDefault();
-        let ingredient = {
-            ingredient: event.target.value
-        }
-        // console.log(ingredient)
-        API.saveIngredient(ingredient)
-            .then(res => this.getSavedIngredients())
-            .catch(err => console.log(err))
-    }
-
+    //function to get saved ingredients.
     getSavedIngredients = () => {
         API.getSavedIngredients()
             .then(res => {
-                console.log(res.data.ingredients);
+                // console.log(res.data.ingredients);
                 if (res.data.ingredients) {
                     this.setState({ savedIngredients: res.data.ingredients.split(',') })
                     // console.log(res)
@@ -135,6 +110,116 @@ class Search extends Component {
             .catch(err => console.log(err));
     }
 
+    //function for click event to bookmark products.
+    bookmarkProduct = event => {
+        event.preventDefault();
+        let product = {
+            product: event.target.value
+        }
+
+        API.bookmarkProduct(product).then(
+            console.log(product.product + " saved to database")
+        )
+            .catch(err => console.log(err))
+    }
+
+    //function for the click event to save ingredients
+    saveIngredient = event => {
+        event.preventDefault();
+        let ingredient = {
+            ingredient: event.target.value
+        }
+        // console.log(ingredient)
+        API.saveIngredient(ingredient)
+            .then(res => this.getSavedIngredients())
+            .catch(err => console.log(err))
+    }
+
+    // Scanner functions
+    _scan = () => {
+        this.setState({ toggleScanner: !this.state.toggleScanner });
+    };
+
+    //when something is detected
+    _onDetected = result => {
+        if (this.state.scanResults.length < 1) {
+            this.setState({ scanResults: this.state.scanResults.concat(result) });
+            console.log(result.codeResult.code)
+            this.setState({scanResults: "678"})
+            API.getScannedProduct(this.state.scanResults)
+                .then(res => {
+                    console.log('Name: ', res.data.brandName,
+                                'upcCode: ', res.data.upcCode)
+                    this.setState({scannedProductName: res.data.brandName})
+                    this.searchScannedProduct();
+
+                })
+                .catch(err => {
+                    console.log(err);
+                    this.setState({
+                        scannerModalShow: true
+                    })
+                })
+        }
+    };
+
+    saveScannedProduct = event => {
+        event.preventDefault();
+
+        API.saveScannedProduct({
+            brandName: this.state.scannedProductName,
+            upcCode: this.state.scanResults,
+        })
+            .then(res => {
+                console.log(res);
+                this.hideScannerModal();
+                this.searchScannedProduct();
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    searchScannedProduct = () => {
+        let brandNameArray = [];
+        API.getProductByScan(this.state.scannedProductName.replace(" ", "%20"))
+            .then(res => {
+                res.data.results.forEach(element => {
+                    let brandName = element.openfda.brand_name
+                    let activeIngredient = element.active_ingredient
+                    let inactiveIngredient = element.inactive_ingredient
+
+
+                    // if a brand name doesn't exist, we skip over it. 
+                    //The brand names, active ingredients, and inactive ingredients are pushed into the empty array.
+                    if (brandName) {
+                        brandNameArray.push({
+                            brandName: brandName,
+                            activeIngredient: this.handleActiveIngredients(activeIngredient),
+                            inactiveIngredient: this.handleInactiveIngredients(inactiveIngredient)
+                        });
+                    }
+                });
+
+                //Sets the state when we are done.
+                this.setState({ searchResults: brandNameArray })
+                this.showResultsModal();
+
+                //Creates a state for each list, and sets them to false so the lists are collapsed.
+                for (let i = 0; i < brandNameArray.length; i++) {
+                    this.setState({
+                        [brandNameArray[i].brandName + brandNameArray[i].inactiveIngredient]: false
+                    });
+
+
+                }
+            }).catch(err => this.setState({
+                showResultsModal: true
+            }));
+    }
+
+
+    // End Scanner Functions
 
 
     //I don't know how to use specific regex so I rigged this up to search for ALL TYPES OF ACTIVE INGREDIENTS
@@ -189,12 +274,11 @@ class Search extends Component {
 
     }
 
-
     handleInactiveIngredients = inactiveIngredient => {
         //splits the inactive ingredients array and puts each ingredient into a string.
         if (inactiveIngredient === undefined) {
             inactiveIngredient = ['No Results']
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
             return inactiveIngredient
         }
         else {
@@ -203,7 +287,7 @@ class Search extends Component {
 
         if (inactiveIngredient.includes('Inactive Ingredients:')) {
             inactiveIngredient = inactiveIngredient.replace('Inactive Ingredients: ', '').split(', ')
-            console.log(inactiveIngredient)
+            // console.log(inactiveIngredient)
             return inactiveIngredient
         }
         else if (inactiveIngredient.includes('Inactive ingredient:')) {
@@ -263,37 +347,23 @@ class Search extends Component {
         }
     }
 
-    handleMatch = (searchedElement, savedElement) => {
-
-        const inCommon = savedElement.filter(function (val) {
-            return searchedElement.indexOf(val) != -1;
-        });
-
-        if (inCommon) {
-            this.setState({
-                disableSave: true
-            });
-        }
-    }
-
-
     //HANDLES A PRODUCT SEARCH
-    handleFormSubmit = event => {
+    handleProductSearch = event => {
         //Prevents page from refreshing.
-        event.preventDefault(); 0
+        event.preventDefault();
         //makes a empty array so we can set this as the searched results later on.
-        const brandNameArray = [];
+        let brandNameArray = [];
 
         //Our API Call.
-        API.getProduct(this.state.searchedProduct)
+        API.getProducts(this.state.searchedProduct.replace(" ", "%20"))
             .then(res => {
                 // console.log(res.data.results)
 
                 //Using a forEach to look for the brand name.
                 res.data.results.forEach(element => {
-                    const brandName = element.openfda.brand_name
-                    const activeIngredient = element.active_ingredient
-                    const inactiveIngredient = element.inactive_ingredient
+                    let brandName = element.openfda.brand_name
+                    let activeIngredient = element.active_ingredient
+                    let inactiveIngredient = element.inactive_ingredient
 
 
                     // if a brand name doesn't exist, we skip over it. 
@@ -310,7 +380,7 @@ class Search extends Component {
 
                 //Sets the state when we are done.
                 this.setState({ searchResults: brandNameArray })
-                this.showModal();
+                this.showResultsModal();
 
                 //Creates a state for each list, and sets them to false so the lists are collapsed.
                 for (let i = 0; i < brandNameArray.length; i++) {
@@ -320,11 +390,9 @@ class Search extends Component {
 
 
                 }
-
             }).catch(err => this.setState({
-                show: true
+                showResultsModal: true
             }));
-
     };
 
     //renders the page.
@@ -346,45 +414,43 @@ class Search extends Component {
                             />
                             <FormBtn
                                 disabled={!this.state.searchedProduct}
-                                onClick={this.handleFormSubmit}
+                                onClick={this.handleProductSearch}
                             >
                                 Search Product
                             </FormBtn>
                         </form>
                     </Col>
                 </Row>
-                <Row>
-                    {/* Scanner Camera */}
-                    {/* <Col size='md-6'>
-                        <Scanner />
-                        <button className='btn btn-primary'>Scan Item</button>
-                    </Col> */}
-                </Row>
 
-                <SearchModal show={this.state.show}>
+                {/* Search Modal begins */}
+                <Modal show={this.state.resultsModalShow}>
                     <Jumbotron style={{ margin: 0 }}>
                         <h2>Search Results</h2>
-                        <button className='btn btn-danger text-center' onClick={this.hideModal}>Close</button>
+                        <button className='btn btn-danger text-center' onClick={this.hideResultsModal}>Close</button>
                     </Jumbotron>
 
                     {/* Ternary Operation to see if there are results for a product */}
                     {this.state.searchResults.length ? (
                         <List>
                             {this.state.searchResults.map((product, index) => {
-                                // console.log(product);
+
+
+                                //Makes a button variable for our for loop. The regular Save Button
                                 let button = <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>;
 
+                                //A For loop to compare both bookmarked products and our searched products
                                 for (let e = 0; e < product.brandName.length; e++) {
-                                    if (!this.state.bookmarkedProducts.indexOf( product.brandName[e])) {
-                                        button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>
+                                    for (let s = 0; s < this.state.bookmarkedProducts.length; s++) {
+
+                                        //If they match, it disables the save button and makes sure the user knows its saved.
+                                        if (this.state.bookmarkedProducts[s] === product.brandName[e]) {
+                                            button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-warning'>Saved</button>
+                                        }
                                     }
-                                    else {
-                                        console.log(product.brandName + ' is not found')
-                                    }
-                                    // Test ForEach End
                                 }
-                                    
-                                return <ListItem key={product.brandName + product.activeIngredient} bookmarkedProducts={this.state.bookmarkedProducts}>
+
+                                //Else it returns the regular buttons and brand names
+                                return <ListItem key={product + index + index}>
                                     <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
                                     {button}
                                     <h4 id='info'>Active Ingredient(s)</h4>
@@ -398,51 +464,120 @@ class Search extends Component {
 
                                     <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
                                         <List>
-                                            {product.inactiveIngredient.map(ingredient => (
-                                                <ListItem key={product.brandName + 'inactive_' + ingredient} savedIngredients={this.state.savedIngredients} >
+                                            {product.inactiveIngredient.map((ingredient, index) => {
+
+                                                //Similar to the code above in the product area, we save variables for what's going to be the outliers.
+
+                                                let button = <button value={ingredient} onClick={this.saveIngredient} className='save-ingredients-button'>Save</button>;
+
+                                                //the usual style
+                                                let style = { textAlign: 'center', fontSize: '10px' }
+
+                                                //the style if the user's saved ingredients match up with the searched ingredients.
+                                                let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
+
+                                                //the for loop that compares it all.
+                                                for (let n = 0; n < this.state.savedIngredients.length; n++) {
+                                                    if (this.state.savedIngredients[n] === ingredient) {
+                                                        button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
+                                                        style = warning
+                                                    }
+                                                }
+
+                                                //else it just returns the above variables to be saved. 
+                                                return <ListItem style={style} key={ingredient + index}>
                                                     {ingredient}
-                                                    <button className='save-ingredients-button' value={ingredient} onClick={this.saveIngredient}>Save</button>
+                                                    {button}
                                                 </ListItem>
-                                            ))}
+                                            })}
                                         </List>
                                     </Collapse>
                                 </ListItem>
                             })}
                         </List>
                     ) : (
+                            //If nothing comes from the API.
                             <h2 id='info'>No results to display!</h2>
                         )}
-                </SearchModal>
+                </Modal>
+                {/* Search Modal ends */}
 
 
+                {/* Scanner Start */}
+                <div className='text-center' style={{ margin: '10px' }}>
+                    <button className='btn btn-primary' onClick={this._scan}>
+                        {this.state.toggleScanner ? "Stop Scanner" : "Use Scanner"}
+                    </button>
+                    <ul className="results">
+                        {this.state.scanResults.map((result, index) => (
+                            <ScannerResults key={result + index + index} result={result} />
+                        ))}
+                    </ul>
+                    {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
+                </div>
 
+                <Modal show={this.state.scannerModalShow}>
+                    <Modal.Header>
+                        <h3 style={{ color: 'red' }} className='modal-title'>Product Not Found!</h3>
+                    </Modal.Header>
 
+                    <Modal.Body>
+                        <h5>UPC Code Found: {this.state.scanResults}</h5>
+                        <h4>Please input product's brand name!</h4>
+                        <form className='text-center'>
+                            <Input
+                                value={this.state.scannedProductName}
+                                onChange={this.handleInputChange}
+                                name="scannedProductName"
+                                placeholder="Brand Name (required)"
+                            />
 
+                            <Modal.Footer>
+                                <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => {event.preventDefault(); this.hideScannerModal();}}>Cancel</button>
+                                <FormBtn
+                                    disabled={!this.state.scannedProductName}
+                                    onClick={this.saveScannedProduct}
+                                >
+                                    Submit
+                                </FormBtn>
+                            </Modal.Footer>
+                        </form>
+                    </Modal.Body>
+                </Modal>
+
+                {/* Scanner End */}
 
 
                 {/* Saved Data test */}
-                {/* WILL BE DELETED ONCE FINISHED */}
-                <h3>Saved Ingredients</h3>
+                {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
+
+
+                {/* <h3>Saved Ingredients</h3>
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
                     {this.state.savedIngredients.map((ingredient, index) => (
-                        <ListItem key={ingredient + this.state.user + index}>
+                        <ListItem key={ingredient + index + index + index}>
                             {ingredient}
                         </ListItem>
                     ))}
                 </List>
-
-
                 <h3>Bookmarked Products</h3>
                 <button onClick={this.getBookmarkedProducts}>Get Bookmarked Products</button>
                 <List>
                     {this.state.bookmarkedProducts.map((product, index) => (
-                        <ListItem key={product + this.state.user + index}>
+                        <ListItem key={index + product + index}>
                             {product}
                         </ListItem>
                     ))}
                 </List>
+
+
+                <h3>Cameraless  test</h3>
+                <button onClick={this._onDetected}>Test Button</button> */}
             </Container>
+
+
+
         );
     }
 }
