@@ -12,13 +12,19 @@ Login Page merged with the rest of the App
     -Check if all buttons work when logged in. (in the navbar)
     -Check if information is pulled from database.
     
+Error Modals?
+    --Just in case something goes wrong, the user can at least know something went wrong. (Search.js completed)
+    -- Creating a user - error on trying to make an account with used email/username
+    -- Error on login - Error trying to login (wrong username or password)
+    -- Profile - Error on updating information and deleting saved data (such as if it fails)
+
+    
 Let users update their information
 --This means:
     - Changing their name, email, and password.
 
 
-Error Modals?
-    --Just in case something goes wrong, the user can at least know something went wrong. (Search.js completed)
+
 
 Make it pretty
     --Any loading animations
