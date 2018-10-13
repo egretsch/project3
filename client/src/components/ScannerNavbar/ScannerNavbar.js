@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Button, ButtonGroup} from "react-bootstrap";
 import "./ScannerNavbar.css";
-// import API from "../../utils/API.js";
+
 
 class ScannerNavbar extends Component {
-
 
 
 
@@ -12,6 +11,7 @@ class ScannerNavbar extends Component {
        
 
     render() {
+        // const pathButtions = p => <button key={p.id}>{p.name}</button>;
         return (
             // navbar
             <Navbar inverse collapseOnSelect>
@@ -25,13 +25,7 @@ class ScannerNavbar extends Component {
 
                     <Nav pullRight className="buttions">
                         <ButtonGroup>
-                            {/* { isLoggedIn ?
-                                <button> Log Out</button>
-                                : */}
-                                <Button onClick={this.handleShowLoginModal} >Login</Button>
-                                <Button onClick={this.handleShowNewUserModal} >Create User</Button>
-                            {/* // } */}
-                        
+                            {this.props.buttons.map(el => <Button key={el.id} value={el.name} onClick={el.action}>{el.name}</Button>)}
                         </ButtonGroup>
                     </Nav>
                 </Navbar.Collapse>

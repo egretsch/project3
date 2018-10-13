@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { Col as Row, Container } from "../components/Grid";
+import { Row, Container } from "../components/Grid";
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
@@ -109,7 +109,7 @@ class Profile extends Component {
                 product: this.state.confirmProduct
             }
 
-            console.log("product you want to delete: " + product.product)
+            // console.log("product you want to delete: " + product.product)
             API.deleteBookmarkedProduct(product)
                 .then(res => {
                     // console.log(product.product + " should be deleted. Here's the response: \n" + res.data)
@@ -126,7 +126,7 @@ class Profile extends Component {
                 ingredient: this.state.confirmIngredient
             }
 
-            console.log("ingredient you want to delete: " + ingredient.ingredient)
+            // console.log("ingredient you want to delete: " + ingredient.ingredient)
 
             API.deleteSavedIngredient(ingredient)
                 .then(res => {
@@ -231,12 +231,36 @@ class Profile extends Component {
         });
     }
 
+    logoutButtonAction = () => {
+
+        this.logoutUser()
+        window.location = "/"
+    };
+
+    searchButtonAction = () => {
+        window.location = "/search"
+    };
+
+    logoutUser() {
+        API.logoutUser({
+        })
+            .then(res => {
+                console.log("logout")
+
+            })
+            .catch(err => console.log(err));
+
+    }
 
     render() {
         console.log(this.state)
+        const buttons = [
+            { id: 1, name: "Logout", action: this.logoutButtonAction },
+            { id: 2, name: "Search", action: this.searchButtonAction }
+        ]
         return (
-            <Container>
-                <ScannerNavbar />
+            <Container fluid>
+                <ScannerNavbar buttons={buttons}/>
                 <Row>
                     <Jumbotron>
                         <h3>Your Profile</h3>
@@ -244,7 +268,7 @@ class Profile extends Component {
                 </Row>
 
                 <Row>
-                    <Col size='md-6'>
+                    <Col md={6}>
                         <h3 id='info'>User Information</h3>
                         <p>Name: {this.state.profileName}</p>
                         <p>Username: {this.state.userName}</p>
@@ -276,7 +300,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateName"
-                                            type="name"
+                                            type="text"
                                             placeholder="Enter Name"
                                             value={this.state.updateName}
                                             onChange={this.handleInputChange} />
@@ -289,7 +313,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateUserName"
-                                            type="Username"
+                                            type="text"
                                             placeholder="Enter Username"
                                             value={this.state.updateUserName}
                                             onChange={this.handleInputChange} />
@@ -302,7 +326,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateEmail"
-                                            type="Email"
+                                            type="email"
                                             placeholder="Enter Email"
                                             value={this.state.updateEmail}
                                             onChange={this.handleInputChange} />
@@ -328,7 +352,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateGender"
-                                            type="Gender"
+                                            type="text"
                                             placeholder="Enter Gender"
                                             value={this.state.updateGender}
                                             onChange={this.handleInputChange} />
@@ -360,7 +384,7 @@ class Profile extends Component {
 
                     {/* Ingredients Here */}
                     <Row>
-                        <Col size='md-4'>
+                        <Col md={4}>
                             <h3 id='warning'>Ingredient Warnings</h3>
                             {this.state.savedIngredients.length ? (
                                 <List>
@@ -383,7 +407,7 @@ class Profile extends Component {
 
                     {/* Products Here */}
                     <Row>
-                        <Col size='md-4'>
+                        <Col md={4}>
                             <h3 id='favorite'>Favorite Products</h3>
                             {this.state.bookmarkedProducts.length ? (
                                 <List>
@@ -412,12 +436,12 @@ class Profile extends Component {
                                     <div className='modal-header'>
                                         <h4 className='modal-title'>
                                             Confirm Delete
-                                </h4>
+                                        </h4>
                                     </div>
 
                                     <div className='modal-body'>
                                         Are you sure you want to delete {this.state.confirmIngredient}?
-                            </div>
+                                    </div>
 
                                     <div className='modal-footer'>
                                         <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
@@ -435,12 +459,12 @@ class Profile extends Component {
                                     <div className='modal-header'>
                                         <h4 className='modal-title'>
                                             Confirm Delete
-                                </h4>
+                                        </h4>
                                     </div>
 
                                     <div className='modal-body'>
                                         Are you sure you want to delete {this.state.confirmProduct}?
-                            </div>
+                                    </div>
 
                                     <div className='modal-footer'>
                                         <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
@@ -453,103 +477,8 @@ class Profile extends Component {
                     }
                     {/* Confirmation Modal End */}
 
-                    {/* Update Modal Here */}
-                    <Modal
-                        {...this.props}
-                        show={this.state.showUpdateUserModal}
-                        onHide={this.handleHideUpdateUserModal}
-                        dialogClassName="custom-modal"
-                    >
-                        <Modal.Header closeButton>
-                            <Modal.Title id="contained-modal-title-lg">
-                                <div style={{ color: this.state.color }}>{this.state.userMessage}</div>
-                            </Modal.Title>
-                        </Modal.Header>
-                        <Form horizontal onSubmit={this.handleCreateSubmit}>
-                            <Modal.Body>
-
-                                <FormGroup controlId="formHorizontalName">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Name
-                                </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateName"
-                                            type="name"
-                                            placeholder="Enter Name"
-                                            value={this.state.updateName}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalUsername">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Username
-                                </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateUserName"
-                                            type="Username"
-                                            placeholder="Enter Username"
-                                            value={this.state.updateUserName}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalEmail">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Email
-                                </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateEmail"
-                                            type="Email"
-                                            placeholder="Enter Email"
-                                            value={this.state.updateEmail}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalPassword">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Password
-                                </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updatePassword"
-                                            type="password"
-                                            placeholder="Enter Password"
-                                            value={this.state.updatePassword}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalGender">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Gender
-                                </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateGender"
-                                            type="Gender"
-                                            placeholder="Enter Gender"
-                                            value={this.state.updateGender}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <ButtonGroup className="createUserButtions">
-                                    <Button
-                                        value="Submit"
-                                        type="submit"
-                                        onClick={this.handleHideUpdateUserModal}
-                                    >
-                                        Submit
-                                </Button>
-                                    <Button onClick={this.handleHideUpdateUserModal}>Close</Button>
-                                </ButtonGroup>
-
-                            </Modal.Footer>
-                        </Form>
-                    </Modal>
-                    {/* End Update Modal */}
+                   
+                    
             </Container>
                 )
             }

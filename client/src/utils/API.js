@@ -24,10 +24,15 @@ export default {
     },
 
     // submit user info
+    logoutUser: function () {
+        return axios.post("/api/user/logout");
+    },
+
+    // submit user info
     postUser: function (userArray) {
         return axios.post("/api/user", userArray);
     },
-
+    // gets cuerrent user
     currentUser: function (currentUserObject) {
         return axios.get("/api/user", currentUserObject);
     },
