@@ -16,6 +16,10 @@ Let users update their information
 --This means:
     - Changing their name, email, and password.
 
+
+Error Modals?
+    --Just in case something goes wrong, the user can at least know something went wrong.
+
 Make it pretty
     --Any loading animations
     --Any thematic things we want to products

@@ -28,6 +28,7 @@ class Search extends Component {
             collapse: false,
             scannerModalShow: false,
             resultsModalShow: false,
+            errorModal: false,
             savedIngredients: [],
             bookmarkedProducts: [],
             searchResults: [],
@@ -50,7 +51,14 @@ class Search extends Component {
         this.setState({ resultsModalShow: true });
     };
     hideResultsModal = () => {
-        this.setState({ resultsModalShow: false });
+        this.setState({ 
+            resultsModalShow: false,
+            scanResults: [],
+            searchResults: [],
+            scannedProductName: "",
+            searchedProduct: "",
+
+        });
     };
 
     //for the scanner modal
@@ -60,10 +68,26 @@ class Search extends Component {
     hideScannerModal = () => {
         this.setState({
             scannerModalShow: false,
-            scanResults: []
+
         });
     };
 
+    showErrorModal = () =>{
+        this.setState({ 
+            errorModal: true,
+            scanResults: [],
+            searchResults: [],
+            scannerModalShow: false,
+            resultsModalShow: false,
+            searchedProduct: "",
+            collapse: false,
+            scannedProductName: "",
+        });
+
+    }
+    hideErrorModal = () => {
+        this.setState({ errorModal: false})
+    }
 
     //Shows or Collapses the list on tap.
     toggleCollapse = (brandName, inactiveIngredient) => {
@@ -93,7 +117,10 @@ class Search extends Component {
                     this.setState({ bookmarkedProducts: ["No Bookmarked Products"] })
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err);
+                this.showErrorModal();
+            });
     }
 
     //function to get saved ingredients.
@@ -109,7 +136,10 @@ class Search extends Component {
                     this.setState({ savedIngredients: ["No Ingredients Saved"] })
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                this.showErrorModal();
+            });
     }
 
     //function for click event to bookmark products.
@@ -123,7 +153,10 @@ class Search extends Component {
                 this.getBookmarkedProducts()
 
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err);
+                this.showErrorModal();
+            });
     }
 
     //function for the click event to save ingredients
@@ -137,7 +170,10 @@ class Search extends Component {
             .then(res => {
                 this.getSavedIngredients();
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err);
+                this.showErrorModal();
+            });
     }
 
     // Scanner functions
@@ -188,7 +224,8 @@ class Search extends Component {
             })
             .catch(err => {
                 console.log(err);
-            })
+                this.showErrorModal();
+            });
     }
 
     searchScannedProduct = () => {
@@ -569,6 +606,27 @@ class Search extends Component {
                     </div>
                 </Modal>
                 {/* Scanner End */}
+
+
+
+                <Modal show={this.state.errorModal}>
+                    <div className='modal-content'>
+                        <div className='modal-header'>
+                            <h3 style={{ color: 'red' }} className='modal-title'>
+                                ERROR
+                        </h3>
+                        </div>
+
+                        <div style={{color: 'red'}} className='modal-body'>
+                            SORRY SOMETHING WENT WRONG!
+
+
+                            <div className='modal-footer'>
+                                <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
             </Container>
         );
     }
