@@ -58,9 +58,9 @@ class Search extends Component {
         this.setState({ scannerModalShow: true });
     };
     hideScannerModal = () => {
-        this.setState({ 
+        this.setState({
             scannerModalShow: false,
-            scanResults: [] 
+            scanResults: []
         });
     };
 
@@ -119,7 +119,10 @@ class Search extends Component {
             product: event.target.value
         }
         API.bookmarkProduct(product)
-            .then(res => this.getBookmarkedProducts())
+            .then(res => {
+                this.getBookmarkedProducts()
+
+            })
             .catch(err => console.log(err))
     }
 
@@ -131,7 +134,9 @@ class Search extends Component {
         }
         // console.log(ingredient)
         API.saveIngredient(ingredient)
-            .then(res => this.getSavedIngredients())
+            .then(res => {
+                this.getSavedIngredients();
+            })
             .catch(err => console.log(err))
     }
 
@@ -442,7 +447,7 @@ class Search extends Component {
 
 
                                 //Makes a button variable for our for loop. The regular Save Button
-                                let button = <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>;
+                                let button = <button value={product.brandName} onClick={event => { this.bookmarkProduct(event); this.getBookmarkedProducts(); }} className='btn btn-primary'>Save</button>;
 
                                 //A For loop to compare both bookmarked products and our searched products
                                 for (let e = 0; e < product.brandName.length; e++) {
@@ -474,7 +479,7 @@ class Search extends Component {
 
                                                 //Similar to the code above in the product area, we save variables for what's going to be the outliers.
 
-                                                let button = <button value={ingredient} onClick={this.saveIngredient} className='save-ingredients-button'>Save</button>;
+                                                let button = <button value={ingredient} onClick={event => { this.saveIngredient(event); this.getSavedIngredients(); }} className='save-ingredients-button'>Save</button>;
 
                                                 //the usual style
                                                 let style = { textAlign: 'center', fontSize: '10px' }
@@ -534,15 +539,14 @@ class Search extends Component {
 
                         <div className='modal-body'>
                             <form className='text-center'>
-                            <h4>Is this UPC code correct?</h4>
-                                    <Input 
-                                        value={this.state.scanResults}
-                                        onChange={this.handleInputChange}
-                                        name="scanResults"
-                                        placeholder={this.state.scanResults}
-                                    />
-                            <h4>Please input product's brand name!</h4>
-
+                                <h4>Is this UPC code correct?</h4>
+                                <Input
+                                    value={this.state.scanResults}
+                                    onChange={this.handleInputChange}
+                                    name="scanResults"
+                                    placeholder={this.state.scanResults}
+                                />
+                                <h4>Please input product's brand name!</h4>
 
                                 <Input
                                     value={this.state.scannedProductName}
@@ -550,8 +554,6 @@ class Search extends Component {
                                     name="scannedProductName"
                                     placeholder="Brand Name (required)"
                                 />
-
-
 
                                 <div className='modal-footer'>
                                     <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => { event.preventDefault(); this.hideScannerModal(); }}>Cancel</button>
@@ -567,28 +569,6 @@ class Search extends Component {
                     </div>
                 </Modal>
                 {/* Scanner End */}
-                {/* Saved Data test */}
-                {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
-                {/* <h3>Saved Ingredients</h3>
-                <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
-                <List>
-                    {this.state.savedIngredients.map((ingredient, index) => (
-                        <ListItem key={ingredient + index + index + index}>
-                            {ingredient}
-                        </ListItem>
-                    ))}
-                </List>
-                <h3>Bookmarked Products</h3>
-                <button onClick={this.getBookmarkedProducts}>Get Bookmarked Products</button>
-                <List>
-                    {this.state.bookmarkedProducts.map((product, index) => (
-                        <ListItem key={index + product + index}>
-                            {product}
-                        </ListItem>
-                    ))}
-                </List>
-                <h3>Cameraless  test</h3>
-                <button onClick={this._onDetected}>Test Button</button> */}
             </Container>
         );
     }
