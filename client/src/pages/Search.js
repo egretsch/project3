@@ -74,7 +74,7 @@ class Search extends Component {
     }
 
     // Gets the data once the user logs on and the page loads.
-    componentDidMount(){
+    componentDidMount() {
         this.getSavedIngredients();
         this.getBookmarkedProducts();
     }
@@ -141,13 +141,15 @@ class Search extends Component {
     _onDetected = result => {
         if (this.state.scanResults.length < 1) {
             this.setState({ scanResults: this.state.scanResults.concat(result) });
-            console.log(result.codeResult.code)
-            this.setState({scanResults: "678"})
+            // console.log(result.codeResult.code)
+
+
+            console.log("HEy 148: ", this.state.scanResults)
             API.getScannedProduct(this.state.scanResults)
                 .then(res => {
                     console.log('Name: ', res.data.brandName,
-                                'upcCode: ', res.data.upcCode)
-                    this.setState({scannedProductName: res.data.brandName})
+                        'upcCode: ', res.data.upcCode)
+                    this.setState({ scannedProductName: res.data.brandName })
                     this.searchScannedProduct();
 
                 })
@@ -479,7 +481,7 @@ class Search extends Component {
                                                     if (this.state.savedIngredients[n] === ingredient) {
                                                         button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
                                                         style = warning
-                                                    }else if ('No Results' === ingredient){
+                                                    } else if ('No Results' === ingredient) {
                                                         button = ""
                                                         style = warning
                                                     }
@@ -518,31 +520,34 @@ class Search extends Component {
                 </div>
 
                 <Modal show={this.state.scannerModalShow}>
-                    <Modal.Header>
-                        <h3 style={{ color: 'red' }} className='modal-title'>Product Not Found!</h3>
-                    </Modal.Header>
+                    <div className='modal-content'>
+                        <div className='modal-header'>
+                            <h3 style={{ color: 'red' }} className='modal-title'>Product Not Found!</h3>
+                        </div>
 
-                    <Modal.Body>
-                        <h5>UPC Code Found: {this.state.scanResults}</h5>
-                        <h4>Please input product's brand name!</h4>
-                        <form className='text-center'>
-                            <Input
-                                value={this.state.scannedProductName}
-                                onChange={this.handleInputChange}
-                                name="scannedProductName"
-                                placeholder="Brand Name (required)"
-                            />
-                            <Modal.Footer>
-                                <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => {event.preventDefault(); this.hideScannerModal();}}>Cancel</button>
-                                <FormBtn
-                                    disabled={!this.state.scannedProductName}
-                                    onClick={this.saveScannedProduct}
-                                >
-                                    Submit
+                        <div className='modal-body'>
+
+                            <h4>Please input product's brand name!</h4>
+                            <form className='text-center'>
+                                <Input
+                                    value={this.state.scannedProductName}
+                                    onChange={this.handleInputChange}
+                                    name="scannedProductName"
+                                    placeholder="Brand Name (required)"
+                                />
+                                
+                                <div className='modal-footer'>
+                                    <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => { event.preventDefault(); this.hideScannerModal(); }}>Cancel</button>
+                                    <FormBtn
+                                        disabled={!this.state.scannedProductName}
+                                        onClick={this.saveScannedProduct}
+                                    >
+                                        Submit
                                 </FormBtn>
-                            </Modal.Footer>
-                        </form>
-                    </Modal.Body>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </Modal>
                 {/* Scanner End */}
                 {/* Saved Data test */}
