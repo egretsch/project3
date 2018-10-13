@@ -151,19 +151,7 @@ class Login extends Component {
                 loginObj
             })
                 .then(res => {
-                    console.log("Logedin")
-
-                    if (!res.data) {
-                        console.log("we made it to the second layer");
-                        // alert("Username already exists! Please use another");
-                        this.setState({
-                            loginUserMessage: "Username or password is incorrect",
-                            loginColor: "red",
-                        })
-                    }
-                    else {
-                        window.location = '/search';
-                    }
+                    window.location = '/search';
                 })
                 .catch(err => {
                     console.log(err)
@@ -354,7 +342,7 @@ class Login extends Component {
 
                     <Modal show={this.state.errorModal}>
                         <div className='modal-content'>
-                        
+
                             <div className='modal-header'>
                                 <h3 style={{ color: 'red' }} className='modal-title'>
                                     ERROR!
