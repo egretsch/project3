@@ -184,16 +184,16 @@ class Search extends Component {
     //when something is detected
     _onDetected = result => {
         if (this.state.scanResults.length < 1) {
-            console.log(result);
+            // console.log(result);
             this.setState({ scanResults: this.state.scanResults.concat(result.codeResult.code) });
             // console.log(result.codeResult.code)
 
 
-            console.log("HEy 148: ", this.state.scanResults)
+            // console.log("HEy 148: ", this.state.scanResults)
             API.getScannedProduct(this.state.scanResults)
                 .then(res => {
-                    console.log('Name: ', res.data.brandName,
-                        'upcCode: ', res.data.upcCode)
+                    // console.log('Name: ', res.data.brandName,
+                    //     'upcCode: ', res.data.upcCode)
                     this.setState({ scannedProductName: res.data.brandName })
                     this.searchScannedProduct();
 
@@ -215,7 +215,7 @@ class Search extends Component {
             upcCode: this.state.scanResults,
         })
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 this.hideScannerModal();
                 this.searchScannedProduct();
                 this.setState({

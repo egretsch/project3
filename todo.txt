@@ -18,7 +18,7 @@ Let users update their information
 
 
 Error Modals?
-    --Just in case something goes wrong, the user can at least know something went wrong.
+    --Just in case something goes wrong, the user can at least know something went wrong. (Search.js completed)
 
 Make it pretty
     --Any loading animations

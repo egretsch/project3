@@ -109,7 +109,7 @@ class Profile extends Component {
                 product: this.state.confirmProduct
             }
 
-            console.log("product you want to delete: " + product.product)
+            // console.log("product you want to delete: " + product.product)
             API.deleteBookmarkedProduct(product)
                 .then(res => {
                     // console.log(product.product + " should be deleted. Here's the response: \n" + res.data)
@@ -126,7 +126,7 @@ class Profile extends Component {
                 ingredient: this.state.confirmIngredient
             }
 
-            console.log("ingredient you want to delete: " + ingredient.ingredient)
+            // console.log("ingredient you want to delete: " + ingredient.ingredient)
 
             API.deleteSavedIngredient(ingredient)
                 .then(res => {
