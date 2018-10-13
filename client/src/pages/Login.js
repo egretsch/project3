@@ -42,8 +42,8 @@ class Login extends Component {
             createUsernameError: "",
             isLoggedIn: false,
             loginUserMessage: "",
-            loginColor: "red"
-
+            loginColor: "red",
+            errorModal: false,
 
         };
     }
@@ -69,6 +69,18 @@ class Login extends Component {
             });
         }
 
+    }
+
+    hideErrorModal = () => {
+        this.setState({
+            errorModal: false
+        });
+    }
+
+    showErrorModal = () => {
+        this.setState({
+            errorModal: true
+        });
     }
 
     // clear user submit
@@ -140,16 +152,23 @@ class Login extends Component {
             })
                 .then(res => {
                     console.log("Logedin")
+
                     if (!res.data) {
                         console.log("we made it to the second layer");
                         // alert("Username already exists! Please use another");
                         this.setState({
-                            loginUserMessage: "Username or password is increct ",
-                            loginColor: "red"
+                            loginUserMessage: "Username or password is incorrect",
+                            loginColor: "red",
                         })
                     }
+                    else {
+                        window.location = '/search';
+                    }
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err)
+                    this.showErrorModal();
+                });
         }
         this.clearLoginState()
     }
@@ -197,7 +216,7 @@ class Login extends Component {
                                 autoFocus
                                 name="loginUsername"
                                 type="Username"
-                                placeholder="Enter Username"
+                                placeholder="Enter Username (Case Sensitive)"
                                 value={this.state.loginUsername}
                                 onChange={this.handleInputChange} />
                         </FormGroup>
@@ -224,7 +243,7 @@ class Login extends Component {
                         >
                             Login
                     </Button>
-                        <Button 
+                        <Button
                             className="loginButtion"
                             block
                             bsSize="large"
@@ -269,7 +288,7 @@ class Login extends Component {
                                         <FormControl
                                             name="createUsername"
                                             type="Username"
-                                            placeholder="Enter Username"
+                                            placeholder="Enter Username (Case Sensitive)"
                                             value={this.state.createUsername}
                                             onChange={this.handleInputChange} />
                                     </Col>
@@ -331,6 +350,28 @@ class Login extends Component {
 
                             </Modal.Footer>
                         </Form>
+                    </Modal>
+
+                    <Modal show={this.state.errorModal}>
+                        <div className='modal-content'>
+                        
+                            <div className='modal-header'>
+                                <h3 style={{ color: 'red' }} className='modal-title'>
+                                    ERROR!
+                                </h3>
+                            </div>
+
+                            <div style={{ color: 'red' }} className='modal-body'>
+
+                                <p>Invalid Username or password.</p>
+                                <p>Please try again!</p>
+
+
+                                <div className='modal-footer'>
+                                    <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button>
+                                </div>
+                            </div>
+                        </div>
                     </Modal>
 
                 </div>
