@@ -11,7 +11,6 @@ import { Modal } from 'react-bootstrap'
 
 //The Scanner
 import ScannerSettings from "../components/Scanner/ScannerSettings.js";
-import ScannerResults from "../components/Scanner/ScannerResults.js";
 
 //for the collapsable list.
 import { Collapse } from 'reactstrap';
@@ -29,6 +28,7 @@ class Search extends Component {
             collapse: false,
             scannerModalShow: false,
             resultsModalShow: false,
+            errorModal: false,
             savedIngredients: [],
             bookmarkedProducts: [],
             searchResults: [],
@@ -50,8 +50,16 @@ class Search extends Component {
     showResultsModal = () => {
         this.setState({ resultsModalShow: true });
     };
+
     hideResultsModal = () => {
-        this.setState({ resultsModalShow: false });
+        this.setState({
+            resultsModalShow: false,
+            scanResults: [],
+            searchResults: [],
+            scannedProductName: "",
+            searchedProduct: "",
+
+        });
     };
 
     //for the scanner modal
@@ -59,9 +67,28 @@ class Search extends Component {
         this.setState({ scannerModalShow: true });
     };
     hideScannerModal = () => {
-        this.setState({ scannerModalShow: false });
+        this.setState({
+            scannerModalShow: false,
+            scanResults: [],
+            searchResults: [],
+            scannedProductName: "",
+            searchedProduct: "",
+        });
     };
 
+    showErrorModal = () => {
+        this.setState({
+            errorModal: true,
+            scanResults: [],
+            searchResults: [],
+            searchedProduct: "",
+            scannedProductName: "",
+        });
+
+    }
+    hideErrorModal = () => {
+        this.setState({ errorModal: false })
+    }
 
     //Shows or Collapses the list on tap.
     toggleCollapse = (brandName, inactiveIngredient) => {
@@ -75,7 +102,7 @@ class Search extends Component {
     }
 
     // Gets the data once the user logs on and the page loads.
-    componentDidMount(){
+    componentDidMount() {
         this.getSavedIngredients();
         this.getBookmarkedProducts();
     }
@@ -91,7 +118,10 @@ class Search extends Component {
                     this.setState({ bookmarkedProducts: ["No Bookmarked Products"] })
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log("ERR on L121: ", err);
+                this.showErrorModal();
+            });
     }
 
     //function to get saved ingredients.
@@ -107,7 +137,10 @@ class Search extends Component {
                     this.setState({ savedIngredients: ["No Ingredients Saved"] })
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log("ERR on L140: ", err);
+                this.showErrorModal();
+            });
     }
 
     //function for click event to bookmark products.
@@ -117,8 +150,14 @@ class Search extends Component {
             product: event.target.value
         }
         API.bookmarkProduct(product)
-            .then(res => this.getBookmarkedProducts())
-            .catch(err => console.log(err))
+            .then(res => {
+                this.getBookmarkedProducts()
+
+            })
+            .catch(err => {
+                console.log("ERR on L157: ", err);
+                this.showErrorModal();
+            });
     }
 
     //function for the click event to save ingredients
@@ -129,8 +168,13 @@ class Search extends Component {
         }
         // console.log(ingredient)
         API.saveIngredient(ingredient)
-            .then(res => this.getSavedIngredients())
-            .catch(err => console.log(err))
+            .then(res => {
+                this.getSavedIngredients();
+            })
+            .catch(err => {
+                console.log("Error on L174: ", err);
+                this.showErrorModal();
+            });
     }
 
     // Scanner functions
@@ -141,19 +185,22 @@ class Search extends Component {
     //when something is detected
     _onDetected = result => {
         if (this.state.scanResults.length < 1) {
-            this.setState({ scanResults: this.state.scanResults.concat(result) });
-            console.log(result.codeResult.code)
-            this.setState({scanResults: "678"})
+            // console.log(result);
+            this.setState({ scanResults: this.state.scanResults.concat(result.codeResult.code) });
+            // console.log(result.codeResult.code)
+
+
+            // console.log("Hey 148: ", this.state.scanResults)
             API.getScannedProduct(this.state.scanResults)
                 .then(res => {
-                    console.log('Name: ', res.data.brandName,
-                                'upcCode: ', res.data.upcCode)
-                    this.setState({scannedProductName: res.data.brandName})
+                    // console.log('Name: ', res.data.brandName,
+                    //     'upcCode: ', res.data.upcCode)
+                    this.setState({ scannedProductName: res.data.brandName })
                     this.searchScannedProduct();
 
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log("Error on L202: ", err);
                     this.setState({
                         scannerModalShow: true
                     })
@@ -163,23 +210,32 @@ class Search extends Component {
 
     saveScannedProduct = event => {
         event.preventDefault();
+        console.log(
+            "The Brand Name in save: ", this.state.scannedProductName,
+            "The UPC Code: ", this.state.scanResults
+            )
 
         API.saveScannedProduct({
             brandName: this.state.scannedProductName,
             upcCode: this.state.scanResults,
         })
             .then(res => {
-                console.log(res);
-                this.hideScannerModal();
+                // console.log(res);
                 this.searchScannedProduct();
+                this.hideScannerModal();
+                this.setState({
+                    scanResults: []
+                })
             })
             .catch(err => {
-                console.log(err);
-            })
+                console.log("Error on L230: ", err);
+                this.showErrorModal();
+            });
     }
 
     searchScannedProduct = () => {
         let brandNameArray = [];
+        console.log("The Search in ScannedProduct, 241: ", this.state.scannedProductName);
         API.getProductByScan(this.state.scannedProductName.replace(" ", "%20"))
             .then(res => {
                 res.data.results.forEach(element => {
@@ -211,9 +267,11 @@ class Search extends Component {
 
 
                 }
-            }).catch(err => this.setState({
-                showResultsModal: true
-            }));
+            }).catch(
+                err => {
+                    console.log("ERR on L271: ", err)
+                    this.showResultsModal();
+                });
     }
 
 
@@ -388,9 +446,11 @@ class Search extends Component {
 
 
                 }
-            }).catch(err => this.setState({
-                showResultsModal: true
-            }));
+            }).catch(err => {
+                console.log("ERR on L449: ", err);
+                this.setState({showResultsModal: true})
+                
+            });
     };
     logoutButtonAction = () =>{
         
@@ -421,6 +481,7 @@ class Search extends Component {
             { id: 2, name: "Profile", action: this.profileButtonAction }
         ]
         return (
+
             <Container fluid>
                 <ScannerNavbar buttons={buttons}/>
                 <Row>
@@ -440,160 +501,170 @@ class Search extends Component {
                                 onClick={this.handleProductSearch}
                             >
                                 Search Product
+
                             </FormBtn>
-                        </form>
-                    </Col>
-                </Row>
+                            </form>
+                        </Col>
+                    </Row>
 
-                {/* Search Modal begins */}
-                <Modal show={this.state.resultsModalShow}>
-                    <Jumbotron style={{ margin: 0 }}>
-                        <h2>Search Results</h2>
-                        <button className='btn btn-danger text-center' onClick={this.hideResultsModal}>Close</button>
-                    </Jumbotron>
+                    {/* Search Modal begins */}
+                    <Modal show={this.state.resultsModalShow}>
+                        <Jumbotron style={{ margin: 0 }}>
+                            <h2>Search Results</h2>
+                            <button className='btn btn-danger text-center' onClick={this.hideResultsModal}>Close</button>
+                        </Jumbotron>
 
-                    {/* Ternary Operation to see if there are results for a product */}
-                    {this.state.searchResults.length ? (
-                        <List>
-                            {this.state.searchResults.map((product, index) => {
+                        {/* Ternary Operation to see if there are results for a product */}
+                        {this.state.searchResults.length ? (
+                            <List>
+                                {this.state.searchResults.map((product, index) => {
 
 
-                                //Makes a button variable for our for loop. The regular Save Button
-                                let button = <button value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-primary'>Save</button>;
+                                    //Makes a button variable for our for loop. The regular Save Button
+                                    let button = <button value={product.brandName} onClick={event => { this.bookmarkProduct(event); this.getBookmarkedProducts(); }} className='btn btn-primary'>Save</button>;
 
-                                //A For loop to compare both bookmarked products and our searched products
-                                for (let e = 0; e < product.brandName.length; e++) {
-                                    for (let s = 0; s < this.state.bookmarkedProducts.length; s++) {
+                                    //A For loop to compare both bookmarked products and our searched products
+                                    for (let e = 0; e < product.brandName.length; e++) {
+                                        for (let s = 0; s < this.state.bookmarkedProducts.length; s++) {
 
-                                        //If they match, it disables the save button and makes sure the user knows its saved.
-                                        if (this.state.bookmarkedProducts[s] === product.brandName[e]) {
-                                            button = <button disabled value={product.brandName} className='btn btn-warning'>Saved</button>
+                                            //If they match, it disables the save button and makes sure the user knows its saved.
+                                            if (this.state.bookmarkedProducts[s] === product.brandName[e]) {
+                                                button = <button disabled value={product.brandName} className='btn btn-warning'>Saved</button>
+                                            }
                                         }
                                     }
-                                }
 
-                                //Else it returns the regular buttons and brand names
-                                return <ListItem key={product + index + index}>
-                                    <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
-                                    {button}
-                                    <h4 id='info'>Active Ingredient(s)</h4>
-                                    <h4 style={{ textAlign: 'center' }}>{product.activeIngredient}</h4>
-
+                                    //Else it returns the regular buttons and brand names
+                                    return <ListItem key={product + index + index}>
+                                        <h2 style={{ textAlign: 'center' }}>{product.brandName}</h2>
+                                        {button}
+                                        <h4 id='info'>Active Ingredient(s)</h4>
+                                        <h4 style={{ textAlign: 'center' }}>{product.activeIngredient}</h4>
 
 
-                                    {/*This is to let the list be collapsable */}
-                                    {/* On click is an anonymous function that must be clicked to use the toggleCollapse function */}
-                                    <button value={index} onClick={() => { this.toggleCollapse(product.brandName, product.inactiveIngredient) }} className='btn btn-success'>Tap for Inactive Ingredients</button>
 
-                                    <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
-                                        <List>
-                                            {product.inactiveIngredient.map((ingredient, index) => {
+                                        {/*This is to let the list be collapsable */}
+                                        {/* On click is an anonymous function that must be clicked to use the toggleCollapse function */}
+                                        <button value={index} onClick={() => { this.toggleCollapse(product.brandName, product.inactiveIngredient) }} className='btn btn-success'>Tap for Inactive Ingredients</button>
 
-                                                //Similar to the code above in the product area, we save variables for what's going to be the outliers.
+                                        <Collapse isOpen={this.state[product.brandName + product.inactiveIngredient]}>
+                                            <List>
+                                                {product.inactiveIngredient.map((ingredient, index) => {
 
-                                                let button = <button value={ingredient} onClick={this.saveIngredient} className='save-ingredients-button'>Save</button>;
+                                                    //Similar to the code above in the product area, we save variables for what's going to be the outliers.
 
-                                                //the usual style
-                                                let style = { textAlign: 'center', fontSize: '10px' }
+                                                    let button = <button value={ingredient} onClick={event => { this.saveIngredient(event); this.getSavedIngredients(); }} className='save-ingredients-button'>Save</button>;
 
-                                                //the style if the user's saved ingredients match up with the searched ingredients.
-                                                let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
+                                                    //the usual style
+                                                    let style = { textAlign: 'center', fontSize: '10px' }
 
-                                                //the for loop that compares it all.
+                                                    //the style if the user's saved ingredients match up with the searched ingredients.
+                                                    let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
 
-                                                for (let n = 0; n < this.state.savedIngredients.length; n++) {
-                                                    if (this.state.savedIngredients[n] === ingredient) {
-                                                        button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
-                                                        style = warning
-                                                    }else if ('No Results' === ingredient){
-                                                        button = ""
-                                                        style = warning
+                                                    //the for loop that compares it all.
+
+                                                    for (let n = 0; n < this.state.savedIngredients.length; n++) {
+                                                        if (this.state.savedIngredients[n] === ingredient) {
+                                                            button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
+                                                            style = warning
+                                                        } else if ('No Results' === ingredient) {
+                                                            button = ""
+                                                            style = warning
+                                                        }
                                                     }
-                                                }
 
-                                                //else it just returns the above variables to be saved. 
-                                                return <ListItem style={style} key={ingredient + index}>
-                                                    {ingredient}
-                                                    {button}
-                                                </ListItem>
-                                            })}
-                                        </List>
-                                    </Collapse>
-                                </ListItem>
-                            })}
-                        </List>
-                    ) : (
-                            //If nothing comes from the API.
-                            <h2 id='info'>No results to display!</h2>
-                        )}
-                </Modal>
-                {/* Search Modal ends */}
+                                                    //else it just returns the above variables to be saved. 
+                                                    return <ListItem style={style} key={ingredient + index}>
+                                                        {ingredient}
+                                                        {button}
+                                                    </ListItem>
+                                                })}
+                                            </List>
+                                        </Collapse>
+                                    </ListItem>
+                                })}
+                            </List>
+                        ) : (
+                                //If nothing comes from the API.
+                                <h2 id='info'>No results to display!</h2>
+                            )}
+                    </Modal>
+                    {/* Search Modal ends */}
 
 
-                {/* Scanner Start */}
-                <div className='text-center' style={{ margin: '10px' }}>
-                    <button className='btn btn-primary' onClick={this._scan}>
-                        {this.state.toggleScanner ? "Stop Scanner" : "Use Scanner"}
-                    </button>
-                    <ul className="results">
-                        {this.state.scanResults.map((result, index) => (
-                            <ScannerResults key={result + index + index} result={result} />
-                        ))}
-                    </ul>
-                    {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
-                </div>
+                    {/* Scanner Start */}
+                    <div className='text-center' style={{ margin: '10px' }}>
+                        <button className='btn btn-primary' onClick={this._scan}>
+                            {this.state.toggleScanner ? "Stop Scanner" : "Use Scanner"}
+                        </button>
+                        
+                        {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
+                    </div>
 
-                <Modal show={this.state.scannerModalShow}>
-                    <Modal.Header>
-                        <h3 style={{ color: 'red' }} className='modal-title'>Product Not Found!</h3>
-                    </Modal.Header>
+                    <Modal show={this.state.scannerModalShow}>
+                        <div className='modal-content'>
+                            <div className='modal-header'>
+                                <h3 style={{ color: 'red' }} className='modal-title'>Product Not Found!</h3>
+                            </div>
 
-                    <Modal.Body>
-                        <h5>UPC Code Found: {this.state.scanResults}</h5>
-                        <h4>Please input product's brand name!</h4>
-                        <form className='text-center'>
-                            <Input
-                                value={this.state.scannedProductName}
-                                onChange={this.handleInputChange}
-                                name="scannedProductName"
-                                placeholder="Brand Name (required)"
-                            />
-                            <Modal.Footer>
-                                <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => {event.preventDefault(); this.hideScannerModal();}}>Cancel</button>
-                                <FormBtn
-                                    disabled={!this.state.scannedProductName}
-                                    onClick={this.saveScannedProduct}
-                                >
-                                    Submit
+                            <div className='modal-body'>
+                                <form className='text-center'>
+                                    <h4>Is this UPC code correct?</h4>
+                                    <Input
+                                        value={this.state.scanResults}
+                                        onChange={this.handleInputChange}
+                                        name="scanResults"
+                                        placeholder={this.state.scanResults}
+                                    />
+
+                                    <h4>Please input product's brand name!</h4>
+                                    <Input
+                                        value={this.state.scannedProductName}
+                                        onChange={this.handleInputChange}
+                                        name="scannedProductName"
+                                        placeholder="Brand Name (required)"
+                                    />
+
+                                    <div className='modal-footer'>
+                                        <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => { event.preventDefault(); this.hideScannerModal(); }}>Cancel</button>
+                                        <FormBtn
+                                            disabled={!this.state.scannedProductName}
+                                            onClick={this.saveScannedProduct}
+                                        >
+                                            Submit
                                 </FormBtn>
-                            </Modal.Footer>
-                        </form>
-                    </Modal.Body>
-                </Modal>
-                {/* Scanner End */}
-                {/* Saved Data test */}
-                {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
-                {/* <h3>Saved Ingredients</h3>
-                <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
-                <List>
-                    {this.state.savedIngredients.map((ingredient, index) => (
-                        <ListItem key={ingredient + index + index + index}>
-                            {ingredient}
-                        </ListItem>
-                    ))}
-                </List>
-                <h3>Bookmarked Products</h3>
-                <button onClick={this.getBookmarkedProducts}>Get Bookmarked Products</button>
-                <List>
-                    {this.state.bookmarkedProducts.map((product, index) => (
-                        <ListItem key={index + product + index}>
-                            {product}
-                        </ListItem>
-                    ))}
-                </List>
-                <h3>Cameraless  test</h3>
-                <button onClick={this._onDetected}>Test Button</button> */}
-            </Container>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </Modal>
+                    {/* Scanner End */}
+
+
+
+                    <Modal show={this.state.errorModal}>
+                        <div className='modal-content'>
+                            <div className='modal-header'>
+                                <h3 style={{ color: 'red' }} className='modal-title'>
+                                    ERROR
+                        </h3>
+                            </div>
+
+                            <div style={{ color: 'red' }} className='modal-body'>
+                                <p>SORRY SOMETHING WENT WRONG!</p>
+                                
+                                <p>Please try logging in again.</p>
+    
+    
+                                <div className='modal-footer'>
+                                    {/* <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button> */}
+                                    <a href="/" className='btn btn-primary'>Log In</a>
+                                </div>
+                            </div>
+                        </div>
+                    </Modal>
+                </Container>
+            </div>
         );
     }
 }
