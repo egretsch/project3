@@ -58,7 +58,10 @@ class Search extends Component {
         this.setState({ scannerModalShow: true });
     };
     hideScannerModal = () => {
-        this.setState({ scannerModalShow: false });
+        this.setState({ 
+            scannerModalShow: false,
+            scanResults: [] 
+        });
     };
 
 
@@ -140,7 +143,8 @@ class Search extends Component {
     //when something is detected
     _onDetected = result => {
         if (this.state.scanResults.length < 1) {
-            this.setState({ scanResults: this.state.scanResults.concat(result) });
+            console.log(result);
+            this.setState({ scanResults: this.state.scanResults.concat(result.codeResult.code) });
             // console.log(result.codeResult.code)
 
 
@@ -173,6 +177,9 @@ class Search extends Component {
                 console.log(res);
                 this.hideScannerModal();
                 this.searchScannedProduct();
+                this.setState({
+                    scanResults: []
+                })
             })
             .catch(err => {
                 console.log(err);
@@ -526,16 +533,26 @@ class Search extends Component {
                         </div>
 
                         <div className='modal-body'>
-
-                            <h4>Please input product's brand name!</h4>
                             <form className='text-center'>
+                            <h4>Is this UPC code correct?</h4>
+                                    <Input 
+                                        value={this.state.scanResults}
+                                        onChange={this.handleInputChange}
+                                        name="scanResults"
+                                        placeholder={this.state.scanResults}
+                                    />
+                            <h4>Please input product's brand name!</h4>
+
+
                                 <Input
                                     value={this.state.scannedProductName}
                                     onChange={this.handleInputChange}
                                     name="scannedProductName"
                                     placeholder="Brand Name (required)"
                                 />
-                                
+
+
+
                                 <div className='modal-footer'>
                                     <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => { event.preventDefault(); this.hideScannerModal(); }}>Cancel</button>
                                     <FormBtn
