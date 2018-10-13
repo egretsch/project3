@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import API from "../utils/API";
-import { Navbar, Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
+import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
+import ScannerNavbar from "../components/ScannerNavbar";
+
 import './pages.css';
 //Parts of the app
 
@@ -173,24 +175,13 @@ class Login extends Component {
     }
 
     render() {
+        const buttons = [
+            
+        ]
         return (
             <div>
                 {/* navbar */}
-                <Navbar inverse collapseOnSelect>
-                    <Navbar.Header>
-                        <Navbar.Brand>
-                            <a href="#brand">Scanner</a>
-                        </Navbar.Brand>
-                        <Navbar.Toggle />
-                    </Navbar.Header>
-                    <Navbar.Collapse>
-
-
-                    </Navbar.Collapse>
-
-
-
-                </Navbar>
+                <ScannerNavbar buttons={buttons} />
 
 
                 <div className="Login">

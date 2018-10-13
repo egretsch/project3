@@ -22,6 +22,7 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.toggleCollapse = this.toggleCollapse.bind(this);
+        // this.logoutUser = this.logoutUser.bind(this);
         this.state = {
             searchedProduct: "",
             collapse: false,
@@ -451,31 +452,56 @@ class Search extends Component {
                 
             });
     };
+    logoutButtonAction = () =>{
+        
+        this.logoutUser()
+        window.location = "/"
+    };
+
+    profileButtonAction = () => {
+        window.location = "/Profile"
+    };
+
+    logoutUser() {
+        API.logoutUser({
+        })
+            .then(res => {
+                console.log("logout")
+
+            })
+            .catch(err => console.log(err));
+
+    }
 
     //renders the page.
     render() {
+        
+        const buttons = [
+            { id: 1, name: "Logout", action: this.logoutButtonAction}, 
+            { id: 2, name: "Profile", action: this.profileButtonAction }
+        ]
         return (
-            <div>
-                <ScannerNavbar />
-                <Jumbotron>
-                    <h1>Product Search</h1>
-                </Jumbotron>
 
-                <Container fluid>
-                    <Row>
-                        <Col size='md-12'>
-                            <form className='text-center'>
-                                <Input
-                                    value={this.state.searchedProduct}
-                                    onChange={this.handleInputChange}
-                                    name="searchedProduct"
-                                    placeholder="Product (required)"
-                                />
-                                <FormBtn
-                                    disabled={!this.state.searchedProduct}
-                                    onClick={this.handleProductSearch}
-                                >
-                                    Search Product
+            <Container fluid>
+                <ScannerNavbar buttons={buttons}/>
+                <Row>
+                    <Col size='md-12'>
+                        <Jumbotron>
+                            <h1>Product Search</h1>
+                        </Jumbotron>
+                        <form className='text-center'>
+                            <Input
+                                value={this.state.searchedProduct}
+                                onChange={this.handleInputChange}
+                                name="searchedProduct"
+                                placeholder="Product (required)"
+                            />
+                            <FormBtn
+                                disabled={!this.state.searchedProduct}
+                                onClick={this.handleProductSearch}
+                            >
+                                Search Product
+
                             </FormBtn>
                             </form>
                         </Col>
