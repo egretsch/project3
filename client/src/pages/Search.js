@@ -73,12 +73,11 @@ class Search extends Component {
         });
     }
 
-    //Gets the data once the user logs on and the page loads.
-    // componentDidMount(){
-    //     this.getSavedIngredients();
-    //     this.getBookmarkedProducts();
-    // }
-
+    // Gets the data once the user logs on and the page loads.
+    componentDidMount(){
+        this.getSavedIngredients();
+        this.getBookmarkedProducts();
+    }
 
     //function to get bookmarked products
     getBookmarkedProducts = () => {
@@ -116,10 +115,8 @@ class Search extends Component {
         let product = {
             product: event.target.value
         }
-
-        API.bookmarkProduct(product).then(
-            console.log(product.product + " saved to database")
-        )
+        API.bookmarkProduct(product)
+            .then(res => this.getBookmarkedProducts())
             .catch(err => console.log(err))
     }
 
@@ -444,7 +441,7 @@ class Search extends Component {
 
                                         //If they match, it disables the save button and makes sure the user knows its saved.
                                         if (this.state.bookmarkedProducts[s] === product.brandName[e]) {
-                                            button = <button disabled value={product.brandName} onClick={this.bookmarkProduct} className='btn btn-warning'>Saved</button>
+                                            button = <button disabled value={product.brandName} className='btn btn-warning'>Saved</button>
                                         }
                                     }
                                 }
@@ -477,9 +474,13 @@ class Search extends Component {
                                                 let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
 
                                                 //the for loop that compares it all.
+
                                                 for (let n = 0; n < this.state.savedIngredients.length; n++) {
                                                     if (this.state.savedIngredients[n] === ingredient) {
                                                         button = <button disabled className='save-ingredients-button btn-danger'>DANGER!</button>;
+                                                        style = warning
+                                                    }else if ('No Results' === ingredient){
+                                                        button = ""
                                                         style = warning
                                                     }
                                                 }
@@ -531,7 +532,6 @@ class Search extends Component {
                                 name="scannedProductName"
                                 placeholder="Brand Name (required)"
                             />
-
                             <Modal.Footer>
                                 <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => {event.preventDefault(); this.hideScannerModal();}}>Cancel</button>
                                 <FormBtn
@@ -544,14 +544,9 @@ class Search extends Component {
                         </form>
                     </Modal.Body>
                 </Modal>
-
                 {/* Scanner End */}
-
-
                 {/* Saved Data test */}
                 {/* WILL BE DELETED ONCE LOGIN SESSION COMPLETED, aka when the componentmounts is uncommented */}
-
-
                 {/* <h3>Saved Ingredients</h3>
                 <button onClick={this.getSavedIngredients}>Get Saved Ingredients</button>
                 <List>
@@ -570,16 +565,10 @@ class Search extends Component {
                         </ListItem>
                     ))}
                 </List>
-
-
                 <h3>Cameraless  test</h3>
                 <button onClick={this._onDetected}>Test Button</button> */}
             </Container>
-
-
-
         );
     }
 }
-
 export default Search;
