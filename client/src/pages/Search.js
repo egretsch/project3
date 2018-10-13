@@ -213,7 +213,7 @@ class Search extends Component {
         console.log(
             "The Brand Name in save: ", this.state.scannedProductName,
             "The UPC Code: ", this.state.scanResults
-            )
+        )
 
         API.saveScannedProduct({
             brandName: this.state.scannedProductName,
@@ -448,12 +448,12 @@ class Search extends Component {
                 }
             }).catch(err => {
                 console.log("ERR on L449: ", err);
-                this.setState({showResultsModal: true})
-                
+                this.setState({ showResultsModal: true })
+
             });
     };
-    logoutButtonAction = () =>{
-        
+    logoutButtonAction = () => {
+
         this.logoutUser()
         window.location = "/"
     };
@@ -475,33 +475,33 @@ class Search extends Component {
 
     //renders the page.
     render() {
-        
+
         const buttons = [
-            { id: 1, name: "Logout", action: this.logoutButtonAction}, 
+            { id: 1, name: "Logout", action: this.logoutButtonAction },
             { id: 2, name: "Profile", action: this.profileButtonAction }
         ]
         return (
-
-            <Container fluid>
-                <ScannerNavbar buttons={buttons}/>
-                <Row>
-                    <Col size='md-12'>
-                        <Jumbotron>
-                            <h1>Product Search</h1>
-                        </Jumbotron>
-                        <form className='text-center'>
-                            <Input
-                                value={this.state.searchedProduct}
-                                onChange={this.handleInputChange}
-                                name="searchedProduct"
-                                placeholder="Product (required)"
-                            />
-                            <FormBtn
-                                disabled={!this.state.searchedProduct}
-                                onClick={this.handleProductSearch}
-                            >
-                                Search Product
-
+            <div>
+                <ScannerNavbar buttons={buttons} />
+                <Jumbotron>
+                    <h1>Product Search</h1>
+                </Jumbotron>
+                <Container fluid>
+                    <Row>
+                        <Col size='md-12'>
+                            <form className='text-center'>
+                                <Input
+                                    value={this.state.searchedProduct}
+                                    onChange={this.handleInputChange}
+                                    name="searchedProduct"
+                                    placeholder="Product (required)"
+                                />
+                                <FormBtn
+                                    disabled={!this.state.searchedProduct}
+                                    onClick={this.handleProductSearch}
+                                >
+                                    Search Product
+    
                             </FormBtn>
                             </form>
                         </Col>
@@ -597,7 +597,7 @@ class Search extends Component {
                         <button className='btn btn-primary' onClick={this._scan}>
                             {this.state.toggleScanner ? "Stop Scanner" : "Use Scanner"}
                         </button>
-                        
+
                         {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
                     </div>
 
@@ -652,10 +652,10 @@ class Search extends Component {
 
                             <div style={{ color: 'red' }} className='modal-body'>
                                 <p>SORRY SOMETHING WENT WRONG!</p>
-                                
+
                                 <p>Please try logging in again.</p>
-    
-    
+
+
                                 <div className='modal-footer'>
                                     {/* <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button> */}
                                     <a href="/" className='btn btn-primary'>Log In</a>
