@@ -481,7 +481,7 @@ class Search extends Component {
             { id: 2, name: "Profile", action: this.profileButtonAction }
         ]
         return (
-
+            <div>
             <Container fluid>
                 <ScannerNavbar buttons={buttons}/>
                 <Row>
