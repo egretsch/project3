@@ -23,6 +23,7 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.toggleCollapse = this.toggleCollapse.bind(this);
+        // this.logoutUser = this.logoutUser.bind(this);
         this.state = {
             searchedProduct: "",
             collapse: false,
@@ -391,12 +392,37 @@ class Search extends Component {
                 showResultsModal: true
             }));
     };
+    logoutButtonAction = () =>{
+        
+        this.logoutUser()
+        window.location = "/"
+    };
+
+    profileButtonAction = () => {
+        window.location = "/Profile"
+    };
+
+    logoutUser() {
+        API.logoutUser({
+        })
+            .then(res => {
+                console.log("logout")
+
+            })
+            .catch(err => console.log(err));
+
+    }
 
     //renders the page.
     render() {
+        
+        const buttons = [
+            { id: 1, name: "Logout", action: this.logoutButtonAction}, 
+            { id: 2, name: "Profile", action: this.profileButtonAction }
+        ]
         return (
             <Container fluid>
-                <ScannerNavbar />
+                <ScannerNavbar buttons={buttons}/>
                 <Row>
                     <Col size='md-12'>
                         <Jumbotron>

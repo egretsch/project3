@@ -4,7 +4,28 @@ const bcrypt = require('bcrypt')
 // Login
 module.exports = {
 
+  logoutUser: function (req, res) {
 
+    // if (users.length === 0) {
+    
+    var userObj = {
+      _id: "",
+      name: "",
+      userName: "",
+      email: "",
+      
+      gender: ""
+    }
+    console.log(userObj);
+    req.session.user.loggedIn = false;
+    req.session.user.currentUser = userObj;
+    res.json(userObj);
+    // } else {
+    //   res.json(false);
+    // }
+    console.log(req.session.user.loggedIn, "logedout")
+    console.log(req.session.user.currentUser, "logedout")
+  },
 
   updateUser: function (req, res) {
     console.log("this is our req.body inside update users: ", req.body);
@@ -28,18 +49,18 @@ module.exports = {
             })
           .then(users => {
             // if (users.length === 0) {
-              console.log("this is our database result user inside updated user", users)
-              var userObj = {
-                _id: users._id,
-                name: users.name,
-                email: users.email,
-                userName: users.userName,
-                gender: users.gender
-              }
-              console.log(userObj);
-              req.session.user.loggedIn = true;
-              req.session.user.currentUser = userObj;
-              res.json(userObj);
+            console.log("this is our database result user inside updated user", users)
+            var userObj = {
+              _id: users._id,
+              name: users.name,
+              email: users.email,
+              userName: users.userName,
+              gender: users.gender
+            }
+            console.log(userObj);
+            req.session.user.loggedIn = true;
+            req.session.user.currentUser = userObj;
+            res.json(userObj);
             // } else {
             //   res.json(false);
             // }
@@ -74,32 +95,32 @@ module.exports = {
         console.log(users.userName, "This is the userName");
         console.log(users.password, "This is the password");
         // if (users.length === 0) {
-          if (!users && typeof users === object) {
-            res.status(404).send('Invalid username or password. Please try again');
-          } else {
-            bcrypt.compare(req.body.loginObj.password, users.password).then(function (bcryptRes) {
-              // res == true
+        if (!users && typeof users === object) {
+          res.status(404).send('Invalid username or password. Please try again');
+        } else {
+          bcrypt.compare(req.body.loginObj.password, users.password).then(function (bcryptRes) {
+            // res == true
 
-              if (!bcryptRes) {
-                console.log("it worked1");
-                res.status(404).send('Invalid username or password. Please try again');
-              } else {
-                console.log("it worked 2");
+            if (!bcryptRes) {
+              console.log("it worked1");
+              res.status(404).send('Invalid username or password. Please try again');
+            } else {
+              console.log("it worked 2");
 
-                var userObj = {
-                  _id: users._id,
-                  name: users.name,
-                  email: users.email,
-                  userName: users.userName,
-                  gender: users.gender
-                }
-                console.log(userObj);
-                req.session.user.loggedIn = true;
-                req.session.user.currentUser = userObj;
-                res.json(userObj);
+              var userObj = {
+                _id: users._id,
+                name: users.name,
+                email: users.email,
+                userName: users.userName,
+                gender: users.gender
               }
-            });
-          }
+              console.log(userObj);
+              req.session.user.loggedIn = true;
+              req.session.user.currentUser = userObj;
+              res.json(userObj);
+            }
+          });
+        }
         // } else {
         //   res.json(false);
         // }
@@ -109,9 +130,9 @@ module.exports = {
         res.status(422).json(err)
       });
   },
-  
+
   create: function (req, res) {
-    db.User.find({$or: [{userName: req.body.userName}, {email: req.body.email}]}).then(dbData =>{
+    db.User.find({ $or: [{ userName: req.body.userName }, { email: req.body.email }] }).then(dbData => {
       console.log("This is dbData inside create: ", dbData);
 
 

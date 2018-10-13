@@ -11,7 +11,8 @@ router.route("/")
 router.route("/update")
   .post(userController.updateUser);
 
-
+router.route("/logout")
+  .post(userController.logoutUser);
 
 // routes login info to server
 router.route("/login")

@@ -231,12 +231,36 @@ class Profile extends Component {
         });
     }
 
+    logoutButtonAction = () => {
+
+        this.logoutUser()
+        window.location = "/"
+    };
+
+    searchButtonAction = () => {
+        window.location = "/search"
+    };
+
+    logoutUser() {
+        API.logoutUser({
+        })
+            .then(res => {
+                console.log("logout")
+
+            })
+            .catch(err => console.log(err));
+
+    }
 
     render() {
         console.log(this.state)
+        const buttons = [
+            { id: 1, name: "Logout", action: this.logoutButtonAction },
+            { id: 2, name: "Search", action: this.searchButtonAction }
+        ]
         return (
             <Container fluid>
-                <ScannerNavbar />
+                <ScannerNavbar buttons={buttons}/>
                 <Row>
                     <Jumbotron>
                         <h3>Your Profile</h3>
@@ -276,7 +300,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateName"
-                                            type="name"
+                                            type="text"
                                             placeholder="Enter Name"
                                             value={this.state.updateName}
                                             onChange={this.handleInputChange} />
@@ -289,7 +313,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateUserName"
-                                            type="Username"
+                                            type="text"
                                             placeholder="Enter Username"
                                             value={this.state.updateUserName}
                                             onChange={this.handleInputChange} />
@@ -302,7 +326,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateEmail"
-                                            type="Email"
+                                            type="email"
                                             placeholder="Enter Email"
                                             value={this.state.updateEmail}
                                             onChange={this.handleInputChange} />
@@ -328,7 +352,7 @@ class Profile extends Component {
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateGender"
-                                            type="Gender"
+                                            type="text"
                                             placeholder="Enter Gender"
                                             value={this.state.updateGender}
                                             onChange={this.handleInputChange} />
@@ -454,7 +478,7 @@ class Profile extends Component {
                     {/* Confirmation Modal End */}
 
                     {/* Update Modal Here */}
-                    <Modal
+                    {/* <Modal
                         {...this.props}
                         show={this.state.showUpdateUserModal}
                         onHide={this.handleHideUpdateUserModal}
@@ -549,7 +573,7 @@ class Profile extends Component {
                             </Modal.Footer>
                         </Form>
                     </Modal>
-                    {/* End Update Modal */}
+                    End Update Modal */}
             </Container>
                 )
             }
