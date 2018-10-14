@@ -5,16 +5,25 @@ export default {
 
     //Search through products in the API.
     getProducts: product => {
-        let url = unescape("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + '"' +  product  + '"' + "&limit=20");
 
-        console.log(url)
+        //The URL should look like this...  https://api.fda.gov/drug/label.json?search=openfda.brand_name:%22Coppertone+SPF+15%22&limit=20
 
-        return axios.get(url)
+
+        // let url = unescape("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + '"' +  product  + '"' + "&limit=20");
+
+        // console.log(url)
+
+        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" +  product + "&limit=20")
     },
 
     //Get the exact scanned product. 
     getProductByScan: product => {
-        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + product + "&limit=1")
+
+        let url = unescape("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + '"' +  product  + '"' + "&limit=1");
+
+        console.log(url)
+
+        return axios.get(url)
     },
 
     //Try getting the scanned product inside the database
