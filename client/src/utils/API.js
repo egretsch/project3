@@ -5,7 +5,11 @@ export default {
 
     //Search through products in the API.
     getProducts: product => {
-        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + product + "&limit=20")
+        let url = unescape("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + '"' +  product  + '"' + "&limit=20");
+
+        console.log(url)
+
+        return axios.get(url)
     },
 
     //Get the exact scanned product. 
