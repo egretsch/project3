@@ -1,5 +1,6 @@
 
 import React, { Component } from "react";
+import Link from 'react-router-dom'
 import { Row, Container } from "../components/Grid";
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 import { List, ListItem } from "../components/List";
@@ -238,7 +239,7 @@ class Profile extends Component {
     };
 
     searchButtonAction = () => {
-        window.location = "/search"
+        this.props.history.push("/search");
     };
 
     logoutUser() {

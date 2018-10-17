@@ -2,14 +2,9 @@ import React, { Component } from "react";
 import API from "../utils/API";
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 import ScannerNavbar from "../components/ScannerNavbar";
-
+import Link from 'react-router-dom'
 import './pages.css';
 //Parts of the app
-
-
-
-
-
 
 
 class Login extends Component {
@@ -153,7 +148,7 @@ class Login extends Component {
                 loginObj
             })
                 .then(res => {
-                    window.location = '/search';
+                    this.props.history.push("/search");
                 })
                 .catch(err => {
                     console.log(err)
@@ -214,6 +209,8 @@ class Login extends Component {
                                 onChange={this.handleInputChange} />
 
                         </FormGroup>
+
+                        
                         <Button className="loginButtion"
                             block
                             bsSize="large"
