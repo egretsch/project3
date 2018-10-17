@@ -235,8 +235,8 @@ class Search extends Component {
 
     searchScannedProduct = () => {
         let brandNameArray = [];
-        console.log("The Search in ScannedProduct, 241: ", this.state.scannedProductName);
-        API.getProductByScan(this.state.scannedProductName.replace(" ", "%20"))
+        // console.log("The Search in ScannedProduct, 241: ", this.state.scannedProductName);
+        API.getProductByScan(this.state.scannedProductName.replace(/ /g, "+"))
             .then(res => {
                 res.data.results.forEach(element => {
                     let brandName = element.openfda.brand_name
@@ -410,8 +410,12 @@ class Search extends Component {
         //makes a empty array so we can set this as the searched results later on.
         let brandNameArray = [];
 
+
+        let noSpaces =  this.state.searchedProduct.replace(/ /g, "+")
+
+        console.log("No Spaces: ", noSpaces)
         //Our API Call.
-        API.getProducts(this.state.searchedProduct.replace(" ", "%20"))
+        API.getProducts(noSpaces)
             .then(res => {
                 // console.log(res.data.results)
 
@@ -628,7 +632,7 @@ class Search extends Component {
                                     <div className='modal-footer'>
                                         <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => { event.preventDefault(); this.hideScannerModal(); }}>Cancel</button>
                                         <FormBtn
-                                            disabled={!this.state.scannedProductName}
+                                            disabled={!this.state.scannedProductName && !this.state.scanResults}
                                             onClick={this.saveScannedProduct}
                                         >
                                             Submit

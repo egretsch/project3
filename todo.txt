@@ -25,6 +25,3 @@ Create a README
     -- What bugs there are
     -- Next steps
     -- any other stuff. 
-
-(optional bugs)
-    --Get rid of/prevent any Duplicates of saved information and/or profiles.
