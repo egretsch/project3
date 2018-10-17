@@ -1,13 +1,7 @@
 Stuff left to do:
 
-Get exact matches out of API
-    -play around with the brand_name: query. Refine the search.
-    -White spaces are filled with %20, but it only works with two words?
-
 Get it Deployed
     -If any Heroku problems, then we will fix ASAP.
-
-
 
 Make it pretty
     --Any loading animations
