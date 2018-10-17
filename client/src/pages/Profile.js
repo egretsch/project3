@@ -253,131 +253,128 @@ class Profile extends Component {
     }
 
     render() {
-        console.log(this.state)
         const buttons = [
             { id: 1, name: "Logout", action: this.logoutButtonAction },
             { id: 2, name: "Search", action: this.searchButtonAction }
         ]
         return (
-            <Container fluid>
-                <ScannerNavbar buttons={buttons}/>
-                <Row>
-                    <Jumbotron>
-                        <h3>Your Profile</h3>
-                    </Jumbotron>
-                </Row>
-
-                <Row>
-                    <Col md={6}>
-                        <h3 id='info'>User Information</h3>
-                        <p>Name: {this.state.profileName}</p>
-                        <p>Username: {this.state.userName}</p>
-                        <p>Email: {this.state.email}</p>
-                        <p>Gender: {this.state.gender}</p>
-                        <button onClick={this.handleShowUpdateUserModal} className='btn btn-success'>Profile Update</button>
-                    </Col>
+            <div>
+                <ScannerNavbar buttons={buttons} />
+                <Jumbotron>
+                    <h3>Your Profile</h3>
+                </Jumbotron>
+                <Container fluid>
+                    <Row>
+                        <Col md={6}>
+                            <h3 id='info'>User Information</h3>
+                            <p>Name: {this.state.profileName}</p>
+                            <p>Username: {this.state.userName}</p>
+                            <p>Email: {this.state.email}</p>
+                            <p>Gender: {this.state.gender}</p>
+                            <button onClick={this.handleShowUpdateUserModal} className='btn btn-success'>Profile Update</button>
+                        </Col>
 
 
 
-                    <Modal
-                        {...this.props}
-                        show={this.state.showUpdateUserModal}
-                        onHide={this.handleHideUpdateUserModal}
-                        dialogClassName="custom-modal"
-                    >
-                        <Modal.Header closeButton>
-                            <Modal.Title id="contained-modal-title-lg">
-                                Update Profile
+                        <Modal
+                            {...this.props}
+                            show={this.state.showUpdateUserModal}
+                            onHide={this.handleHideUpdateUserModal}
+                            dialogClassName="custom-modal"
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title id="contained-modal-title-lg">
+                                    Update Profile
                             </Modal.Title>
-                        </Modal.Header>
-                        <Form horizontal onSubmit={this.handleUpdateUserSubmit}>
-                            <Modal.Body>
+                            </Modal.Header>
+                            <Form horizontal onSubmit={this.handleUpdateUserSubmit}>
+                                <Modal.Body>
 
-                                <FormGroup controlId="formHorizontalName">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Name
+                                    <FormGroup controlId="formHorizontalName">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Name
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateName"
-                                            type="text"
-                                            placeholder="Enter Name"
-                                            value={this.state.updateName}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalUsername">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Username
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updateName"
+                                                type="text"
+                                                placeholder="Enter Name"
+                                                value={this.state.updateName}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalUsername">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Username
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateUserName"
-                                            type="text"
-                                            placeholder="Enter Username"
-                                            value={this.state.updateUserName}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalEmail">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Email
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updateUserName"
+                                                type="text"
+                                                placeholder="Enter Username"
+                                                value={this.state.updateUserName}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalEmail">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Email
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateEmail"
-                                            type="email"
-                                            placeholder="Enter Email"
-                                            value={this.state.updateEmail}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalPassword">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Password
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updateEmail"
+                                                type="email"
+                                                placeholder="Enter Email"
+                                                value={this.state.updateEmail}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalPassword">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Password
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updatePassword"
-                                            type="password"
-                                            placeholder="Enter New Password"
-                                            value={this.state.updatePassword}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalGender">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Gender
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updatePassword"
+                                                type="password"
+                                                placeholder="Enter New Password"
+                                                value={this.state.updatePassword}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalGender">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Gender
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateGender"
-                                            type="text"
-                                            placeholder="Enter Gender"
-                                            value={this.state.updateGender}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updateGender"
+                                                type="text"
+                                                placeholder="Enter Gender"
+                                                value={this.state.updateGender}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
 
 
 
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <ButtonGroup className="createUserButtions">
-                                    <Button
-                                        value="Submit"
-                                        type="submit"
-                                        onClick={this.handleHideUpdateUserModal}
-                                    >
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <ButtonGroup className="createUserButtions">
+                                        <Button
+                                            value="Submit"
+                                            type="submit"
+                                            onClick={this.handleHideUpdateUserModal}
+                                        >
 
-                                        Submit
+                                            Submit
                                 </Button>
-                                    <Button onClick={this.handleHideUpdateUserModal}>Close</Button>
-                                </ButtonGroup>
-                            </Modal.Footer>
+                                        <Button onClick={this.handleHideUpdateUserModal}>Close</Button>
+                                    </ButtonGroup>
+                                </Modal.Footer>
                             </Form>
-                    </Modal>
-                </Row>
+                        </Modal>
+                    </Row>
 
 
 
@@ -476,7 +473,16 @@ class Profile extends Component {
                         )
                     }
                     {/* Confirmation Modal End */}
+                </Container>
+            </div>
+        )
+    }
 
+}
+
+export default Profile;
+
+<<<<<<< HEAD
                    
                     
             </Container>
@@ -488,3 +494,6 @@ class Profile extends Component {
         export default Profile;
         
         
+=======
+
+>>>>>>> 7449e1610b9927f200841ab6308d1642b522855a

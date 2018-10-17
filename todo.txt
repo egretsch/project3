@@ -1,20 +1,7 @@
 Stuff left to do:
 
-Get exact matches out of API
-    -play around with the brand_name: query. Refine the search.
-    -White spaces are filled with %20, but it only works with two words?
-
 Get it Deployed
     -If any Heroku problems, then we will fix ASAP.
-
-Login Page merged with the rest of the App
-    -Check if any bugs logging in or out.
-    -Check if all buttons work when logged in. (in the navbar)
-    -Check if information is pulled from database.
-    
-Let users update their information
---This means:
-    - Changing their name, email, and password.
 
 Make it pretty
     --Any loading animations
@@ -32,7 +19,3 @@ Create a README
     -- What bugs there are
     -- Next steps
     -- any other stuff. 
-
-(optional bugs)
-    --Get rid of/prevent any Duplicates of saved information and/or profiles.
-    --More dynamic, make buttons instantly go saved or danger if saving ingredients/products
