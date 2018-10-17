@@ -36,6 +36,7 @@ class Profile extends Component {
             savedIngredients: [],
             confirmIngredient: "",
             confirmProduct: "",
+            userUpdateMessage: "",
             show: false,
         };
 
@@ -47,6 +48,8 @@ class Profile extends Component {
         this.getBookmarkedProducts();
         this.getSavedIngredients();
     }
+
+    
 
     showModal = () => {
         this.setState({ show: true });
@@ -71,7 +74,7 @@ class Profile extends Component {
             .then(res => {
                 if (res.data.ingredients) {
                     this.setState({ savedIngredients: res.data.ingredients.split(',') })
-                    // console.log(res)
+                    
                 }
             })
             .catch(err => console.log(err));
@@ -161,8 +164,13 @@ class Profile extends Component {
     loadCurrentUser = () => {
         API.currentUser()
             .then(res =>
-                // console.log(res)
-                this.setState({ profileName: res.data.name, userName: res.data.userName, email: res.data.email, gender: res.data.gender })
+                
+                this.setState({ 
+                    profileName: res.data.name,
+                    userName: res.data.userName, 
+                    email: res.data.email, 
+                    gender: res.data.gender 
+                })
             )
             .catch(err => console.log(err));
     };
@@ -174,7 +182,9 @@ class Profile extends Component {
             updateEmail: this.state.email,
             updateUserName: this.state.userName,
             updatePassword: "",
-            updateGender: this.state.gender
+            updateGender: this.state.gender,
+            userUpdateMessage: "Update Porfile", 
+            colorUpdateUser: "black" 
         });
     }
 
@@ -192,33 +202,35 @@ class Profile extends Component {
             password: this.state.updatePassword,
             gender: this.state.updateGender
         };
-        console.log(updateUserObj, 1)
+        
         API.updateUser(updateUserObj)
             .then(res => {
-                //console.log("submited data and here is res: ", res)
-                console.log(res, 2)
+                
+                
 
-                //if (!res.data) {
-                //    console.log("we made it to the second layer");
-                // alert("Username already exists! Please use another");
-                //    this.setState({
-                //        userMessage: "Username or Password already exsists",
-                //        color: "#FF000"
-                //    })
-                //}
-
+                this.updateUserState();
+                this.setState({
+                    userUpdateMessage: "!!!!! Your data was updated !!!!",
+                    colorUpdateUser: "blue"
+                })
+                this.loadCurrentUser();
             })
-            .catch(err => console.log(err));
+            .catch((err) => {
+            console.log(err)
+                this.setState({
+                    userUpdateMessage: "Username or Password already exsists",
+                    colorUpdateUser: "red"
+                })
+            });
     };
 
     // update USER Submit
 
     handleUpdateUserSubmit(event) {
         event.preventDefault();
-        this.updateUserState();
-        // console.log(state)
+        
         this.updateUser();
-        // this.createUserState();
+        
 
 
     }
@@ -246,21 +258,20 @@ class Profile extends Component {
         })
             .then(res => {
                 console.log("logout")
-
             })
             .catch(err => console.log(err));
 
     }
 
     render() {
-        console.log(this.state)
+        
         const buttons = [
             { id: 1, name: "Logout", action: this.logoutButtonAction },
             { id: 2, name: "Search", action: this.searchButtonAction }
         ]
         return (
             <Container fluid>
-                <ScannerNavbar buttons={buttons}/>
+                <ScannerNavbar buttons={buttons} />
                 <Row>
                     <Jumbotron>
                         <h3>Your Profile</h3>
@@ -287,7 +298,7 @@ class Profile extends Component {
                     >
                         <Modal.Header closeButton>
                             <Modal.Title id="contained-modal-title-lg">
-                                Update Profile
+                                <div style={{ color: this.state.colorUpdateUser }} >{this.state.userUpdateMessage}</div>
                             </Modal.Title>
                         </Modal.Header>
                         <Form horizontal onSubmit={this.handleUpdateUserSubmit}>
@@ -296,7 +307,7 @@ class Profile extends Component {
                                 <FormGroup controlId="formHorizontalName">
                                     <Col componentClass={ControlLabel} sm={2}>
                                         Update Name
-                                </Col>
+                                    </Col>
                                     <Col sm={10}>
                                         <FormControl
                                             name="updateName"
@@ -367,7 +378,7 @@ class Profile extends Component {
                                     <Button
                                         value="Submit"
                                         type="submit"
-                                        onClick={this.handleHideUpdateUserModal}
+                                        // onClick={this.handleHideUpdateUserModal}
                                     >
 
                                         Submit
@@ -375,116 +386,116 @@ class Profile extends Component {
                                     <Button onClick={this.handleHideUpdateUserModal}>Close</Button>
                                 </ButtonGroup>
                             </Modal.Footer>
-                            </Form>
+                        </Form>
                     </Modal>
                 </Row>
 
 
 
 
-                    {/* Ingredients Here */}
-                    <Row>
-                        <Col md={4}>
-                            <h3 id='warning'>Ingredient Warnings</h3>
-                            {this.state.savedIngredients.length ? (
-                                <List>
-                                    {/* Ternary Operation to see if User has any marked Ingredients */}
-                                    {this.state.savedIngredients.map(ingredient => (
-                                        <ListItem key={ingredient}>
-                                            {ingredient}
-                                            <button value={ingredient} onClick={this.deleteSavedIngredient} className=' delete-button btn-danger'>Delete</button>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            ) : (
-                                    <h4 style={{ textAlign: 'center' }}>No Ingredients Warnings Found</h4>
-                                )}
-                        </Col>
-                    </Row>
-                    {/* Ingredients End */}
+                {/* Ingredients Here */}
+                <Row>
+                    <Col md={4}>
+                        <h3 id='warning'>Ingredient Warnings</h3>
+                        {this.state.savedIngredients.length ? (
+                            <List>
+                                {/* Ternary Operation to see if User has any marked Ingredients */}
+                                {this.state.savedIngredients.map(ingredient => (
+                                    <ListItem key={ingredient}>
+                                        {ingredient}
+                                        <button value={ingredient} onClick={this.deleteSavedIngredient} className=' delete-button btn-danger'>Delete</button>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        ) : (
+                                <h4 style={{ textAlign: 'center' }}>No Ingredients Warnings Found</h4>
+                            )}
+                    </Col>
+                </Row>
+                {/* Ingredients End */}
 
 
 
-                    {/* Products Here */}
-                    <Row>
-                        <Col md={4}>
-                            <h3 id='favorite'>Favorite Products</h3>
-                            {this.state.bookmarkedProducts.length ? (
-                                <List>
-                                    {/* Ternary Operation to see if User has any favorite products */}
-                                    {this.state.bookmarkedProducts.map(product => (
-                                        <ListItem key={product}>
-                                            {product}
-                                            <button value={product} onClick={this.deleteBookmarkedProduct} className=' delete-button btn-danger'>Delete</button>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            ) : (
-                                    <h4 style={{ textAlign: 'center' }}>No Favorite Products Found</h4>
-                                )}
-                        </Col>
-                    </Row>
-                    {/* Products end */}
+                {/* Products Here */}
+                <Row>
+                    <Col md={4}>
+                        <h3 id='favorite'>Favorite Products</h3>
+                        {this.state.bookmarkedProducts.length ? (
+                            <List>
+                                {/* Ternary Operation to see if User has any favorite products */}
+                                {this.state.bookmarkedProducts.map(product => (
+                                    <ListItem key={product}>
+                                        {product}
+                                        <button value={product} onClick={this.deleteBookmarkedProduct} className=' delete-button btn-danger'>Delete</button>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        ) : (
+                                <h4 style={{ textAlign: 'center' }}>No Favorite Products Found</h4>
+                            )}
+                    </Col>
+                </Row>
+                {/* Products end */}
 
 
-                    {/* Confirmation Modal Here */}
-                    {this.state.confirmIngredient ?
-                        (
+                {/* Confirmation Modal Here */}
+                {this.state.confirmIngredient ?
+                    (
 
-                            <ConfirmationModal show={this.state.show}>
-                                <div className='modal-content'>
-                                    <div className='modal-header'>
-                                        <h4 className='modal-title'>
-                                            Confirm Delete
+                        <ConfirmationModal show={this.state.show}>
+                            <div className='modal-content'>
+                                <div className='modal-header'>
+                                    <h4 className='modal-title'>
+                                        Confirm Delete
                                         </h4>
-                                    </div>
-
-                                    <div className='modal-body'>
-                                        Are you sure you want to delete {this.state.confirmIngredient}?
-                                    </div>
-
-                                    <div className='modal-footer'>
-                                        <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
-                                        <button className='btn btn-danger' onClick={() => { this.confirmDelete(); this.hideModal(); }}>Confirm</button>
-                                    </div>
-
                                 </div>
-                            </ConfirmationModal>
 
-                        ) :
-                        (
-                            <ConfirmationModal show={this.state.show}>
-                                <div className='modal-content'>
+                                <div className='modal-body'>
+                                    Are you sure you want to delete {this.state.confirmIngredient}?
+                                    </div>
 
-                                    <div className='modal-header'>
-                                        <h4 className='modal-title'>
-                                            Confirm Delete
+                                <div className='modal-footer'>
+                                    <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
+                                    <button className='btn btn-danger' onClick={() => { this.confirmDelete(); this.hideModal(); }}>Confirm</button>
+                                </div>
+
+                            </div>
+                        </ConfirmationModal>
+
+                    ) :
+                    (
+                        <ConfirmationModal show={this.state.show}>
+                            <div className='modal-content'>
+
+                                <div className='modal-header'>
+                                    <h4 className='modal-title'>
+                                        Confirm Delete
                                         </h4>
-                                    </div>
-
-                                    <div className='modal-body'>
-                                        Are you sure you want to delete {this.state.confirmProduct}?
-                                    </div>
-
-                                    <div className='modal-footer'>
-                                        <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
-                                        <button className='btn btn-danger' onClick={() => { this.confirmDelete(); this.hideModal(); }}>Confirm</button>
-                                    </div>
-
                                 </div>
-                            </ConfirmationModal>
-                        )
-                    }
-                    {/* Confirmation Modal End */}
 
-                   
-                    
+                                <div className='modal-body'>
+                                    Are you sure you want to delete {this.state.confirmProduct}?
+                                    </div>
+
+                                <div className='modal-footer'>
+                                    <button className='btn btn-secondary' onClick={() => { this.hideModal(); this.reset(); }}>Cancel</button>
+                                    <button className='btn btn-danger' onClick={() => { this.confirmDelete(); this.hideModal(); }}>Confirm</button>
+                                </div>
+
+                            </div>
+                        </ConfirmationModal>
+                    )
+                }
+                {/* Confirmation Modal End */}
+
+
+
             </Container>
-                )
-            }
-        
-        }
-        
-        export default Profile;
-        
-        
+        )
+    }
+
+}
+
+export default Profile;
+
+

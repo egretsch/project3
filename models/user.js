@@ -9,8 +9,8 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   gender: { type: String, required: true },
-  ingredients: {type: String, unique: true},
-  bookmarkedProducts: {type: String, unique: true}
+  ingredients: {type: String, sparse: true},
+  bookmarkedProducts: {type: String, sparse: true}
 });
 
 const User = mongoose.model("User", userSchema);
