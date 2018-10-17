@@ -1,28 +1,33 @@
 .jumbotron {
-    width: 100%;
-    background-color: maroon;
-    color: pink;
-    text-align: center;
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: rgb(37, 42, 61);
+  color: rgb(255, 255, 255);
+  text-align: center;
 }
 
 #warning {
-    text-align: center;
-    color: red;
+  text-align: center;
+  color: rgb(37, 42, 61);
+  margin-top: 0;
 }
 
 #info {
-    text-align: center;
-    color: blue;
+  margin-top: 0;
+  text-align: center;
+  color: rgb(37, 42, 61);
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
 }
 
-
 #favorite {
-    text-align: center;
-    color: green;
+  text-align: center;
+  color: rgb(37, 42, 61);
 }
 
 .save-ingredients-button {
-    float: right;
+  float: right;
 }
 @media all and (min-width: 480px) {
   .Login {
@@ -34,13 +39,17 @@
     max-width: 30%;
     margin-top: 10%;
   }
-  .loginButtion{
-      max-width: 50%;
-      margin-left: 25%;
+  .loginButtion {
+    max-width: 50%;
+    margin-left: 25%;
   }
 }
 
 .delete-button {
-    float: right;
+  float: right;
 }
 
+.navbar {
+  border-radius: 0;
+  margin-bottom: 5px;
+}
