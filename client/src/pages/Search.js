@@ -485,28 +485,6 @@ class Search extends Component {
         ]
         return (
             <div>
-<<<<<<< HEAD
-            <Container fluid>
-                <ScannerNavbar buttons={buttons}/>
-                <Row>
-                    <Col size='md-12'>
-                        <Jumbotron>
-                            <h1>Product Search</h1>
-                        </Jumbotron>
-                        <form className='text-center'>
-                            <Input
-                                value={this.state.searchedProduct}
-                                onChange={this.handleInputChange}
-                                name="searchedProduct"
-                                placeholder="Product (required)"
-                            />
-                            <FormBtn
-                                disabled={!this.state.searchedProduct}
-                                onClick={this.handleProductSearch}
-                            >
-                                Search Product
-
-=======
                 <ScannerNavbar buttons={buttons} />
                 <Jumbotron>
                     <h1>Product Search</h1>
@@ -527,7 +505,6 @@ class Search extends Component {
                                 >
                                     Search Product
     
->>>>>>> 7449e1610b9927f200841ab6308d1642b522855a
                             </FormBtn>
                             </form>
                         </Col>

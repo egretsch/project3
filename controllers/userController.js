@@ -7,13 +7,13 @@ module.exports = {
   logoutUser: function (req, res) {
 
     // if (users.length === 0) {
-
+    
     var userObj = {
       _id: "",
       name: "",
       userName: "",
       email: "",
-
+      
       gender: ""
     }
     console.log(userObj);
@@ -48,30 +48,22 @@ module.exports = {
               }
             })
           .then(users => {
-            console.log("this is our database result user inside updated user", users)
             // if (users.length === 0) {
-            db.User.findOne({ userName: req.body.userName })
-              .then(users => {
-
-                var userObj = {
-                  _id: users._id,
-                  name: users.name,
-                  email: users.email,
-                  userName: users.userName,
-                  gender: users.gender
-                }
-                console.log(userObj, "updateUserINfo");
-                req.session.user.loggedIn = true;
-                req.session.user.currentUser = userObj;
-                res.json(userObj);
-                // } else {
-                //   res.json(false);
-                // }
-              })
-              .catch((err) => {
-                console.log(err)
-                res.status(422).json(err)
-              });
+            console.log("this is our database result user inside updated user", users)
+            var userObj = {
+              _id: users._id,
+              name: users.name,
+              email: users.email,
+              userName: users.userName,
+              gender: users.gender
+            }
+            console.log(userObj);
+            req.session.user.loggedIn = true;
+            req.session.user.currentUser = userObj;
+            res.json(userObj);
+            // } else {
+            //   res.json(false);
+            // }
 
           })
           .catch((err) => {

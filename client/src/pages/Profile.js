@@ -482,18 +482,4 @@ class Profile extends Component {
 
 export default Profile;
 
-<<<<<<< HEAD
-                   
-                    
-            </Container>
-                )
-            }
-        
-        }
-        
-        export default Profile;
-        
-        
-=======
 
->>>>>>> 7449e1610b9927f200841ab6308d1642b522855a
