@@ -561,11 +561,12 @@ class Search extends Component {
                                                     let button = <button value={ingredient} onClick={event => { this.saveIngredient(event); this.getSavedIngredients(); }} className='save-ingredients-button'>Save</button>;
 
                                                     //the usual style
-                                                    let style = { textAlign: 'center', fontSize: '10px' }
+                                                    let style = { textAlign: 'left', fontSize: '13px' }
 
                                                     //the style if the user's saved ingredients match up with the searched ingredients.
-                                                    let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
-
+                                                    let warning = { textAlign: 'left', fontSize: '13px', backgroundColor: "#f2dede", color: "#a94442" }
+                                                    let noResults = { textAlign: 'center', fontSize: '13px', backgroundColor: "#f2dede", color: "#a94442" }
+                                                     
                                                     //the for loop that compares it all.
 
                                                     for (let n = 0; n < this.state.savedIngredients.length; n++) {
@@ -574,7 +575,7 @@ class Search extends Component {
                                                             style = warning
                                                         } else if ('No Results' === ingredient) {
                                                             button = ""
-                                                            style = warning
+                                                            style = noResults
                                                         }
                                                     }
 
