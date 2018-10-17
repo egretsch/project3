@@ -3,26 +3,9 @@ import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
-//Landing page should be login page.
 
 
 import API from "./utils/API";
-
-// let isLogedin;
-
-
-// const PrivateRoute = ({ component: Component, ...rest }) => (
-//   <Route {...rest} render={(props) => (
-//     auth().then(isAuthenticated => {
-//       isLogedin = isAuthenticated;
-//       isAuthenticated === true
-//         ? <Component {...props} />
-//         : <Redirect to='/' />
-
-//     })
-//   )} />
-
-// )
 
 class App extends Component {
   state = {
@@ -44,8 +27,6 @@ class App extends Component {
           this.setState({
             isLogedin: true
           });
-          // isLogedin = true
-          // console.log(isLogedin)
         }
         return res;
 
@@ -61,7 +42,6 @@ class App extends Component {
       <Router>
   <div>
     <Switch>
-      {/* <Route exact path="/" component={ isLogedin ? Search : Login } /> */}
       <Route exact path='/' component={Login} />
           <Route path='/search' component={this.state.isLogedin ? Search : Login} />
       <Route path='/profile' component={ this.state.isLogedin ? Profile : Login} />

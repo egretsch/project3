@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../utils/API";
+import Link from 'react-router-dom'
 
 //Parts of the app
 import { Col, Row, Container } from "../components/Grid";
@@ -210,10 +211,10 @@ class Search extends Component {
 
     saveScannedProduct = event => {
         event.preventDefault();
-        console.log(
-            "The Brand Name in save: ", this.state.scannedProductName,
-            "The UPC Code: ", this.state.scanResults
-            )
+        // console.log(
+        //     "The Brand Name in save: ", this.state.scannedProductName,
+        //     "The UPC Code: ", this.state.scanResults
+        // )
 
         API.saveScannedProduct({
             brandName: this.state.scannedProductName,
@@ -223,20 +224,18 @@ class Search extends Component {
                 // console.log(res);
                 this.searchScannedProduct();
                 this.hideScannerModal();
-                this.setState({
-                    scanResults: []
-                })
             })
             .catch(err => {
                 console.log("Error on L230: ", err);
-                this.showErrorModal();
+                this.hideScannerModal();
+                this.searchScannedProduct();
             });
     }
 
     searchScannedProduct = () => {
         let brandNameArray = [];
-        console.log("The Search in ScannedProduct, 241: ", this.state.scannedProductName);
-        API.getProductByScan(this.state.scannedProductName.replace(" ", "%20"))
+        // console.log("The Search in ScannedProduct, 241: ", this.state.scannedProductName);
+        API.getProductByScan(this.state.scannedProductName.replace(/ /g, "+"))
             .then(res => {
                 res.data.results.forEach(element => {
                     let brandName = element.openfda.brand_name
@@ -410,8 +409,13 @@ class Search extends Component {
         //makes a empty array so we can set this as the searched results later on.
         let brandNameArray = [];
 
+
+        //Regex code for spaces, replaces it with +
+        let noSpaces =  this.state.searchedProduct.replace(/ /g, "+")
+        // console.log("No Spaces: ", noSpaces)
+
         //Our API Call.
-        API.getProducts(this.state.searchedProduct.replace(" ", "%20"))
+        API.getProducts(noSpaces)
             .then(res => {
                 // console.log(res.data.results)
 
@@ -448,25 +452,25 @@ class Search extends Component {
                 }
             }).catch(err => {
                 console.log("ERR on L449: ", err);
-                this.setState({showResultsModal: true})
-                
+                this.setState({ showResultsModal: true })
+
             });
     };
-    logoutButtonAction = () =>{
-        
+    logoutButtonAction = () => {
+
         this.logoutUser()
         window.location = "/"
     };
 
     profileButtonAction = () => {
-        window.location = "/Profile"
+        this.props.history.push("/profile");
     };
 
     logoutUser() {
         API.logoutUser({
         })
             .then(res => {
-                console.log("logout")
+                console.log("User has logged out.")
 
             })
             .catch(err => console.log(err));
@@ -475,33 +479,33 @@ class Search extends Component {
 
     //renders the page.
     render() {
-        
+
         const buttons = [
-            { id: 1, name: "Logout", action: this.logoutButtonAction}, 
+            { id: 1, name: "Logout", action: this.logoutButtonAction },
             { id: 2, name: "Profile", action: this.profileButtonAction }
         ]
         return (
             <div>
-            <Container fluid>
-                <ScannerNavbar buttons={buttons}/>
-                <Row>
-                    <Col size='md-12'>
-                        <Jumbotron>
-                            <h1>Product Search</h1>
-                        </Jumbotron>
-                        <form className='text-center'>
-                            <Input
-                                value={this.state.searchedProduct}
-                                onChange={this.handleInputChange}
-                                name="searchedProduct"
-                                placeholder="Product (required)"
-                            />
-                            <FormBtn
-                                disabled={!this.state.searchedProduct}
-                                onClick={this.handleProductSearch}
-                            >
-                                Search Product
-
+                <ScannerNavbar buttons={buttons} />
+                <Jumbotron>
+                    <h1>Product Search</h1>
+                </Jumbotron>
+                <Container fluid>
+                    <Row>
+                        <Col size='md-12'>
+                            <form className='text-center'>
+                                <Input
+                                    value={this.state.searchedProduct}
+                                    onChange={this.handleInputChange}
+                                    name="searchedProduct"
+                                    placeholder="Product (required)"
+                                />
+                                <FormBtn
+                                    disabled={!this.state.searchedProduct}
+                                    onClick={this.handleProductSearch}
+                                >
+                                    Search Product
+    
                             </FormBtn>
                             </form>
                         </Col>
@@ -556,11 +560,12 @@ class Search extends Component {
                                                     let button = <button value={ingredient} onClick={event => { this.saveIngredient(event); this.getSavedIngredients(); }} className='save-ingredients-button'>Save</button>;
 
                                                     //the usual style
-                                                    let style = { textAlign: 'center', fontSize: '10px' }
+                                                    let style = { textAlign: 'left', fontSize: '13px' }
 
                                                     //the style if the user's saved ingredients match up with the searched ingredients.
-                                                    let warning = { textAlign: 'center', fontSize: '10px', backgroundColor: "#f2dede", color: "#a94442" }
-
+                                                    let warning = { textAlign: 'left', fontSize: '13px', backgroundColor: "#f2dede", color: "#a94442" }
+                                                    let noResults = { textAlign: 'center', fontSize: '13px', backgroundColor: "#f2dede", color: "#a94442" }
+                                                     
                                                     //the for loop that compares it all.
 
                                                     for (let n = 0; n < this.state.savedIngredients.length; n++) {
@@ -569,7 +574,7 @@ class Search extends Component {
                                                             style = warning
                                                         } else if ('No Results' === ingredient) {
                                                             button = ""
-                                                            style = warning
+                                                            style = noResults
                                                         }
                                                     }
 
@@ -597,7 +602,7 @@ class Search extends Component {
                         <button className='btn btn-primary' onClick={this._scan}>
                             {this.state.toggleScanner ? "Stop Scanner" : "Use Scanner"}
                         </button>
-                        
+
                         {this.state.toggleScanner ? <ScannerSettings onDetected={this._onDetected} /> : null}
                     </div>
 
@@ -628,7 +633,7 @@ class Search extends Component {
                                     <div className='modal-footer'>
                                         <button style={{ marginLeft: '3px' }} className='btn btn-secondary' onClick={event => { event.preventDefault(); this.hideScannerModal(); }}>Cancel</button>
                                         <FormBtn
-                                            disabled={!this.state.scannedProductName}
+                                            disabled={!this.state.scannedProductName && !this.state.scanResults}
                                             onClick={this.saveScannedProduct}
                                         >
                                             Submit
@@ -652,12 +657,11 @@ class Search extends Component {
 
                             <div style={{ color: 'red' }} className='modal-body'>
                                 <p>SORRY SOMETHING WENT WRONG!</p>
-                                
+
                                 <p>Please try logging in again.</p>
-    
-    
+
+
                                 <div className='modal-footer'>
-                                    {/* <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button> */}
                                     <a href="/" className='btn btn-primary'>Log In</a>
                                 </div>
                             </div>

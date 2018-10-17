@@ -1,5 +1,6 @@
 
 import React, { Component } from "react";
+import Link from 'react-router-dom'
 import { Row, Container } from "../components/Grid";
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 import { List, ListItem } from "../components/List";
@@ -250,7 +251,7 @@ class Profile extends Component {
     };
 
     searchButtonAction = () => {
-        window.location = "/search"
+        this.props.history.push("/search");
     };
 
     logoutUser() {
@@ -264,7 +265,6 @@ class Profile extends Component {
     }
 
     render() {
-        
         const buttons = [
             { id: 1, name: "Logout", action: this.logoutButtonAction },
             { id: 2, name: "Search", action: this.searchButtonAction }
@@ -300,65 +300,65 @@ class Profile extends Component {
                             <Modal.Title id="contained-modal-title-lg">
                                 <div style={{ color: this.state.colorUpdateUser }} >{this.state.userUpdateMessage}</div>
                             </Modal.Title>
-                        </Modal.Header>
-                        <Form horizontal onSubmit={this.handleUpdateUserSubmit}>
-                            <Modal.Body>
+                            </Modal.Header>
+                            <Form horizontal onSubmit={this.handleUpdateUserSubmit}>
+                                <Modal.Body>
 
-                                <FormGroup controlId="formHorizontalName">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Name
-                                    </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateName"
-                                            type="text"
-                                            placeholder="Enter Name"
-                                            value={this.state.updateName}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalUsername">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Username
+                                    <FormGroup controlId="formHorizontalName">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Name
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateUserName"
-                                            type="text"
-                                            placeholder="Enter Username"
-                                            value={this.state.updateUserName}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalEmail">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Email
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updateName"
+                                                type="text"
+                                                placeholder="Enter Name"
+                                                value={this.state.updateName}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalUsername">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Username
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updateEmail"
-                                            type="email"
-                                            placeholder="Enter Email"
-                                            value={this.state.updateEmail}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalPassword">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Password
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updateUserName"
+                                                type="text"
+                                                placeholder="Enter Username"
+                                                value={this.state.updateUserName}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalEmail">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Email
                                 </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="updatePassword"
-                                            type="password"
-                                            placeholder="Enter New Password"
-                                            value={this.state.updatePassword}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalGender">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Update Gender
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updateEmail"
+                                                type="email"
+                                                placeholder="Enter Email"
+                                                value={this.state.updateEmail}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalPassword">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Password
+                                </Col>
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="updatePassword"
+                                                type="password"
+                                                placeholder="Enter New Password"
+                                                value={this.state.updatePassword}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalGender">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Update Gender
                                 </Col>
                                     <Col sm={10}>
                                         <FormControl

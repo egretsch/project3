@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Button, ButtonGroup} from "react-bootstrap";
 import "./ScannerNavbar.css";
+import Link from 'react-router-dom'
 
 
 class ScannerNavbar extends Component {

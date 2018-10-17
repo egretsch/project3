@@ -201,6 +201,9 @@ module.exports = {
         bcrypt.genSalt(saltRounds, function (err, salt) {
           bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
             req.body.password = hash;
+
+            console.log("This is the req.body: ", req.body);
+
             db.User
               .create(req.body)
               .then(dbModel => res.json(dbModel))
