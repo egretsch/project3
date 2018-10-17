@@ -22,8 +22,8 @@
 }
 
 #favorite {
-    text-align: center;
-    color: green;
+  text-align: center;
+  color: rgb(37, 42, 61);
 }
 
 .save-ingredients-button {
