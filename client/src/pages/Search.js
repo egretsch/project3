@@ -411,9 +411,10 @@ class Search extends Component {
         let brandNameArray = [];
 
 
+        //Regex code for spaces, replaces it with +
         let noSpaces =  this.state.searchedProduct.replace(/ /g, "+")
+        // console.log("No Spaces: ", noSpaces)
 
-        console.log("No Spaces: ", noSpaces)
         //Our API Call.
         API.getProducts(noSpaces)
             .then(res => {
