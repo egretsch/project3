@@ -20,58 +20,99 @@ import "./pages.css";
 import ScannerNavbar from "../components/ScannerNavbar";
 
 class Profile extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.handleInputChange = this.handleInputChange.bind(this);
 
-    this.updateUserState = this.updateUserState.bind(this);
-    this.handleUpdateUserSubmit = this.handleUpdateUserSubmit.bind(this);
+    constructor(props, context) {
+        super(props, context);
+        this.handleInputChange = this.handleInputChange.bind(this);
 
-    this.handleShowUpdateUserModal = this.handleShowUpdateUserModal.bind(this);
-    this.handleHideUpdateUserModal = this.handleHideUpdateUserModal.bind(this);
-    this.state = {
-      profileName: "",
-      email: "",
-      userName: "",
-      gender: "",
-      showUpdateUserModal: false,
-      updateName: "",
-      updateEmail: "",
-      updateUserName: "",
-      updatePassword: "",
-      updateGender: "",
-      bookmarkedProducts: [],
-      savedIngredients: [],
-      confirmIngredient: "",
-      confirmProduct: "",
-      show: false
+        this.updateUserState = this.updateUserState.bind(this);
+        this.handleUpdateUserSubmit = this.handleUpdateUserSubmit.bind(this);
+
+        this.handleShowUpdateUserModal = this.handleShowUpdateUserModal.bind(this);
+        this.handleHideUpdateUserModal = this.handleHideUpdateUserModal.bind(this);
+        this.state = {
+            profileName: "",
+            email: "",
+            userName: "",
+            gender: "",
+            showUpdateUserModal: false,
+            updateName: "",
+            updateEmail: "",
+            updateUserName: "",
+            updatePassword: "",
+            updateGender: "",
+            bookmarkedProducts: [],
+            savedIngredients: [],
+            confirmIngredient: "",
+            confirmProduct: "",
+            userUpdateMessage: "",
+            show: false,
+        };
+
+    }
+
+
+    componentDidMount() {
+        this.loadCurrentUser();
+        this.getBookmarkedProducts();
+        this.getSavedIngredients();
+    }
+
+    
+
+    showModal = () => {
+        this.setState({ show: true });
     };
-  }
+    hideModal = () => {
+        this.setState({ show: false });
+    };
 
-  componentDidMount() {
-    this.loadCurrentUser();
-    this.getBookmarkedProducts();
-    this.getSavedIngredients();
-  }
 
-  showModal = () => {
-    this.setState({ show: true });
-  };
-  hideModal = () => {
-    this.setState({ show: false });
-  };
+    getBookmarkedProducts = () => {
+        API.getBookmarkedProducts()
+            .then(res => {
+                if (res.data.bookmarkedProducts) {
+                    this.setState({ bookmarkedProducts: res.data.bookmarkedProducts.split(',') })
+                }
+            })
+            .catch(err => console.log(err))
+    }
 
-  getBookmarkedProducts = () => {
-    API.getBookmarkedProducts()
-      .then(res => {
-        if (res.data.bookmarkedProducts) {
-          this.setState({
-            bookmarkedProducts: res.data.bookmarkedProducts.split(",")
-          });
-        }
-      })
-      .catch(err => console.log(err));
-  };
+    getSavedIngredients = () => {
+        API.getSavedIngredients()
+            .then(res => {
+                if (res.data.ingredients) {
+                    this.setState({ savedIngredients: res.data.ingredients.split(',') })
+                    
+                }
+            })
+            .catch(err => console.log(err));
+    }
+
+    deleteSavedIngredient = event => {
+        event.preventDefault();
+        this.setState({
+            confirmIngredient: event.target.value
+        })
+        this.showModal();
+
+    }
+
+    deleteBookmarkedProduct = event => {
+        event.preventDefault();
+        this.setState({
+            confirmProduct: event.target.value
+        })
+        this.showModal();
+
+    }
+
+    reset = () => {
+        this.setState({
+            confirmProduct: "",
+            confirmIngredient: "",
+        })
+    }
 
   getSavedIngredients = () => {
     API.getSavedIngredients()

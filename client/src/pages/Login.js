@@ -103,11 +103,11 @@ class Login extends Component {
         userAry.push(userObj);
         API.postUser(userObj)
             .then(res => {
-                console.log("submited data and here is res: ", res)
+                
 
                 if (!res.data) {
-                    console.log("we made it to the second layer");
-                    // alert("Username already exists! Please use another");
+                    
+                    
                     this.setState({
                         createUserMessage: "Username or Password already exsists",
                         createColor: "red"
@@ -148,7 +148,13 @@ class Login extends Component {
                 loginObj
             })
                 .then(res => {
-                    this.props.history.push("/search");
+                    
+                    if (res.data.validUser) {
+
+                        window.location = '/search'
+                    } else {
+                        window.location = '/'
+                    };
                 })
                 .catch(err => {
                     console.log(err)
@@ -171,7 +177,7 @@ class Login extends Component {
 
     render() {
         const buttons = [
-            
+
         ]
         return (
             <div>
