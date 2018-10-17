@@ -210,10 +210,10 @@ class Search extends Component {
 
     saveScannedProduct = event => {
         event.preventDefault();
-        console.log(
-            "The Brand Name in save: ", this.state.scannedProductName,
-            "The UPC Code: ", this.state.scanResults
-        )
+        // console.log(
+        //     "The Brand Name in save: ", this.state.scannedProductName,
+        //     "The UPC Code: ", this.state.scanResults
+        // )
 
         API.saveScannedProduct({
             brandName: this.state.scannedProductName,
@@ -223,13 +223,11 @@ class Search extends Component {
                 // console.log(res);
                 this.searchScannedProduct();
                 this.hideScannerModal();
-                this.setState({
-                    scanResults: []
-                })
             })
             .catch(err => {
                 console.log("Error on L230: ", err);
-                this.showErrorModal();
+                this.hideScannerModal();
+                this.searchScannedProduct();
             });
     }
 
@@ -663,7 +661,6 @@ class Search extends Component {
 
 
                                 <div className='modal-footer'>
-                                    {/* <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button> */}
                                     <a href="/" className='btn btn-primary'>Log In</a>
                                 </div>
                             </div>
