@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../utils/API";
+import Link from 'react-router-dom'
 
 //Parts of the app
 import { Col, Row, Container } from "../components/Grid";
@@ -462,14 +463,14 @@ class Search extends Component {
     };
 
     profileButtonAction = () => {
-        window.location = "/Profile"
+        this.props.history.push("/profile");
     };
 
     logoutUser() {
         API.logoutUser({
         })
             .then(res => {
-                console.log("logout")
+                console.log("User has logged out.")
 
             })
             .catch(err => console.log(err));
