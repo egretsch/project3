@@ -11,7 +11,7 @@ class ScannerNavbar extends Component {
         // const pathButtions = p => <button key={p.id}>{p.name}</button>;
         return (
             // navbar
-            <Navbar inverse collapseOnSelect>
+            <Navbar inverse collapseOnSelect style={{margin: 0}}>
                 <Navbar.Header>
                     <Navbar.Brand>
                         AHI Scanner

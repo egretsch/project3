@@ -1,17 +1,15 @@
 .footer {
-  min-height: 50px;
+  min-height: 40px;
   background: #252a3d;
-  bottom: 0;
+  flex-shrink: 0;
+  color: white;
+  flex-shrink: 0; /* Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. */
+  padding: 10px;
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  height:30px;
   width:100%;
-  position: absolute;
+ 
 }
 
-.footer span {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 3px;
-  text-align: center;
-  color: white;
-}
