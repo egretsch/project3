@@ -23,9 +23,6 @@ export default {
         return axios.post('/api/products', product)
     },
 
-    userAuth: function (logedintCurrentUser) {
-        return axios.get("/api/user/auth", logedintCurrentUser);
-    },
     // submit user info
     logoutUser: function () {
         return axios.post("/api/user/logout");

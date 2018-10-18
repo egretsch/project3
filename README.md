@@ -63,11 +63,3 @@ ___
 [Linkedin](https://www.linkedin.com/in/deana-baker-871958b5/) 
 
 
-
-
-
-
-
-
-
-

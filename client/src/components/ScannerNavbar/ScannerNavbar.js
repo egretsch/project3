@@ -7,10 +7,6 @@ import Link from 'react-router-dom'
 class ScannerNavbar extends Component {
 
 
-
-    
-       
-
     render() {
         // const pathButtions = p => <button key={p.id}>{p.name}</button>;
         return (
@@ -18,22 +14,17 @@ class ScannerNavbar extends Component {
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#brand">Scanner</a>
+                        AHI Scanner
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
                 <Navbar.Collapse>
-
                     <Nav pullRight className="buttions">
                         <ButtonGroup>
                             {this.props.buttons.map(el => <Button key={el.id} value={el.name} onClick={el.action}>{el.name}</Button>)}
                         </ButtonGroup>
                     </Nav>
                 </Navbar.Collapse>
-
-
-               
-
             </Navbar>
         );
     }
