@@ -5,12 +5,12 @@ export default {
 
     //Search through products in the API.
     getProducts: product => {
-        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:%22" +  product  + "%22&limit=20")
+        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + product + "&limit=20")
     },
 
     //Get the exact scanned product. 
     getProductByScan: product => {
-        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:%22" +  product  + "%22&limit=1")
+        return axios.get("https://api.fda.gov/drug/label.json?search=openfda.brand_name:" + product + "&limit=1")
     },
 
     //Try getting the scanned product inside the database
@@ -23,6 +23,9 @@ export default {
         return axios.post('/api/products', product)
     },
 
+    userAuth: function (logedintCurrentUser) {
+        return axios.get("/api/user/auth", logedintCurrentUser);
+    },
     // submit user info
     logoutUser: function () {
         return axios.post("/api/user/logout");

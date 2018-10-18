@@ -1,27 +1,76 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Search from "./pages/Search";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
-import Footer from "./components/Footer"
-import "./pages/pages.css"
+//Landing page should be login page.
 
-const App = () => (
-  <Router>
-    <div>
-      
-      <div className='content'>
-        <Switch>
-          <Route exact path='/' component={Login} />
-          <Route path='/search' component={Search} />
-          <Route path='/profile' component={Profile} />
-        </Switch>
-      </div>
-      <Footer />
-    </div>
-  </Router>
 
-)
+import API from "./utils/API";
+
+// let isLogedin;
+
+
+// const PrivateRoute = ({ component: Component, ...rest }) => (
+//   <Route {...rest} render={(props) => (
+//     auth().then(isAuthenticated => {
+//       isLogedin = isAuthenticated;
+//       isAuthenticated === true
+//         ? <Component {...props} />
+//         : <Redirect to='/' />
+
+//     })
+//   )} />
+
+// )
+
+class App extends Component {
+  state = {
+    isLogedin: false
+  }
+
+  componentDidMount() {
+    this.auth();
+
+  }
+  
+  auth = () => {
+    
+
+    API.userAuth()
+      .then(res => {
+        
+        if (res.data.validUser) {
+          this.setState({
+            isLogedin: true
+          });
+          // isLogedin = true
+          // console.log(isLogedin)
+        }
+        return res;
+
+      })
+      .catch(err => {
+        console.log(err)
+      });
+  };
+
+  
+  render() {
+  return(
+      <Router>
+  <div>
+    <Switch>
+      {/* <Route exact path="/" component={ isLogedin ? Search : Login } /> */}
+      <Route exact path='/' component={Login} />
+          <Route path='/search' component={this.state.isLogedin ? Search : Login} />
+      <Route path='/profile' component={ this.state.isLogedin ? Profile : Login} />
+    </Switch>
+  </div>
+      </Router >
+    );
+  }
+}
 
 
 export default App;

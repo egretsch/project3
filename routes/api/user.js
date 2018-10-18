@@ -18,7 +18,8 @@ router.route("/logout")
 router.route("/login")
   .post(userController.findOne);
 
-
+router.route("/auth")
+  .get(userController.userAuth)
 router
   .route('/products')
   .post(bookmarkedProductsController.bookmarkProduct)

@@ -2,9 +2,14 @@ import React, { Component } from "react";
 import API from "../utils/API";
 import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl, Col } from "react-bootstrap";
 import ScannerNavbar from "../components/ScannerNavbar";
-import Link from 'react-router-dom'
+
 import './pages.css';
 //Parts of the app
+
+
+
+
+
 
 
 class Login extends Component {
@@ -41,7 +46,6 @@ class Login extends Component {
             loginUserMessage: "",
             loginColor: "red",
             errorModal: false,
-            successModal: false,
 
         };
     }
@@ -81,20 +85,6 @@ class Login extends Component {
         });
     }
 
-
-
-    hideSuccessModal = () => {
-        this.setState({
-            successModal: false
-        });
-    }
-
-    showSuccessModal = () => {
-        this.setState({
-            successModal: true
-        });
-    }
-
     // clear user submit
     createUserState() {
         this.setState({
@@ -118,18 +108,17 @@ class Login extends Component {
         userAry.push(userObj);
         API.postUser(userObj)
             .then(res => {
+                
+
                 if (!res.data) {
-                    // console.log("we made it to the second layer");
+                    
+                    
                     this.setState({
-                        createUserMessage: "Username already exists",
+                        createUserMessage: "Username or Password already exsists",
                         createColor: "red"
                     })
                 }
-                else{
-                // console.log("submited data and here is res: ", res)
-                this.showSuccessModal();
-                this.handleHideNewUserModal();
-                }
+
             })
             .catch(err => console.log(err));
     };
@@ -142,7 +131,6 @@ class Login extends Component {
 
         event.preventDefault();
     }
-
     // CLEAR login state
     clearLoginState() {
         this.setState({
@@ -165,7 +153,13 @@ class Login extends Component {
                 loginObj
             })
                 .then(res => {
-                    this.props.history.push("/search");
+                    
+                    if (res.data.validUser) {
+
+                        window.location = '/search'
+                    } else {
+                        window.location = '/'
+                    };
                 })
                 .catch(err => {
                     console.log(err)
@@ -188,7 +182,7 @@ class Login extends Component {
 
     render() {
         const buttons = [
-            
+
         ]
         return (
             <div>
@@ -226,8 +220,6 @@ class Login extends Component {
                                 onChange={this.handleInputChange} />
 
                         </FormGroup>
-
-                        
                         <Button className="loginButtion"
                             block
                             bsSize="large"
@@ -362,29 +354,6 @@ class Login extends Component {
 
                                 <div className='modal-footer'>
                                     <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </Modal>
-
-
-                    <Modal show={this.state.successModal}>
-                        <div className='modal-content'>
-
-                            <div className='modal-header'>
-                                <h3 style={{ color: 'green' }} className='modal-title'>
-                                    User Created!
-                                </h3>
-                            </div>
-
-                            <div style={{ color: 'black' }} className='modal-body'>
-
-                                <p>Successfully created username!</p>
-                                <p>Please log in!</p>
-
-
-                                <div className='modal-footer'>
-                                    <button className='btn btn-danger' onClick={this.hideSuccessModal}>Close</button>
                                 </div>
                             </div>
                         </div>

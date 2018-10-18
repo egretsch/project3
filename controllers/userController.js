@@ -1,34 +1,68 @@
 const db = require("../models");
 const bcrypt = require('bcrypt')
+let isAuth = false;
+let _id;
+let name;
+let email;
+let userName;
+let gender;
+
 
 // Login
 module.exports = {
 
+
+  userAuth: function (req, res) {
+    
+    
+
+    var userObj = {
+      _id: _id,
+      name: name,
+      email: email,
+      userName: userName,
+      gender: gender,
+      validUser: isAuth,
+
+    }
+    
+    req.session.user.loggedIn = false;
+    req.session.user.currentUser = userObj;
+    let logedinCurrentUser = req.session.user.currentUser
+
+    
+    res.json(userObj);
+
+  },
+
   logoutUser: function (req, res) {
 
-    // if (users.length === 0) {
-    
+    _id = "";
+    name = "";
+    email = "";
+    userName = "";
+    gender = "";
+    isAuth = false;
+
     var userObj = {
-      _id: "",
-      name: "",
-      userName: "",
-      email: "",
-      
-      gender: ""
+      _id: _id,
+      name: name,
+      email: email,
+      userName: userName,
+      gender: gender,
+      validUser: isAuth,
+
     }
+
     console.log(userObj);
     req.session.user.loggedIn = false;
     req.session.user.currentUser = userObj;
     res.json(userObj);
-    // } else {
-    //   res.json(false);
-    // }
-    console.log(req.session.user.loggedIn, "logedout")
-    console.log(req.session.user.currentUser, "logedout")
+
   },
 
   updateUser: function (req, res) {
-    console.log("this is our req.body inside update users: ", req.body);
+    
 
     const saltRounds = 10;
     const myPlaintextPassword = req.body.password;
@@ -48,23 +82,43 @@ module.exports = {
               }
             })
           .then(users => {
-            // if (users.length === 0) {
-            console.log("this is our database result user inside updated user", users)
-            var userObj = {
-              _id: users._id,
-              name: users.name,
-              email: users.email,
-              userName: users.userName,
-              gender: users.gender
-            }
-            console.log(userObj);
-            req.session.user.loggedIn = true;
-            req.session.user.currentUser = userObj;
-            res.json(userObj);
-            // } else {
+            
+
+            db.User.findOne({ userName: req.body.userName })
+              .then(users => {
+                
+                _id = users._id;
+                name = users.name;
+                email = users.email;
+                userName = users.userName;
+                gender = users.gender;
+                isAuth = true;
+
+                var userObj = {
+                  _id: _id,
+                  name: name,
+                  email: email,
+                  userName: userName,
+                  gender: gender,
+                  validUser: isAuth,
+
+                }
+
+                
+                req.session.user.loggedIn = true;
+                req.session.user.currentUser = userObj;
+                res.json(userObj);
+
+              })
+              .catch((err) => {
+                console.log(err)
+                res.status(422).json(err)
+              });
+
+
+            // else {
             //   res.json(false);
             // }
-
           })
           .catch((err) => {
             console.log("This is our error inside of update: ", err)
@@ -86,33 +140,39 @@ module.exports = {
 
 
   findOne: function (req, res) {
-    console.log(req.body.loginObj.userName, "backend")
+  
     db.User
       .findOne({ userName: req.body.loginObj.userName })
       .then(users => {
-        console.log(users)
 
-        console.log(users.userName, "This is the userName");
-        console.log(users.password, "This is the password");
-        // if (users.length === 0) {
+
         if (!users && typeof users === object) {
           res.status(404).send('Invalid username or password. Please try again');
         } else {
           bcrypt.compare(req.body.loginObj.password, users.password).then(function (bcryptRes) {
-            // res == true
+
 
             if (!bcryptRes) {
-              console.log("it worked1");
+
               res.status(404).send('Invalid username or password. Please try again');
             } else {
-              console.log("it worked 2");
+              
+
+              _id = users._id;
+              name = users.name;
+              email = users.email;
+              userName = users.userName;
+              gender = users.gender;
+              isAuth = true;
 
               var userObj = {
-                _id: users._id,
-                name: users.name,
-                email: users.email,
-                userName: users.userName,
-                gender: users.gender
+                _id: _id,
+                name: name,
+                email: email,
+                userName: userName,
+                gender: gender,
+                validUser: isAuth,
+
               }
               console.log(userObj);
               req.session.user.loggedIn = true;
@@ -121,9 +181,7 @@ module.exports = {
             }
           });
         }
-        // } else {
-        //   res.json(false);
-        // }
+
       })
       .catch((err) => {
         console.log(err)
@@ -133,19 +191,16 @@ module.exports = {
 
   create: function (req, res) {
     db.User.find({ $or: [{ userName: req.body.userName }, { email: req.body.email }] }).then(dbData => {
-      console.log("This is dbData inside create: ", dbData);
+      
 
 
       if (dbData.length === 0) {
-        console.log(2)
+        
         const saltRounds = 10;
         const myPlaintextPassword = req.body.password;
         bcrypt.genSalt(saltRounds, function (err, salt) {
           bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
             req.body.password = hash;
-
-            console.log("This is the req.body: ", req.body);
-
             db.User
               .create(req.body)
               .then(dbModel => res.json(dbModel))
