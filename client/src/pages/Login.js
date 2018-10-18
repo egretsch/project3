@@ -151,9 +151,9 @@ class Login extends Component {
                     
                     if (res.data.validUser) {
 
-                        window.location = '/search'
+                        this.props.history.push("/search");
                     } else {
-                        window.location = '/'
+                        this.props.history.push("/");
                     };
                 })
                 .catch(err => {

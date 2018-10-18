@@ -273,7 +273,7 @@ class Profile extends Component {
 
   logoutButtonAction = () => {
     this.logoutUser();
-    window.location = "/";
+    this.props.history.push("/");
   };
 
   searchButtonAction = () => {
