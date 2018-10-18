@@ -33,10 +33,12 @@ ____
 #### Back End:
 * Node.js - the interface
 * MongoDB - the core database
+* Axios - Simplified Ajax and route calls.
 
 #### Front End: 
 * React.js - dynamically generated data to client.
 * Bootstrap - for CSS and general web layout
+* Quagga.js - the camera scanner
 
 ___
 

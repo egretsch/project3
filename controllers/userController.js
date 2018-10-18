@@ -37,17 +37,6 @@ module.exports = {
 
   logoutUser: function (req, res) {
 
-<<<<<<< HEAD
-    // if (users.length === 0) {
-    
-    var userObj = {
-      _id: "",
-      name: "",
-      userName: "",
-      email: "",
-      
-      gender: ""
-=======
     _id = "";
     name = "";
     email = "";
@@ -63,7 +52,6 @@ module.exports = {
       gender: gender,
       validUser: isAuth,
 
->>>>>>> fbded4abc84d9c6e2c1c313447fd8a19324e2a12
     }
 
     console.log(userObj);
@@ -94,24 +82,6 @@ module.exports = {
               }
             })
           .then(users => {
-<<<<<<< HEAD
-            // if (users.length === 0) {
-            console.log("this is our database result user inside updated user", users)
-            var userObj = {
-              _id: users._id,
-              name: users.name,
-              email: users.email,
-              userName: users.userName,
-              gender: users.gender
-            }
-            console.log(userObj);
-            req.session.user.loggedIn = true;
-            req.session.user.currentUser = userObj;
-            res.json(userObj);
-            // } else {
-            //   res.json(false);
-            // }
-=======
             
 
             db.User.findOne({ userName: req.body.userName })
@@ -144,7 +114,6 @@ module.exports = {
                 console.log(err)
                 res.status(422).json(err)
               });
->>>>>>> fbded4abc84d9c6e2c1c313447fd8a19324e2a12
 
 
             // else {
