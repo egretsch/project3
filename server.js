@@ -8,8 +8,6 @@ const cors = require('cors');
 const PORT = process.env.PORT || 8000;
 
 
-
-
 app.use(session({
   secret: process.env.SESSIONSECRET || 'cat',
   resave: false,
