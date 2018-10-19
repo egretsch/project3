@@ -4,6 +4,8 @@ import { Button, ButtonGroup, Modal, Form, FormGroup, ControlLabel, FormControl,
 import ScannerNavbar from "../components/ScannerNavbar";
 import Link from 'react-router-dom'
 import './pages.css';
+import Tuna from "../utils/images/tuna.jpg"
+
 //Parts of the app
 
 
@@ -41,6 +43,7 @@ class Login extends Component {
             loginUserMessage: "",
             loginColor: "red",
             errorModal: false,
+            successModal: false,
 
         };
     }
@@ -80,6 +83,20 @@ class Login extends Component {
         });
     }
 
+
+
+    hideSuccessModal = () => {
+        this.setState({
+            successModal: false
+        });
+    }
+
+    showSuccessModal = () => {
+        this.setState({
+            successModal: true
+        });
+    }
+
     // clear user submit
     createUserState() {
         this.setState({
@@ -103,17 +120,18 @@ class Login extends Component {
         userAry.push(userObj);
         API.postUser(userObj)
             .then(res => {
-                
-
                 if (!res.data) {
-                    
-                    
+                    // console.log("we made it to the second layer");
                     this.setState({
-                        createUserMessage: "Username or Password already exsists",
+                        createUserMessage: "Username already exists",
                         createColor: "red"
                     })
                 }
-
+                else {
+                    // console.log("submited data and here is res: ", res)
+                    this.showSuccessModal();
+                    this.handleHideNewUserModal();
+                }
             })
             .catch(err => console.log(err));
     };
@@ -126,6 +144,7 @@ class Login extends Component {
 
         event.preventDefault();
     }
+
     // CLEAR login state
     clearLoginState() {
         this.setState({
@@ -148,13 +167,7 @@ class Login extends Component {
                 loginObj
             })
                 .then(res => {
-                    
-                    if (res.data.validUser) {
-
-                        window.location = '/search'
-                    } else {
-                        window.location = '/'
-                    };
+                    this.props.history.push("/search");
                 })
                 .catch(err => {
                     console.log(err)
@@ -187,179 +200,204 @@ class Login extends Component {
 
                 <div className="Login">
 
-                    {/* login modal */}
-                    <form onSubmit={this.handleLoginSubmit}>
-                        <div style={{ color: this.state.loginColor }}>{this.state.loginUserMessage}</div>
-                        <FormGroup controlId="email" bsSize="large">
-                            <ControlLabel>Username</ControlLabel>
-                            <FormControl
-                                autoFocus
-                                name="loginUsername"
-                                type="Username"
-                                placeholder="Enter Username (Case Sensitive)"
-                                value={this.state.loginUsername}
-                                onChange={this.handleInputChange} />
-                        </FormGroup>
-                        <FormGroup controlId="password" bsSize="large">
-                            <ControlLabel>
-                                Password
+                        <img src={Tuna} alt="Tuna" height="300px" width="300px" className='center'/>
+
+                        {/* login modal */}
+                        <form onSubmit={this.handleLoginSubmit}>
+                            <div style={{ color: this.state.loginColor }}>{this.state.loginUserMessage}</div>
+                            <FormGroup controlId="email" bsSize="large">
+                                <ControlLabel>Username</ControlLabel>
+                                <FormControl
+                                    autoFocus
+                                    name="loginUsername"
+                                    type="Username"
+                                    placeholder="Enter Username (Case Sensitive)"
+                                    value={this.state.loginUsername}
+                                    onChange={this.handleInputChange} />
+                            </FormGroup>
+                            <FormGroup controlId="password" bsSize="large">
+                                <ControlLabel>
+                                    Password
                             </ControlLabel>
 
 
-                            <FormControl
-                                autoFocus
-                                name="loginPassword"
-                                type="password"
-                                placeholder="Enter Password"
-                                value={this.state.loginPassword}
-                                onChange={this.handleInputChange} />
+                                <FormControl
+                                    autoFocus
+                                    name="loginPassword"
+                                    type="password"
+                                    placeholder="Enter Password"
+                                    value={this.state.loginPassword}
+                                    onChange={this.handleInputChange} />
 
-                        </FormGroup>
+                            </FormGroup>
 
-                        
-                        <Button className="loginButtion"
-                            block
-                            bsSize="large"
 
-                            type="submit"
-                        >
-                            Login
+                            <Button className="loginButtion"
+                                block
+                                bsSize="large"
+
+                                type="submit"
+                            >
+                                Login
                     </Button>
-                        <Button
-                            className="loginButtion"
-                            block
-                            bsSize="large"
-                            onClick={this.handleShowNewUserModal} >Create User</Button>
-                    </form>
+                            <Button
+                                className="loginButtion"
+                                block
+                                bsSize="large"
+                                onClick={this.handleShowNewUserModal} >Create User</Button>
+                        </form>
 
 
-                    {/* create user modal */}
-                    <Modal
-                        {...this.props}
-                        show={this.state.showNewUserModal}
-                        onHide={this.handleHideNewUserModal}
-                        dialogClassName="custom-modal"
-                    >
-                        <Modal.Header closeButton>
-                            <Modal.Title id="contained-modal-title-lg">
-                                <div style={{ color: this.state.createColor }}>{this.state.createUserMessage}</div>
-                            </Modal.Title>
-                        </Modal.Header>
-                        <Form horizontal onSubmit={this.handleCreateSubmit}>
-                            <Modal.Body>
+                        {/* create user modal */}
+                        <Modal
+                            {...this.props}
+                            show={this.state.showNewUserModal}
+                            onHide={this.handleHideNewUserModal}
+                            dialogClassName="custom-modal"
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title id="contained-modal-title-lg">
+                                    <div style={{ color: this.state.createColor }}>{this.state.createUserMessage}</div>
+                                </Modal.Title>
+                            </Modal.Header>
+                            <Form horizontal onSubmit={this.handleCreateSubmit}>
+                                <Modal.Body>
 
-                                <FormGroup controlId="formHorizontalName">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Name
+                                    <FormGroup controlId="formHorizontalName">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Name
                                         </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="createName"
-                                            type="name"
-                                            placeholder="Enter Name"
-                                            value={this.state.createName}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalUsername">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Username
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="createName"
+                                                type="name"
+                                                placeholder="Enter Name"
+                                                value={this.state.createName}
+                                                onChange={this.handleInputChange} />
                                         </Col>
-                                    <Col sm={10}>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalUsername">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Username
+                                        </Col>
+                                        <Col sm={10}>
 
-                                        <FormControl
-                                            name="createUsername"
-                                            type="Username"
-                                            placeholder="Enter Username (Case Sensitive)"
-                                            value={this.state.createUsername}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalEmail">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Email
+                                            <FormControl
+                                                name="createUsername"
+                                                type="Username"
+                                                placeholder="Enter Username (Case Sensitive)"
+                                                value={this.state.createUsername}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalEmail">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Email
                                          </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="createEmail"
-                                            type="Email"
-                                            placeholder="Enter Email"
-                                            value={this.state.createEmail}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalPassword">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Password
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="createEmail"
+                                                type="Email"
+                                                placeholder="Enter Email"
+                                                value={this.state.createEmail}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalPassword">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Password
                                          </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="createPassword"
-                                            type="password"
-                                            placeholder="Enter Password"
-                                            value={this.state.createPassword}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="formHorizontalGender">
-                                    <Col componentClass={ControlLabel} sm={2}>
-                                        Gender
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="createPassword"
+                                                type="password"
+                                                placeholder="Enter Password"
+                                                value={this.state.createPassword}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="formHorizontalGender">
+                                        <Col componentClass={ControlLabel} sm={2}>
+                                            Gender
                                          </Col>
-                                    <Col sm={10}>
-                                        <FormControl
-                                            name="createGender"
-                                            type="Gender"
-                                            placeholder="Enter Gender"
-                                            value={this.state.createGender}
-                                            onChange={this.handleInputChange} />
-                                    </Col>
-                                </FormGroup>
+                                        <Col sm={10}>
+                                            <FormControl
+                                                name="createGender"
+                                                type="Gender"
+                                                placeholder="Enter Gender"
+                                                value={this.state.createGender}
+                                                onChange={this.handleInputChange} />
+                                        </Col>
+                                    </FormGroup>
 
 
 
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <ButtonGroup className="createUserButtions">
-                                    <Button
-                                        value="Submit"
-                                        type="submit"
-                                    // onClick={this.handleHideNewUserModal}
-                                    >
-                                        Submit
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <ButtonGroup className="createUserButtions">
+                                        <Button
+                                            value="Submit"
+                                            type="submit"
+                                        // onClick={this.handleHideNewUserModal}
+                                        >
+                                            Submit
                                          </Button>
-                                    <Button onClick={this.handleHideNewUserModal}>Close</Button>
-                                </ButtonGroup>
+                                        <Button onClick={this.handleHideNewUserModal}>Close</Button>
+                                    </ButtonGroup>
 
-                            </Modal.Footer>
-                        </Form>
-                    </Modal>
+                                </Modal.Footer>
+                            </Form>
+                        </Modal>
 
-                    <Modal show={this.state.errorModal}>
-                        <div className='modal-content'>
+                        <Modal show={this.state.errorModal}>
+                            <div className='modal-content'>
 
-                            <div className='modal-header'>
-                                <h3 style={{ color: 'red' }} className='modal-title'>
-                                    ERROR!
+                                <div className='modal-header'>
+                                    <h3 style={{ color: 'red' }} className='modal-title'>
+                                        ERROR!
                                 </h3>
-                            </div>
+                                </div>
 
-                            <div style={{ color: 'red' }} className='modal-body'>
+                                <div style={{ color: 'red' }} className='modal-body'>
 
-                                <p>Invalid Username or password.</p>
-                                <p>Please try again!</p>
+                                    <p>Invalid Username or password.</p>
+                                    <p>Please try again!</p>
 
 
-                                <div className='modal-footer'>
-                                    <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button>
+                                    <div className='modal-footer'>
+                                        <button className='btn btn-danger' onClick={this.hideErrorModal}>Close</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Modal>
+                        </Modal>
 
+
+                        <Modal show={this.state.successModal}>
+                            <div className='modal-content'>
+
+                                <div className='modal-header'>
+                                    <h3 style={{ color: 'green' }} className='modal-title'>
+                                        User Created!
+                                </h3>
+                                </div>
+
+                                <div style={{ color: 'black' }} className='modal-body'>
+
+                                    <p>Successfully created username!</p>
+                                    <p>Please log in!</p>
+
+
+                                    <div className='modal-footer'>
+                                        <button className='btn btn-danger' onClick={this.hideSuccessModal}>Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Modal>
+
+                    </div>
                 </div>
-            </div>
-        );
-    }
-}
-
+                );
+            }
+        }
+        
 export default Login;
